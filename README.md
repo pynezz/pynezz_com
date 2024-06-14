@@ -1,4 +1,4 @@
-# website for pynezz_com
+# pynezz_com
 
 Simple website for pynezz.com built with Go and ...?
 
