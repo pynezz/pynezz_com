@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 
 	"github.com/pynezz/pynezz_com/cmd"
+	"github.com/pynezz/pynezz_com/cmd/cms"
+	"github.com/pynezz/pynezz_com/cmd/serve"
 )
 
 func main() {
@@ -13,38 +15,78 @@ func main() {
 	Execute(args...)
 }
 
-var usage func() = func() {
+var displayHelp func(...string) = func(args ...string) {
 	fmt.Printf(`Usage:
-	%s [...options]
+	%s [module] [options]
 Options:
-	help       				Print this help message
-	bivrost 				Execute bivrost
-	test_module				Execute test_module module
-	threat_detection 		Execute threat_detection module
-Example:
-	%s bivrost test_module	Will execute both bivrost and test_module`, filepath.Base(os.Args[0]), filepath.Base(os.Args[0]))
+  cms		Execute the CMS module
+  serve		Serve the webapp
+
+  info		Print information about the CLI
+  help		Print this help message
+`, filepath.Base(os.Args[0]))
 }
 
-var info func() = func() {
+// var usage func(...string) = func(args ...string) {
+// 	f := map[string]func(args ...string){
+// 		"help": displayHelp,
+// 		"info": func(...string) {
+// 			fmt.Println("Pynezz.com CLI")
+// 		},
+// 		"cms": cmd.CMS(args[:1]),
+// 	}
+
+// 	for _, arg := range args[:2] {
+// 		if f[arg] == nil {
+// 			return
+// 		}
+// 		f[arg](args...)
+// 	}
+
+// 	fmt.Printf(`Usage:
+// 	%s [module] [options]
+// Options:
+//   cms		Execute the CMS module
+//   serve		Serve the webapp
+
+//   info		Print information about the CLI
+//   help		Print this help message
+// `, filepath.Base(os.Args[0]))
+// }
+
+var info func(...string) = func(...string) {
 	fmt.Println("Pynezz.com CLI")
 }
 
 func Execute(args ...string) {
 
-	f := map[string]func(){
-		"cms":   cmd.CMS,
-		"serve": cmd.Serve,
-		"help":  usage,
+	if len(args) < 1 {
+		displayHelp(args...)
+		return
+	}
+
+	for _, arg := range args[:1] {
+		if arg == "help" {
+			if help := cmd.Execute(args...); help != "" {
+				fmt.Println(help)
+				return
+			}
+		}
+	}
+
+	f := map[string]func(...string){
+		"cms":   cms.Execute,
+		"serve": serve.Execute,
 		"info":  info,
 	}
 
 	// check the arguments and execute the function if it exists
-	for _, module := range args {
+	for _, module := range args[:1] {
 		if f[module] == nil {
 			fmt.Printf("Unknown module %s\n", module)
-			usage()
+			displayHelp(args...)
 			return
 		}
-		f[module]()
+		f[module](args[1:]...)
 	}
 }
