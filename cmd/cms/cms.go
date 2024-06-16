@@ -3,36 +3,36 @@ package cms
 import "fmt"
 
 type ICMS interface {
-	Help(args ...string) string
+	ICommand // Embedding the ICommand interface to inherit its methods
+
 	CMS(args ...string) cms
 }
 
-
 type cms struct{}
 
-func commands() map[string]string {
+// INFO: This is example commands for now.
+func commands() map[string]ICommand {
 	prefix := "--"
 
-	return map[string]Command{
-		prefix + "list": "List all the pages",
-		prefix + "page":
-		"--create":      "Create a new page",
-		"--edit":        "Edit an existing page",
-		"--delete":      "Delete a page",
-		"--publish":     "Publish a page",
-		"--unpublish":   "Unpublish a page",
-		"--status":      "Get the status of a page",
-		"--tags":        "Get the tags of a page",
-
-		"--stats":  "Get the statistics of the CMS",
-		"--config": "Show the configuration",
+	return map[string]ICommand{
+		prefix + "list":      c["list"],
+		prefix + "page":      c["page"],
+		prefix + "create":    c["create"],
+		prefix + "edit":      c["edit"],
+		prefix + "delete":    c["delete"],
+		prefix + "publish":   c["publish"],
+		prefix + "unpublish": c["unpublish"],
+		prefix + "status":    c["status"],
+		prefix + "tags":      c["tags"],
+		prefix + "stats":     c["stats"],
+		prefix + "config":    c["config"],
 	}
 }
 
 func listCommands() string {
 	var s string
 	for k, v := range commands() {
-		s += k + "\t" + v + "\n"
+		s += k + "\t" + v.Help() + "\n"
 	}
 	return s
 }
@@ -49,8 +49,8 @@ func (c *cms) CMS(args ...string) *cms {
 	return &cms{}
 }
 
-func run(c Command) {
-	fmt.Println("running command: ", c)
+func run(c ICommand) {
+	fmt.Println("running command: ", c.Name())
 }
 
 func Execute(args ...string) {
@@ -61,11 +61,13 @@ func Execute(args ...string) {
 		return
 	}
 
+	// If the command exists, run it
 	for k, v := range commands() {
-		if arg == k {
-			fmt.Println(v)
-			return
+		for _, arg := range args {
+			if arg == k {
+				v.Run("hello")
+				return
+			}
 		}
 	}
-
 }

@@ -23,3 +23,23 @@ type Post struct {
 
 	sha256sum string
 }
+
+type PostsPage struct {
+	*Page    // Embedding the Page struct to inherit its fields
+	Metadata Metadata
+	Posts    []Post
+
+	sha256sum string
+}
+
+type Page struct {
+	Metadata Metadata
+
+	sha256sum string
+}
+
+type Site struct {
+	Pages []Page
+
+	sha256sum string
+}

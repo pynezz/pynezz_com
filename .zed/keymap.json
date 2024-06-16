@@ -1,0 +1,13 @@
+/*
+This file is just for reference.
+The actual keybindings are in the settings.json file located in ~/.config/zed
+*/
+
+[
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-k ctrl-c": ["workspace::SendKeystrokes", "ctrl-/"],
+    },
+  }
+]

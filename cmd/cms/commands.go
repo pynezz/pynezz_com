@@ -3,33 +3,135 @@ package cms
 import (
 	"fmt"
 
+	"github.com/pynezz/pynezz_com/internal/parser"
 	ansi "github.com/pynezz/pynezzentials/ansi"
 )
 
-var c = map[string]Command{
-	"list":      Command{HelpString: "List all the pages", Run: listPages},
-	"page":      Command{HelpString: "Show a specific page", Run: showPage},
-	"create":    Command{HelpString: "Create a new page. Takes a markdown filepath as input", Run: createPage},
-	"edit":      Command{HelpString: "Edit an existing page", Run: editPage},
-	"delete":    Command{HelpString: "Delete a page", Run: deletePage},
-	"publish":   Command{HelpString: "Publish a page", Run: publishPage},
-	"unpublish": Command{HelpString: "Unpublish a page", Run: unpublishPage},
-	"status":    Command{HelpString: "Get the status of a page", Run: statusPage},
-	"tags":      Command{HelpString: "Get the tags of a page", Run: tagsPage},
-	"stats":     Command{HelpString: "Get the statistics of the CMS", Run: statsCMS},
-	"config":    Command{HelpString: "Show the configuration", Run: configCMS},
-	"push":      Command{HelpString: "Push the CMS to the server", Run: pushCMS},
-	"sync":      Command{HelpString: "Sync the changes to the server", Run: syncCMS},
+// Declaration of the Commands goes here
+var c = map[string]ICommand{
+	"list":      &ListPages{Command{HelpStr: "List all pages", NameStr: "list"}},
+	"edit":      &EditPage{Command{HelpStr: "Edit a page", NameStr: "edit"}},
+	"create":    &CreatePage{Command{HelpStr: "Create a page", NameStr: "create"}},
+	"delete":    &DeletePage{Command{HelpStr: "Delete a page", NameStr: "delete"}},
+	"publish":   &PublishPage{Command{HelpStr: "Publish a page", NameStr: "publish"}},
+	"unpublish": &UnpublishPage{Command{HelpStr: "Unpublish a page", NameStr: "unpublish"}},
+	"status":    &PageStatus{Command{HelpStr: "Show the status of a page", NameStr: "status"}},
+	"tags":      &PageTags{Command{HelpStr: "Show the tags of a page", NameStr: "tags"}},
+	"config":    &Config{Command{HelpStr: "Show the config of a page", NameStr: "config"}},
 }
 
-func createPage(path string) any {
+// func showPage(id string) bool {
+// 	return false
+// }
+
+// func createPage(path string) bool {
+// 	var str string
+// 	var err error
+// 	if str, err = ansi.SprintHexf("#7BD4F1", "Hello from the createPage function!"); err != nil {
+// 		return false
+// 	}
+
+// 	fmt.Println(str)
+
+// 	return true
+// }
+
+// func listPages(min, max int) []parser.Page {
+// 	var str string
+// 	var err error
+// 	if str, err = ansi.SprintHexf("#7BD4F1", "Hello from the listPages function!"); err != nil {
+// 		return nil
+// 	}
+
+// 	fmt.Println(str)
+
+// 	return nil
+// }
+
+func showPage(id string) bool {
+	return false
+}
+
+func createPage(path string) bool {
 	var str string
 	var err error
-	if str, err = ansi.SprintHexf("#ff0000", "Hello from the createPage function!"); err != nil {
-		return err
+	if str, err = ansi.SprintHexf("#7BD4F1", "Hello from the createPage function!"); err != nil {
+		return false
 	}
 
 	fmt.Println(str)
 
-	return "Hello from the createPage function!"
+	return true
+}
+
+func listPages(min, max int) []parser.Page {
+	var str string
+	var err error
+	if str, err = ansi.SprintHexf("#7BD4F1", "Hello from the listPages function!"); err != nil {
+		return nil
+	}
+
+	fmt.Println(str)
+
+	return nil
+}
+
+func editPage(id string) bool {
+	ansi.PrintInfo("edit page called with param: " + id)
+
+	return false
+}
+
+func deletePage(id string) bool {
+	ansi.PrintInfo("delete page called with param: " + id)
+
+	return false
+}
+
+func publishPage(id string) bool {
+	ansi.PrintInfo("publish page called with param: " + id)
+
+	return false
+}
+
+func unpublishPage(id string) bool {
+	ansi.PrintInfo("unpublish page called with param: " + id)
+
+	return false
+}
+
+func showPageStatus(id string) bool {
+	ansi.PrintInfo("show page status called with param: " + id)
+
+	return false
+}
+
+func showPageTags(id string) bool {
+	ansi.PrintInfo("show page tags called with param: " + id)
+
+	return false
+}
+
+func showPageConfig(id string) bool {
+	ansi.PrintInfo("show page config called with param: " + id)
+
+	return false
+}
+
+func pageStatus(id string) bool {
+	ansi.PrintInfo("page status called with param: " + id)
+
+	return false
+}
+
+func pageTags(id string) bool {
+	ansi.PrintInfo("page tags called with param: " + id)
+
+	return false
+}
+
+func config(id string) bool {
+	ansi.PrintInfo("page config called with param: " + id)
+
+	return false
 }

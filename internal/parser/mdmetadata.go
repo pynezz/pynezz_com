@@ -35,7 +35,17 @@ func readMetadata(md []byte) ([]byte, error) {
 func parseMetadata(md []byte) (Metadata, error) {
 	m := Metadata{}
 
+	// read until the next "\n"
+	for i := 0; i < len(md); i++ {
+		if md[i] == '\n' {
+			m.Title = string(md[:i])
+			break
+		}
+	}
 
+	// read until the next ":"
+	// read until the next "\n"
+	// read until the next "---"
 
-	return Metadata{}, nil
+	return m, nil
 }
