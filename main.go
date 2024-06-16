@@ -1,7 +1,9 @@
 package main
 
 import (
+	"embed"
 	"fmt"
+	"html/template"
 	"os"
 	"path/filepath"
 
@@ -9,6 +11,11 @@ import (
 	"github.com/pynezz/pynezz_com/cmd/cms"
 	"github.com/pynezz/pynezz_com/cmd/serve"
 )
+
+//go:embed templates/*
+var resources embed.FS
+
+var t = template.Must(template.ParseFS(resources, "templates/*"))
 
 func main() {
 	args := os.Args[1:]
