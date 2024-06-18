@@ -38,15 +38,3 @@ func (bc *Command) Name() string {
 // func (c *Command[I, O]) Run(args I) O {
 // 	return nil
 // }
-
-func (c *ListPages) Run(args ...interface{}) interface{} {
-	if len(args) < 2 {
-		return nil
-	}
-	min, ok1 := args[0].(int)
-	max, ok2 := args[1].(int)
-	if !ok1 || !ok2 {
-		return nil
-	}
-	return listPages(min, max)
-}

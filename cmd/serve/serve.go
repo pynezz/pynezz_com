@@ -8,31 +8,70 @@ import (
 	"os"
 )
 
+var usage func(...string) = func(args ...string) {
+	fmt.Println(`Usage: serve [options]
+	Options:
+		--help			Print this help message
+		--port, -p	Specify the port to listen on
+
+		Example:
+		serve --port 8080
+
+		Visit http://localhost:8080 in your browser to see the webapp.`)
+}
+
+
 func Serve(args ...string) {
-	fmt.Println("Hello from the serve package!")
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			data := struct {
+				Title string
+				Body  string
+			}{
+				Title: "Hello, World!",
+				Body:  "This is a test page.",
+			}
+
+			t.ExecuteTemplate(w, "index.html.tmpl", data)
+		})
 }
 
 func Help(args ...string) string {
-	return "Help for serve module: [usage instructions]"
+	return fmt.Sprintf("Help for serve module: %s", usage(args...) )
 }
 
 func Execute(args ...string) {
-	var t = template.Must(template.ParseFiles("index.html.tmpl"))
+	fmt.Println("Hello from the serve package!")
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	var t = template.Must(template.ParseFiles("index.html.tmpl"))
+	var port string
+
+	// Some args parsing
+	if len(args) < 1 {̈́
+		fmt.Println("Please provide a command.")
+		usage(args...)
+		return
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		data := map[string]string{
-			"Region": os.Getenv("FLY_REGION"),
+	for i, arg := range args[:1] {
+		if arg == "--help" {
+			usage(args...)
+			return
 		}
 
-		t.ExecuteTemplate(w, "index.html.tmpl", data)
-	})
+		if arg == "--port" || arg == "-p" {
+			if len(args) < 2 {
+				fmt.Println("Please provide a port number.")
+				usage(args...)
+				return
+			}
 
-	log.Println("listening on", port)
+			port := args[i+1]
+
+			fmt.Println("Listening on port", port)
+			return
+		}
+	}
+
+
 	log.Fatal(http.ListenAndServe(":"+port, nil))
-
 }
