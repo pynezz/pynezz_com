@@ -1,0 +1,20 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Contact: mailto:elxn50rt@duck.com
+Expires: 2024-09-04T22:00:00.000Z
+Encryption: https://pynezz.com/pgp.txt
+Encryption: https://pynezz.dev/pgp.txt
+Preferred-Languages: en, no
+Canonical: https://pynezz.com/.well_known/security.txt
+Canonical: https://pynezz.dev/.well_known/security.txt
+Policy: https://pynezz.com/security-policy.html
+Policy: https://pynezz.dev/security-policy.html
+Policy: http://pynezz.com/security-policy.html
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQTSmm8q7j+QxB8P9at9VqghfcNEEwUCZnIKTgAKCRB9VqghfcNE
+E9+SAQCyOqmJwYSlBN/O1r33TV6pjCEfZLpLMOnVcJStdgU+zAD9Eqvo2G7zwixY
+VST31ODUkXkJ5KLceG6UnSRF1JDbjAo=
+=KZlV
+-----END PGP SIGNATURE-----
