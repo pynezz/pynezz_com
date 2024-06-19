@@ -3,8 +3,8 @@ Expires: 2024-09-04T22:00:00.000Z
 Encryption: https://pynezz.com/pgp.txt
 Encryption: https://pynezz.dev/pgp.txt
 Preferred-Languages: en, no
-Canonical: https://pynezz.com/.well_known/security.txt
-Canonical: https://pynezz.dev/.well_known/security.txt
+Canonical: https://pynezz.com/.well-known/security.txt
+Canonical: https://pynezz.dev/.well-known/security.txt
 Policy: https://pynezz.com/security-policy.html
 Policy: https://pynezz.dev/security-policy.html
 Policy: http://pynezz.com/security-policy.html

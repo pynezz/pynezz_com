@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/53382864?s=32&v=4" />
+    <meta charset="utf-8" />
+    <meta name="Description" content="Here resides the pynezz.com and pynezz.dev site." />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <title>pynezz home</title>
+</head>
+
+<body>
+    <h1 style="padding: 10px" id="hostname"></h1>
+    <div class="top-content">
+        <p style="width: max-content; font-size: small; padding-top: 5px; align-content: center; padding-left: 1em; padding-right: 1em; border-radius: 10px; background-color: #cdd6f4;"
+            class="res-label">markdown format</p>
+        <p style="width: max-content; font-size: small; padding-top: 5px; align-content: center; padding-left: 1em; padding-right: 1em; border-radius: 10px; background-color: #a6da95;"
+            class="res-label">result (HTML) format</p>
+    </div>
+    <div class="content">
+        <div class="markdown">
+            <pre>
+# Welcome to <span id="hostname" style="font-size: small;"></span>
+*both sites are the same*
+
+## What is <span id="hostname">pynezz.dev / pynezz.com</span>?
+
+This site is a personal project by me ([pynezz](https://github.com/pynezz))
+where I'm building a content management system (CMS) in [Go](https://go.dev/).
+
+## $whoami
+
+I've newly graduated with a bachelor's degree in cyber security,
+and have a passion for programming and development.
+
+This serves as a portfolio of my work, as well as thoughts, and ideas.
+
+## What's next?
+
+Aside from searching for a job, I'm developing this site to be a blog and portfolio.
+As time passes, this site will gradually be updated with new content in the changelog section.
+
+### Aim
+
+This site starts off as a simple static site, I'm writing this "by hand".
+
+The goal is to be able to upload markdown files to the server and have
+them automatically converted to HTML and displayed on the site,
+with correct formatting and styling.
+
+I'm writing the server and client side code from scratch because it's fun to re-invent the wheel.
+
+### Technologies used
+
+- Reverse proxy with OpenResty (nginx) with some Lua scripting
+- Go CMS server with SQLite database
+- Authentication (undecided): maybe JWT, maybe OAuth,
+    at least I'll use Argon2 if I need to store credentials...
+- Frontend (planned): Go-Templ
+- Markdown to HTML conversion: undecided
+- Temporary hosting: DigitalOcean
+
+### Read more
+
+Read more about the project on the
+[GitHub repository](https://github.com/pynezz/pynezz_com).</pre>
+        </div>
+        <div class="preview">
+            <h2>Welcome to <span id="hostname">pynezz.dev / pynezz.com</span></h2>
+            <p><em>both sites are the same</em></p>
+
+            <h3>What is <span id="hostname">pynezz.dev / pynezz.com</span>?</h3>
+            <p>This site is a personal project by me (<a href="https://github.com/pynezz/">pynezz</a>), where I'm building a content management system (CMS) in <a href="https://go.dev/">Go</a>.</p>
+
+            <h4>$whoami</h4>
+            <p>I've newly graduated with a bachelor's degree in cyber security, and have a passion for programming and
+                development. This servers as a portfolio of my work and a place to share my thoughts and ideas.</p>
+
+            <h4>What's next?</h4>
+            <p>Aside from searching for a job, I'm developing this site to be a blog and portfolio of my work. As time
+                passes, this site will gradually be updated with new content in the changelog section.</p>
+
+            <h5>Aim</h5>
+            <p>This site starts off as a simple static site, I'm writing this "by hand". The goal is to be able to
+                upload markdown files to the server and have them automatically converted to HTML and displayed on the
+                site, with correct formatting and styling. I'm writing the server and client side code from scratch because
+                it's fun to re-invent the wheel.</p>
+
+            <h5>Technologies used</h5>
+            <ul>
+                <li>Reverse proxy with OpenResty (nginx) with some Lua scripting</li>
+                <li>Go CMS server with SQLite database</li>
+                <li>Authentication (undecided): maybe JWT, maybe OAuth, at least I'll use Argon2 if I need to store
+                    credentials...</li>
+                <li>Frontend (planned): Go-Templ</li>
+                <li>Markdown to HTML conversion: undecided</li>
+                <li>Temporary hosting: DigitalOcean</li>
+            </ul>
+            <h5>Read more</h5>
+            <p>Read more about the project on the <a href="https://github.com/pynezz/pynezz_com">GitHub repository</a>
+            </p>
+
+        </div>
+
+    </div>
+    <section class="changelog">
+        <h2>Changelog</h2>
+        <a href="/changelog.html" style="width: fit-content;">Read more</a>
+        <i style="color: slategray; font-size: small; margin-top: 5px; margin-bottom: 5px;">date format: dd.mm.yyyy</i>
+
+        <div class="changelog-entries">
+            <div class="changelog-entry">
+                <h3>19.06.2024</h3>
+                <p>- Added a signed security.txt, which you'll find at <a href="/.well-known/security.txt"
+                        style="color:rgb(207, 215, 222)">/.well-known/security.txt</a></p>
+                <p>- Added PGP key (for signing security.txt) which you'll find at <a href="/pgp.txt"
+                    style="color:rgb(207, 215, 222)">pgp.txt</a></p>
+                <p>- Added information front page, and /posts/ path</p>
+            </div>
+            <div class="changelog-entry">
+                <h3>18.06.2024</h3>
+                <p>Set up VPS and configured domains for TLS.</p>
+            </div>
+        </div>
+    </section>
+</body>
+
+<script>
+    (() => {
+        let host = window.location.hostname;
+        let hname = document.querySelectorAll("#hostname");
+
+        for (let i = 0; i < hname.length; i++) {
+            hname[i].textContent = host;
+        }
+        // hname.textContent = host;
+    })();
+</script>
+
+</html>

@@ -1,0 +1,113 @@
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+
+a {
+    text-decoration-style: dotted;
+    color: #313244;
+}
+
+a:hover {
+    color: #89b4fa;
+}
+.res-label {
+    font-weight:600;
+}
+
+/*
+The content will display two columns, one for markdown, and one for the preview.
+*/
+.content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.top-content {
+    display: flex;
+    align-items: center;
+    /* grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); */
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.markdown {
+    background-color: #45475a;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    padding-top: 0;
+}
+
+.preview {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.changelog {
+    border-top-style: #45475a dotted;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-content: stretch;
+    justify-content: stretch;
+    margin: 5 auto;
+
+    font-family: 'Hack Nerd Font Mono', "Fira Mono", "Fira Code", "Roboto Mono", Courier, monospace;
+}
+
+.changelog-entries {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    border-radius: 10px;
+
+    font-family: 'Hack Nerd Font Mono', "Fira Mono", "Fira Code", "Roboto Mono", Courier, monospace;
+    background-color:#313244;
+}
+
+/* pill boxes */
+.changelog-entry {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: #a6e3a1 3px solid;
+    /* border: 2px dotted #313244; */
+    color: #cdd6f4;
+    padding: 10px;
+    margin: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 15px;
+}
+
+.changelog-entry h3 {
+    margin: 1px;
+    padding: 10px;
+    text-align: start;
+    font-size: 1.1em;
+    border-radius: 5px;
+    background-color: #313244;
+}
+
+.changelog-entry p {
+    margin: 1px;
+    padding: 10px;
+    text-align: start;
+    font-size: 1em;
+    border-radius: 5px;
+    background-color: #313244;
+}
