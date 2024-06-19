@@ -10,14 +10,22 @@ import (
 	"github.com/pynezz/pynezz_com/cmd"
 	"github.com/pynezz/pynezz_com/cmd/cms"
 	"github.com/pynezz/pynezz_com/cmd/serve"
+	"github.com/pynezz/pynezzentials/ansi"
 )
 
 //go:embed templates/*
 var resources embed.FS
 
+var buildVersion string
+
 var t = template.Must(template.ParseFS(resources, "templates/*"))
 
+var header = func() string {
+	return fmt.Sprintf(ansi.FormatRoundedBox("pynezz.dev CLI\n"+buildVersion), "\n")
+}
+
 func main() {
+	fmt.Println(header())
 	args := os.Args[1:]
 	Execute(args...)
 }
