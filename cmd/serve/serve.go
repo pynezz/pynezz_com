@@ -2,10 +2,11 @@ package serve
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/a-h/templ"
 )
 
 var usage func(...string) = func(args ...string) {
@@ -31,7 +32,7 @@ func Serve(args ...string) {
 				Body:  "This is a test page.",
 			}
 
-			t.ExecuteTemplate(w, "index.html.tmpl", data)
+			// TODO: Decide if we want to use a-h/templ or html/template, or something else
 		})
 }
 
