@@ -12,16 +12,17 @@ type Command struct {
 	NameStr string
 }
 
-// Commands
-type ListPages struct{ Command }
-type CreatePage struct{ Command }
-type EditPage struct{ Command }
-type DeletePage struct{ Command }
-type PublishPage struct{ Command }
-type UnpublishPage struct{ Command }
-type PageStatus struct{ Command }
-type PageTags struct{ Command }
-type Config struct{ Command }
+// Commands - reflecting the commands in the cms.go in cms.go
+type Config struct{ *Command }
+type PageTags struct{ *Command }
+type EditPage struct{ *Command }
+type ShowPage struct{ *Command }
+type ListPages struct{ *Command }
+type PageStatus struct{ *Command }
+type CreatePage struct{ *Command }
+type DeletePage struct{ *Command }
+type PublishPage struct{ *Command }
+type UnpublishPage struct{ *Command }
 
 // // Help returns the help string of the command
 //

@@ -10,7 +10,9 @@ import (
 )
 
 var usage func(...string) string = func(args ...string) string {
-	return fmt.Sprintf(`Usage: serve [options]
+	fmt.Println("args in serve.go", args)
+
+	return fmt.Sprintln(`Usage: serve [options]
 	Options:
 		--help			Print this help message
 		--port, -p	Specify the port to listen on
@@ -35,7 +37,7 @@ func setup(app *echo.Echo) {
 }
 
 func Help(args ...string) string {
-	return fmt.Sprintf("Help for serve module: %s", usage(args...))
+	return fmt.Sprintf("Help for serve module: \n%s", usage(args...))
 }
 
 func Execute(args ...string) {

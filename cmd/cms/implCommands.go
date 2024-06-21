@@ -1,14 +1,17 @@
 package cms
 
 import (
+	"fmt"
+
 	"github.com/pynezz/pynezzentials/ansi"
 )
 
 func (c *ListPages) Run(args ...interface{}) interface{} {
+	var requiredArgs = 2
 	ansi.PrintDebug("listpages function called!")
-	if len(args) < 2 {
-		ansi.PrintError("Not enough arguments:" +
-			string(len(args)) + " instead of 2")
+
+	if len(args) < requiredArgs {
+		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of %d", len(args), requiredArgs))
 		return nil
 	}
 
@@ -20,9 +23,9 @@ func (c *ListPages) Run(args ...interface{}) interface{} {
 
 func (c *CreatePage) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("createpage function called!")
+
 	if len(args) < 1 {
-		ansi.PrintError("Not enough arguments:" +
-			string(len(args)) + " instead of 1")
+		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
 		return nil
 	}
 
@@ -31,11 +34,14 @@ func (c *CreatePage) Run(args ...interface{}) interface{} {
 	return createPage(path)
 }
 
+func (*CreatePage) Help() string {
+	return "Create a page"
+}
+
 func (c *EditPage) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("editpage function called!")
 	if len(args) < 1 {
-		ansi.PrintError("Not enough arguments:" +
-			string(len(args)) + " instead of 1")
+		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
 		return nil
 	}
 
@@ -47,8 +53,7 @@ func (c *EditPage) Run(args ...interface{}) interface{} {
 func (c *DeletePage) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("deletepage function called!")
 	if len(args) < 1 {
-		ansi.PrintError("Not enough arguments:" +
-			string(len(args)) + " instead of 1")
+		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
 		return nil
 	}
 
@@ -60,8 +65,7 @@ func (c *DeletePage) Run(args ...interface{}) interface{} {
 func (c *PublishPage) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("publishpage function called!")
 	if len(args) < 1 {
-		ansi.PrintError("Not enough arguments:" +
-			string(len(args)) + " instead of 1")
+		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
 		return nil
 	}
 
@@ -73,8 +77,7 @@ func (c *PublishPage) Run(args ...interface{}) interface{} {
 func (c *UnpublishPage) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("unpublishpage function called!")
 	if len(args) < 1 {
-		ansi.PrintError("Not enough arguments:" +
-			string(len(args)) + " instead of 1")
+		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
 		return nil
 	}
 
@@ -86,8 +89,7 @@ func (c *UnpublishPage) Run(args ...interface{}) interface{} {
 func (c *PageStatus) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("pagestatus function called!")
 	if len(args) < 1 {
-		ansi.PrintError("Not enough arguments:" +
-			string(len(args)) + " instead of 1")
+		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
 		return nil
 	}
 
@@ -99,8 +101,7 @@ func (c *PageStatus) Run(args ...interface{}) interface{} {
 func (c *PageTags) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("pagetags function called!")
 	if len(args) < 1 {
-		ansi.PrintError("Not enough arguments:" +
-			string(len(args)) + " instead of 1")
+		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
 		return nil
 	}
 
@@ -112,12 +113,23 @@ func (c *PageTags) Run(args ...interface{}) interface{} {
 func (c *Config) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("config function called!")
 	if len(args) < 1 {
-		ansi.PrintError("Not enough arguments:" +
-			string(len(args)) + " instead of 1")
+		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
 		return nil
 	}
 
 	key, _ := args[0].(string)
 
 	return config(key)
+}
+
+func (c *ShowPage) Run(args ...interface{}) interface{} {
+	ansi.PrintDebug("showpage function called!")
+	if len(args) < 1 {
+		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
+		return nil
+	}
+
+	id, _ := args[0].(string)
+
+	return showPage(id)
 }

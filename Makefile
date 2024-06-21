@@ -1,4 +1,4 @@
-BIN_NAME=bivrost
+BIN_NAME=pynezz-cli
 #TEST_BIN_NAME=testmodule
 
 WINDOWS=$(BIN_NAME)_win_amd64.exe

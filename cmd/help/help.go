@@ -34,7 +34,6 @@ Options:
 }
 
 func Help(args ...string) string {
-
 	return displayHelp(args...)
 }
 
@@ -50,8 +49,12 @@ var displayHelp func(args ...string) string = func(args ...string) string {
 		"serve": serve.Help,
 	}
 
-	return fmt.Sprintf(`Usage:
-	%s %s [options]
+	if hasParams := len(args)-1 > 2; !hasParams {
+		return fmt.Sprintf(`Usage: %s %s %s [options]`, filepath.Base(os.Args[0]), args[0], args[len(args)-1])
+	}
+
+	return fmt.Sprintf(`Usage: %s %s [options]
+
 Options:
-	%s`, filepath.Base(os.Args[0]), args[1], h[args[1]](args...))
+%s`, filepath.Base(os.Args[0]), args[2], h[args[0]](args...))
 }

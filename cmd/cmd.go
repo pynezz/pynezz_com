@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/pynezz/pynezz_com/cmd/help"
 )
 
@@ -32,7 +34,9 @@ import (
 // }
 
 func Execute(args ...string) string {
-	if len(args) < 1 {
+	fmt.Println("Hello from the main package!")
+	fmt.Printf("Args: %v\n", args)
+	if len(args) < 2 {
 		return ""
 	}
 	return help.Help(args...)

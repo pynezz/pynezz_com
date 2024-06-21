@@ -1,6 +1,10 @@
 package cms
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/pynezz/pynezzentials/ansi"
+)
 
 type ICMS interface {
 	ICommand // Embedding the ICommand interface to inherit its methods
@@ -14,6 +18,7 @@ type cms struct{}
 func commands() map[string]ICommand {
 	prefix := "--"
 
+	// fmt.Println("Creating commands...")
 	return map[string]ICommand{
 		prefix + "list":      c["list"],
 		prefix + "page":      c["page"],
@@ -24,16 +29,29 @@ func commands() map[string]ICommand {
 		prefix + "unpublish": c["unpublish"],
 		prefix + "status":    c["status"],
 		prefix + "tags":      c["tags"],
-		prefix + "stats":     c["stats"],
 		prefix + "config":    c["config"],
 	}
 }
 
 func listCommands() string {
 	var s string
-	for k, v := range commands() {
-		s += k + "\t" + v.Help() + "\n"
+
+	// fmt.Println("Listing commands...")
+	cmds := commands()
+
+	pad := longestStringMap(cmds)
+	// fmt.Println("Commands length: ", len(cmds))
+	// fmt.Println("Padding: ", pad)
+	for k, v := range cmds {
+		if v != nil {
+			s += "  " + k + ansi.AddPadding(" ", pad-len(k)) + v.Help() + "\n"
+		} else {
+			s += k + "\t" + "⚠️ error:  command not initialized!\n"
+		}
 	}
+	// for k, v := range cmds {
+	// 	s += k + "\t" + v.Help() + "\n"
+	// }
 	return s
 }
 
@@ -49,8 +67,9 @@ func (c *cms) CMS(args ...string) *cms {
 	return &cms{}
 }
 
-func run(c ICommand) {
+func run(c ICommand, args ...string) {
 	fmt.Println("running command: ", c.Name())
+	c.Run(args)
 }
 
 func Execute(args ...string) {
@@ -65,9 +84,39 @@ func Execute(args ...string) {
 	for k, v := range commands() {
 		for _, arg := range args {
 			if arg == k {
-				v.Run("hello")
+				if v != nil {
+					// v.Run("hello")
+					run(v, args...)
+				} else {
+					fmt.Printf("Command %s is not initialized.\n", k)
+				}
 				return
 			}
+			// if arg == k {
+			// 	v.Run("hello")
+			// 	return
+			// }
 		}
 	}
+}
+
+// Get the longest string in a slice of strings and return its length
+func longestString(s []string) int {
+	var max int
+	for _, v := range s {
+		if len(v) > max {
+			max = len(v)
+		}
+	}
+	return max
+}
+
+func longestStringMap(m map[string]ICommand) int {
+	var max int
+	for k := range m {
+		if len(k) > max {
+			max = len(k)
+		}
+	}
+	return max
 }
