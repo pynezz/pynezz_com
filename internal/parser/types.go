@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"crypto/sha256"
 	"errors"
 	"time"
 )
@@ -22,6 +23,8 @@ type Post struct {
 	Content  []byte
 
 	sha256sum string
+
+	CalculateSha256Sum func() string
 }
 
 type PostsPage struct {
@@ -42,4 +45,33 @@ type Site struct {
 	Pages []Page
 
 	sha256sum string
+}
+
+func NewPost(content string) *Post {
+	p := &Post{
+		Content: []byte(content),
+	}
+
+	return &Post{
+		CalculateSha256Sum: func() string {
+			if p.sha256sum == "" && p.Content != nil {
+				hash := sha256.New()
+				hash.Write(p.Content)
+				p.sha256sum = string(hash.Sum(nil))
+			}
+			return p.sha256sum
+		},
+	}
+}
+
+func NewPostsPage() *PostsPage {
+	return &PostsPage{}
+}
+
+func NewPage() *Page {
+	return &Page{}
+}
+
+func NewSite() *Site {
+	return &Site{}
 }

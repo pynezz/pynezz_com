@@ -30,11 +30,24 @@ linux: $(LINUX)
 
 test: go test ./...
 
-build: windows linux
+build: windows linux ## Build the application for Windows and Linux
 	@echo $(VERSION)
 	@echo "Build complete"
 
-run: $(LINUX) && ./$(LINUX)
+build-windows: windows ## Build the application for Windows
+	@echo $(VERSION)
+	@echo "Build complete"
+
+build-linux: linux ## Build the application for Linux
+	@echo $(VERSION)
+	@echo "Build complete"
+
+run: ## Build and run the application (Linux)
+	$(LINUX) && ./$(LINUX)
+
+gen: ## Generate code
+	@templ generate
+	@go run . serve -p 8080
 
 # run-prototype: # Run prototype
 # 	$(TEST_LINUX)

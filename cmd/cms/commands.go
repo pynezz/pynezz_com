@@ -37,34 +37,6 @@ var c = map[string]ICommand{
 	"page":      &ShowPage{&Command{HelpStr: "Show a page", NameStr: "page"}},
 }
 
-// func showPage(id string) bool {
-// 	return false
-// }
-
-// func createPage(path string) bool {
-// 	var str string
-// 	var err error
-// 	if str, err = ansi.SprintHexf("#7BD4F1", "Hello from the createPage function!"); err != nil {
-// 		return false
-// 	}
-
-// 	fmt.Println(str)
-
-// 	return true
-// }
-
-// func listPages(min, max int) []parser.Page {
-// 	var str string
-// 	var err error
-// 	if str, err = ansi.SprintHexf("#7BD4F1", "Hello from the listPages function!"); err != nil {
-// 		return nil
-// 	}
-
-// 	fmt.Println(str)
-
-// 	return nil
-// }
-
 func showPage(id string) bool {
 	return false
 }

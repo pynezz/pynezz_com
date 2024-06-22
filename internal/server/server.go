@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 
+	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 )
 
@@ -17,5 +18,18 @@ func Serve(port string) {
 func setup(app *echo.Echo) {
 	app.GET("/", homeHandler)
 	app.GET("/about", aboutHandler)
-	app.GET("/posts/:id", postsHandler)
+	app.GET("/posts/", newPostsHandler().handleShowLastPosts)
+	app.GET("/posts/:id", newPostsHandler().handleShowPosts)
+}
+
+// This custom Render replaces Echo's echo.Context.Render() with templ's templ.Component.Render().
+func Render(ctx echo.Context, statusCode int, t templ.Component) error {
+	buf := templ.GetBuffer()
+	defer templ.ReleaseBuffer(buf)
+
+	if err := t.Render(ctx.Request().Context(), buf); err != nil {
+		return err
+	}
+
+	return ctx.HTML(statusCode, buf.String())
 }

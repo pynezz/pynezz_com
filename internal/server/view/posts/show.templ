@@ -1,0 +1,11 @@
+package posts
+
+templ Show(title string, content string) {
+  <h1>{title}</h1>
+
+  <p>{content}</p>
+
+  <a href="/posts/{.Id}/edit">Edit</a>
+  <a href="/posts/{.Id}/delete">Delete</a>
+  <a href="/posts">Back</a>
+}
