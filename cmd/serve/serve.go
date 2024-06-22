@@ -14,14 +14,17 @@ var usage func(...string) string = func(args ...string) string {
 	fmt.Println("args in serve.go", args)
 
 	return fmt.Sprintln(`Usage: serve [options]
-	Options:
-		--help			Print this help message
-		--port, -p	Specify the port to listen on
 
-		Example:
-		serve --port 8080
+  Serve the web server on a specified port.
 
-		Visit http://localhost:8080 in your browser to see the webapp.`)
+Options:
+    --help      Print this help message
+    --port, -p  Specify the port to listen on
+
+Example:
+  serve --port 8080
+
+Visit http://localhost:8080 in your browser to see the webapp.`)
 }
 
 func Help(args ...string) string {

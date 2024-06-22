@@ -4,6 +4,33 @@ Tags: ["go", "projects", "portfolio", "pynezz.dev"]
 Created: 20.06.2024
 ---
 
+
+**🏗️ Current status:**  Building the project
+
+Still manually writing the html for the [changelog]. It's a hassle.
+
+[changelog]: https://pynezz.dev/changelog.html
+
+---
+
+# How to write a CMS and site generator in Go from scratch
+
+- [How to write a CMS and site generator in Go from scratch](#how-to-write-a-cms-and-site-generator-in-go-from-scratch)
+  - [Planning and introduction](#planning-and-introduction)
+    - [Introduction](#introduction)
+      - [Dual purpose project](#dual-purpose-project)
+    - [Requirements](#requirements)
+      - [Markdown](#markdown)
+      - [Authentication](#authentication)
+      - [Theming and styles](#theming-and-styles)
+      - [CLI build tool](#cli-build-tool)
+      - [Web server](#web-server)
+  - [The implementation, thoughts, and ideas](#the-implementation-thoughts-and-ideas)
+    - [Markdown to HTML](#markdown-to-html)
+      - [Content](#content)
+      - [Metadata](#metadata)
+    - [Implementing authentication](#implementing-authentication)
+
 ## Planning and introduction
 
 ### Introduction
