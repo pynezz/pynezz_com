@@ -2,11 +2,12 @@ package serve
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
+	"github.com/pynezz/pynezz_com/internal/helpers"
+	"github.com/pynezz/pynezz_com/internal/server"
+	"github.com/pynezz/pynezzentials/ansi"
 )
 
 var usage func(...string) string = func(args ...string) string {
@@ -23,56 +24,43 @@ var usage func(...string) string = func(args ...string) string {
 		Visit http://localhost:8080 in your browser to see the webapp.`)
 }
 
-func Serve(args ...string) {
-
-	app := echo.New()
-	setup(app)
-}
-
-func setup(app *echo.Echo) {
-	app.GET("/", homeHandler)
-	app.GET("/about", aboutHandler)
-	app.GET("posts/:id", postsHandler)
-
-}
-
 func Help(args ...string) string {
 	return fmt.Sprintf("Help for serve module: \n%s", usage(args...))
 }
 
 func Execute(args ...string) {
-	fmt.Println("Hello from the serve package!")
 
-	var port string
+	fmt.Println("Hello from the serve package!")
 
 	// Some args parsing
 	if len(args) < 1 {
-		fmt.Println("Please provide a command.")
-		usage(args...)
+		helpers.Warning("Please provide a command.")
+		fmt.Println(usage(args...))
 		return
 	}
 
 	for i, arg := range args[:1] {
 		if arg == "--help" {
-			usage(args...)
+			fmt.Println(usage(args...))
 			return
 		}
 
 		if arg == "--port" || arg == "-p" {
 			if len(args) < 2 {
 				fmt.Println("Please provide a port number.")
-				usage(args...)
+				fmt.Println(usage(args...))
 				return
 			}
 
 			port := args[i+1]
 
-			fmt.Println("Listening on port", port)
-			return
+			server.Serve(port)
+
+			ansi.PrintInfo("Listening on port: " + port)
 		}
 	}
 
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	ansi.PrintInfo("Waiting for SIGINT (Ctrl+C) to shutdown...")
 }
 
 // This custom Render replaces Echo's echo.Context.Render() with templ's templ.Component.Render().
