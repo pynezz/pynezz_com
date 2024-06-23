@@ -57,8 +57,6 @@ func InitDB(database string, conf gorm.Config, tables ...interface{}) (*gorm.DB,
 		return nil, err
 	}
 
-	db = db.Session(&gorm.Session{CreateBatchSize: 100})
-
 	return db, nil
 }
 

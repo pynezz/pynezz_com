@@ -2,7 +2,6 @@ package cms
 
 import (
 	"fmt"
-	"sync"
 
 	"github.com/pynezz/pynezzentials/ansi"
 )
@@ -37,12 +36,9 @@ func commands() map[string]ICommand {
 func listCommands() string {
 	var s string
 
-	// fmt.Println("Listing commands...")
 	cmds := commands()
-
 	pad := longestStringMap(cmds)
-	// fmt.Println("Commands length: ", len(cmds))
-	// fmt.Println("Padding: ", pad)
+
 	for k, v := range cmds {
 		if v != nil {
 			s += "  " + k + ansi.AddPadding(" ", pad-len(k)) + v.Help() + "\n"
@@ -50,19 +46,12 @@ func listCommands() string {
 			s += k + "\t" + "⚠️ error:  command not initialized!\n"
 		}
 	}
-	// for k, v := range cmds {
-	// 	s += k + "\t" + v.Help() + "\n"
-	// }
 	return s
 }
 
 func Help(args ...string) string {
 	return listCommands()
 }
-
-// func CMS(args []string) string {
-// 	return cms.Help(cms{}, args...)
-// }
 
 func (c *cms) CMS(args ...string) *cms {
 	return &cms{}
@@ -74,8 +63,6 @@ func run(c ICommand, args ...string) {
 }
 
 func Execute(args ...string) {
-	var wg sync.WaitGroup
-
 	fmt.Printf("Hello from the CMS module!\n")
 
 	if len(args) < 1 {
@@ -83,34 +70,21 @@ func Execute(args ...string) {
 		return
 	}
 
-	wg.Add(1)
 	if ok := testDbConnection(); !ok {
 		fmt.Println("Database connection failed.")
-		wg.Done()
 		return
-	} else {
-		fmt.Println("Database connection successful.")
-		wg.Done()
 	}
-
-	fmt.Println("Waiting for the database connection to finish...")
-	wg.Wait()
 	// If the command exists, run it
 	for k, v := range commands() {
 		for _, arg := range args {
 			if arg == k {
 				if v != nil {
-					// v.Run("hello")
 					run(v, args...)
 				} else {
 					fmt.Printf("Command %s is not initialized.\n", k)
 				}
 				return
 			}
-			// if arg == k {
-			// 	v.Run("hello")
-			// 	return
-			// }
 		}
 	}
 }

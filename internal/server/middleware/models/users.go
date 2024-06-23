@@ -6,8 +6,9 @@ import "gorm.io/gorm"
 type User struct {
 	gorm.Model // Embed the `Model` struct, which contains fields `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
 
+	UserID   uint   `gorm:"primaryKey; unique;"`
 	Username string `gorm:"unique"`
 	Password string `gorm:"not null"`
 
-	Session string `gorm:"not null" json:"session"`
+	Role string `gorm:"not null"`
 }

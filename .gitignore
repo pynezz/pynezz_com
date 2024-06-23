@@ -46,3 +46,9 @@ Thumbs.db
 # Database
 *.sqlite3
 *.db
+
+# Environment
+.env
+.env.local
+.env.development
+.env.test
