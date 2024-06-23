@@ -2,11 +2,20 @@ module github.com/pynezz/pynezz_com
 
 go 1.22.4
 
-require github.com/pynezz/pynezzentials v0.0.0-20240605222431-700a36e65e72
+require (
+	github.com/pynezz/pynezzentials v0.0.0-20240605222431-700a36e65e72
+	gorm.io/driver/sqlite v1.5.6
+	gorm.io/gorm v1.25.10
+)
 
 require (
-	github.com/a-h/templ v0.2.707 // indirect
-	github.com/labstack/echo v3.3.10+incompatible // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/mattn/go-sqlite3 v1.14.22 // indirect
+)
+
+require (
+	github.com/a-h/templ v0.2.707
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect

@@ -42,3 +42,7 @@ Thumbs.db
 
 # Zed editor
 .zedstate
+
+# Database
+*.sqlite3
+*.db
