@@ -14,3 +14,14 @@ func homeHandler(c echo.Context) error {
 func aboutHandler(c echo.Context) error {
 	return c.String(http.StatusOK, "About page\n")
 }
+
+func handleLogin(c echo.Context) error {
+	return c.String(http.StatusOK, "Login page\n")
+}
+
+func handleRegister(c echo.Context) error {
+	// css
+	c.Get("/styles/templ.css")
+
+	return Render(c, http.StatusOK, templates.Register())
+}

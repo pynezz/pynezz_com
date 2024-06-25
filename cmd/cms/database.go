@@ -31,7 +31,6 @@ func testDbConnection() bool {
 		ansi.PrintError(err.Error())
 		return false
 	}
-
 	ansi.PrintColorBold(ansi.LightGreen, "🎉 Database connected!")
 
 	return true

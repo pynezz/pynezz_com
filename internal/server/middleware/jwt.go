@@ -31,23 +31,22 @@ func getSecretKey() string {
 		os.Exit(1)
 	}
 
-	secretKey := strings.Split(envFile, "=")[1]
-	fmt.Println("Secret key: ", secretKey)
+	for _, line := range strings.Split(envFile, "\n") {
+		if strings.Contains(line, "JWT_SECRET") {
+			return strings.Split(line, "=")[1]
+		}
+	}
 
-	secretKey = strings.Trim(secretKey, "\"") // Remove any quotes from the secret key
-	fmt.Println("Secret key trimmed: ", secretKey)
-
-	return secretKey
+	return "" // Whatever value is after the '=' sign
 }
 
 func VerifyJWTToken(tokenString string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-
 		signing := token.Header["alg"]
 		fmt.Printf("%v\n", token)
 		fmt.Println("Signing method: ", signing)
 
-		exp := token.Claims.(jwt.MapClaims)["exp"].(float64)
+		exp := token.Claims.(jwt.MapClaims)["exp"].(float64) // Unix timestamp
 		debugExp := fmt.Sprintf("%f", exp)
 		ansi.PrintDebug(fmt.Sprintf("Token expires at: %s", debugExp))
 
@@ -84,7 +83,7 @@ func VerifyJWTToken(tokenString string) (*jwt.Token, error) {
 		return nil, err
 	}
 
-	sub := fmt.Sprintf("%f", claims["sub"].(float64))
+	sub := fmt.Sprintf("%s", claims["sub"])
 	ansi.PrintDebug("Subject(user): " + sub)
 	aud := fmt.Sprintf("%s", claims["aud"])
 	ansi.PrintDebug("Audience(role): " + aud)
@@ -92,15 +91,15 @@ func VerifyJWTToken(tokenString string) (*jwt.Token, error) {
 	return token, err
 }
 
-func GenerateJWTToken(user models.User, loginTime time.Time) string {
+func GenerateJWTToken(user models.User) string {
+	// curTime := time.Now().Unix()
+	loginTime := time.Now()
 	// Create a new token object, specifying signing method and the claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		// NB! This might not work. It's a time.Time object
 		"exp": loginTime.Add(time.Duration(exp) * time.Hour).Unix(),
-
 		"iss": iss,
-		"aud": user.Role,
-		"sub": user.UserID,
+		"aud": &user.Role,
+		"sub": &user.Username,
 	})
 
 	// Sign and get the complete encoded token as a string

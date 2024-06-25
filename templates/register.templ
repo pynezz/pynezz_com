@@ -1,0 +1,138 @@
+package templates
+
+var (
+  bg        = "#1e1e2e" // catppuccin Mocha: base
+  txt       = "#cdd6f4" // text
+  subtxt    = "#b5bfe2" // text2
+  text3     = "#a6adc8" // text3
+  darkTxt   = "#313244" // surface0
+  red       = "#f38ba8"
+  green     = "#a6e3a1"
+  overlay2  = "#9399b2" // light gray
+  overlay1  = "#7f849c" // semi gray
+  overlay0  = "#6c7086" // semi gray
+  surface2   = "#585b70" // light gray
+  surface0  = "#313244" // dark gray
+  mantle    = "#181825" // darkest gray
+  crust     = "#11111b" // darkest
+)
+
+css h1() {
+  color: {txt};
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-family: "Hack Nerd Font Mono", "Fira Mono", monospace;
+}
+
+css btn(fg, bg string) {
+  background-color: {bg};
+  color: {fg};
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+css hint() {
+  color: {subtxt};
+  font-size: 0.8rem;
+  font-family: "Hack Nerd Font Mono", "Fira Mono", monospace;
+}
+
+css input() {
+  background-color: {crust};
+  color: {txt};
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+css form() {
+  display: flex;
+  flex-direction: column;
+  background-color: {surface0};
+  color: {txt};
+
+  padding: 2rem;
+  border-radius: 0.4rem;
+  box-shadow: 0 0 1rem 0.4rem {overlay0};
+
+  max-width: 40rem;
+
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+css formDiv() {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: {bg};
+  color: {txt};
+
+  padding: 1rem;
+
+  max-width: 50rem;
+  border-radius: 0.4rem;
+  box-shadow: 0 0 10px 20px {overlay0};
+  margin: 0 auto;
+}
+
+css Outer() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: {crust};
+}
+
+css aTxt() {
+  color: {text3};
+  text-decoration: none;
+  font-family: "Hack Nerd Font Mono", "Fira Mono", monospace;
+  border-bottom: 3px dotted {subtxt};
+  font-size: 0.9rem;
+
+  padding: 0.3rem;
+
+  background-color: {surface0};
+  border-radius: 0.4rem;
+}
+
+css code() {
+  background-color: {surface0};
+  font-family: "Hack Nerd Font Mono", "Fira Mono", monospace;
+  padding: .3rem;
+  border-radius: 0.4rem;
+}
+
+css lighten() {
+  color: {txt};
+}
+
+
+templ Register() {
+  <link rel="stylesheet" href="/styles/templ.css">
+
+  <div class={"div", Outer()}>
+    <div class={"div", formDiv()}>
+      <h1 class={"h1", h1()}> Register </h1>
+      <p> Please register here </p>
+
+      // Input form
+      <form class={"form", form()} action="/register" method="post">
+        <input class={"input", input()} type="text" name="username" placeholder="Username" />
+        <input class={"input", input()} type="password" name="password" placeholder="Password" />
+        <button type="submit" class={"button", btn(darkTxt, green)}>Register</button>
+      </form>
+      <i class={"i", hint()}> Password requirements: <code class={"code", code()}> > 12 characters </code> </i>
+      <br>
+      <p style="display: flex; flex-direction: column; justify-content: center;"> Already have an account?
+      <a href="/login" class={"a", templ.KV("hover:lighten", false), aTxt()}> Login here </a>
+       </p>
+    </div>
+  </div>
+}

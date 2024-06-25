@@ -2,21 +2,50 @@ package server
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
+	"github.com/pynezz/pynezz_com/internal/server/middleware"
+	"github.com/pynezz/pynezz_com/templates"
 )
 
 func Serve(port string) {
 	fmt.Println("Serving the webapp on port", port)
 	app := echo.New()
 	setup(app)
+	c1 := templates.Style()
+	handler := templ.NewCSSMiddleware(app, c1)
+	app.GET("/styles/templ.css", func(c echo.Context) error {
+		css := templates.RenderStyle()
+		return c.Blob(http.StatusOK, "text/css", []byte(css))
+	})
 
-	app.Logger.Fatal(app.Start(":" + port))
+	app.Logger.Fatal(http.ListenAndServe(":"+port, handler))
 }
 
 func setup(app *echo.Echo) {
+
+	ctx := app.AcquireContext()
+	defer app.ReleaseContext(ctx)
+
+	app.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(ctx echo.Context) error {
+			ctx.Response().Header().Set(echo.HeaderServer, "pynezz.dev")
+			return next(ctx)
+		}
+	})
+
+	app.GET("/favicon.ico", func(c echo.Context) error {
+		return c.File("pynezz/public/favicon.ico")
+	})
+
 	app.GET("/", homeHandler)
+
+	// Use Bouncer middleware
+	app.GET("/login", middleware.Bouncer(handleLogin))
+	app.GET("/register", handleRegister)
+	app.POST("/register", middleware.Register(handleLogin))
 	app.GET("/about", aboutHandler)
 	app.GET("/posts/", newPostsHandler().handleShowLastPosts)
 	app.GET("/posts/:id", newPostsHandler().handleShowPosts)
