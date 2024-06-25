@@ -161,6 +161,12 @@ func navBarItem(floatSide string) templ.CSSClass {
 	var templ_7745c5c3_CSSBuilder strings.Builder
 	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`float`, floatSide)))
 	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`color`, txt)))
+	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`background-color`, mantle)))
+	templ_7745c5c3_CSSBuilder.WriteString(`border-right:1px solid { crust };`)
+	templ_7745c5c3_CSSBuilder.WriteString(`border-right-style:solid;`)
+	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`border-right-color`, crust)))
+	templ_7745c5c3_CSSBuilder.WriteString(`padding-left:1rem;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`padding-right:1rem;`)
 	templ_7745c5c3_CSSID := templ.CSSID(`navBarItem`, templ_7745c5c3_CSSBuilder.String())
 	return templ.ComponentCSSClass{
 		ID:    templ_7745c5c3_CSSID,

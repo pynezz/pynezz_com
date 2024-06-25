@@ -13,12 +13,28 @@ templ links() {
 templ Header() {
   @links()
   <header class={"header", header()}>
-    <h1>pynezz.dev</h1>
-    @horizNav()
+  <div>
+
+    <h3 class={"h3", title()}>pynezz.dev</h3>
+  </div>
+    <ul class={"ul", navBarList()}>
+		<li class={"li", navBarItem("left")}>
+			<a href="/" class={ navBarItemLink("monospace")}>/</a>
+		</li>
+    <li class={ navBarItem("left") }>
+      <a href="/posts/" class={ navBarItemLink("Hack Nerd Font Mono") }>posts</a>
+    </li>
+	</ul>
+    // @horizNav()
+
   </header>
 }
 
 css header() {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   background-color: {crust};
   max-height: fit-content;
   padding-left: 5em;
@@ -26,10 +42,17 @@ css header() {
   width: 100%;
   max-width: 100%;
   float: top;
-  display: absolute;
   z-index: 1;
 
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
+}
+
+css title() {
+  font-size: 1.35em;
+  font-family: "Hack Nerd Font Mono", monospace;
+  color: {txt};
+  margin: 0;
+  padding: 0rem 2rem 0rem 2rem;
 }
