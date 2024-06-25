@@ -1,0 +1,18 @@
+package layout
+
+templ Footer() {
+  <footer class={"footer", footer()}>
+    <p>© 2024 pynezz.dev</p>
+    <a href="https://www.github.com/pynezz/" class={ navBarItemLink("monospace") }><img src="/static/svgs/github-icon.svg" height="20px" /></a>
+  </footer>
+}
+
+
+css footer() {
+  display: flex;
+  justify-content: center;
+
+  background-color: {crust};
+  width: 100%;
+
+}

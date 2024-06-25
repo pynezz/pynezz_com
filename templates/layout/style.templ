@@ -1,0 +1,51 @@
+package layout
+
+const (
+  bg        = "#1e1e2e" // catppuccin Mocha: base
+  txt       = "#cdd6f4" // text
+  subtxt    = "#b5bfe2" // text2
+  text3     = "#a6adc8" // text3
+  darkTxt   = "#313244" // surface0
+  red       = "#f38ba8"
+  green     = "#a6e3a1"
+  overlay2  = "#9399b2" // light gray
+  overlay1  = "#7f849c" // semi gray
+  overlay0  = "#6c7086" // semi gray
+  surface2  = "#585b70" // light gray
+  surface0  = "#313244" // dark gray
+  mantle    = "#181825" // darkest gray
+  crust     = "#11111b" // darkest
+)
+
+templ Style() {
+	<style>
+    html {
+        font-size: 16px;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+    }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: { bg };
+    }
+    a {
+        text-decoration: none;
+    }
+    a:link {
+      text-decoration: none;
+    }
+    a:visited {
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: none;
+    }
+    a:active {
+      text-decoration: none;
+    }
+  </style>
+}

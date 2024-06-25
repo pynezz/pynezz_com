@@ -1,0 +1,35 @@
+package layout
+
+templ links() {
+  <head>
+    <title>pynezz.dev</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @Style()
+    <link rel="stylesheet" href="/styles/templ.css">
+  </head>
+}
+
+templ Header() {
+  @links()
+  <header class={"header", header()}>
+    <h1>pynezz.dev</h1>
+    @horizNav()
+  </header>
+}
+
+css header() {
+  background-color: {crust};
+  max-height: fit-content;
+  padding-left: 5em;
+  margin-right: 5em;
+  width: 100%;
+  max-width: 100%;
+  float: top;
+  display: absolute;
+  z-index: 1;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+}

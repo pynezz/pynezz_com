@@ -1,6 +1,11 @@
 package templates
 
+import (
+  "github.com/pynezz/pynezz_com/templates/layout"
+)
+
 templ Show(title string, body string) {
+  @layout.Header()
   <link rel="stylesheet" href="/styles/templ.css">
   <div>
   <h1>{title}</h1>

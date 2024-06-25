@@ -16,10 +16,10 @@ func Serve(port string) {
 	setup(app)
 	c1 := templates.Style()
 	handler := templ.NewCSSMiddleware(app, c1)
-	app.GET("/styles/templ.css", func(c echo.Context) error {
-		css := templates.RenderStyle()
-		return c.Blob(http.StatusOK, "text/css", []byte(css))
-	})
+	// app.GET("/styles/templ.css", func(c echo.Context) error {
+	// 	css := templates.RenderStyle()
+	// 	return c.Blob(http.StatusOK, "text/css", []byte(css))
+	// })
 
 	app.Logger.Fatal(http.ListenAndServe(":"+port, handler))
 }
@@ -38,6 +38,10 @@ func setup(app *echo.Echo) {
 
 	app.GET("/favicon.ico", func(c echo.Context) error {
 		return c.File("pynezz/public/favicon.ico")
+	})
+
+	app.GET("/static/svgs/github-icon.svg", func(c echo.Context) error {
+		return c.File("pynezz/public/svgs/github-icon.svg")
 	})
 
 	app.GET("/", homeHandler)

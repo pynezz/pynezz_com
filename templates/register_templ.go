@@ -11,7 +11,11 @@ import "io"
 import "bytes"
 import "strings"
 
-var (
+import (
+	"github.com/pynezz/pynezz_com/templates/layout"
+)
+
+const (
 	bg       = "#1e1e2e" // catppuccin Mocha: base
 	txt      = "#cdd6f4" // text
 	subtxt   = "#b5bfe2" // text2
@@ -111,16 +115,25 @@ func formDiv() templ.CSSClass {
 	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`background-color`, bg)))
 	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`color`, txt)))
 	templ_7745c5c3_CSSBuilder.WriteString(`padding:1rem;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`padding-right:2.25rem;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`padding-left:2.25rem;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`max-width:50rem;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`border-radius:0.4rem;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`box-shadow:0 0 10px 20px {overlay0};`)
 	templ_7745c5c3_CSSBuilder.WriteString(`margin:0 auto;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`flex-shrink:1;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`border-style:solid;`)
+	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`border-color`, surface0)))
+	templ_7745c5c3_CSSBuilder.WriteString(`border-width:0.1rem;`)
 	templ_7745c5c3_CSSID := templ.CSSID(`formDiv`, templ_7745c5c3_CSSBuilder.String())
 	return templ.ComponentCSSClass{
 		ID:    templ_7745c5c3_CSSID,
 		Class: templ.SafeCSS(`.` + templ_7745c5c3_CSSID + `{` + templ_7745c5c3_CSSBuilder.String() + `}`),
 	}
 }
+
+// box-shadow: 0 0 10px 2px;
+// box-shadow-color: {overlay0};
+// border-style: dotted;
 
 func Outer() templ.CSSClass {
 	var templ_7745c5c3_CSSBuilder strings.Builder
@@ -158,6 +171,7 @@ func code() templ.CSSClass {
 	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`background-color`, surface0)))
 	templ_7745c5c3_CSSBuilder.WriteString(`font-family:"Hack Nerd Font Mono", "Fira Mono", monospace;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`padding:.3rem;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`margin:.3rem;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`border-radius:0.4rem;`)
 	templ_7745c5c3_CSSID := templ.CSSID(`code`, templ_7745c5c3_CSSBuilder.String())
 	return templ.ComponentCSSClass{
@@ -189,11 +203,7 @@ func Register() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<link rel=\"stylesheet\" href=\"/styles/templ.css\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var2 = []any{"div", Outer()}
+		var templ_7745c5c3_Var2 = []any{"div", Style()}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -212,6 +222,10 @@ func Register() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = layout.Header().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -255,7 +269,7 @@ func Register() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Register </h1><p>Please register here </p>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Register </h1><p>registration is needed to post content</p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -365,7 +379,7 @@ func Register() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Password requirements: ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Password requirements<br><br>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -387,7 +401,7 @@ func Register() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">> 12 characters </code></i><br><p style=\"display: flex; flex-direction: column; justify-content: center;\">Already have an account? ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">> 12 characters</code></i><br><p style=\"display: flex; flex-direction: column; justify-content: center;\">Already have an account? ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -409,7 +423,15 @@ func Register() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Login here </a></p></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Login here </a></p></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = layout.Footer().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

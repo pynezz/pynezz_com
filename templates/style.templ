@@ -3,6 +3,7 @@ package templates
 
 css Style() {
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
     background-color: {bg};
@@ -12,8 +13,10 @@ css Style() {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
 }
+
+
 
 // css div() {
 //     display: flex;
@@ -23,22 +26,22 @@ css Style() {
 //     min-height: 100vh;
 // }
 
-func RenderStyle() string {
-  return `
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      background-color: ` + bg + `;
-      color: ` + subtxt + `;
-      font-family: 'Inter', sans-serif;
-    }
-    .div {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
-  `
-}
+// func RenderStyle() string {
+//   return `
+//     html, body {
+//       height: 100%;
+//       margin: 0;
+//       padding: 0;
+//       background-color: ` + bg + `;
+//       color: ` + subtxt + `;
+//       font-family: 'Inter', sans-serif;
+//     }
+//     .div {
+//       display: flex;
+//       flex-direction: column;
+//       align-items: center;
+//       justify-content: center;
+//       min-height: 100vh;
+//     }
+//   `
+// }

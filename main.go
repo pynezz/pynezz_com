@@ -1,9 +1,7 @@
 package main
 
 import (
-	"embed"
 	"fmt"
-	"html/template"
 	"os"
 	"path/filepath"
 	"strings"
@@ -19,12 +17,12 @@ var warning = func(warning string) {
 	ansi.PrintBold(ansi.HexColor256(r, g, b, warning+"\n"))
 }
 
-//go:embed templates/*
-var resources embed.FS
+////go:embed templates/*
+// var resources embed.FS
 
-var buildVersion string
+	var buildVersion string
 
-var t = template.Must(template.ParseFS(resources, "templates/*"))
+// var t = template.Must(template.ParseFS(resources, "templates/*", "templates/layout/*"))
 
 var header = func() string {
 	return fmt.Sprintf("%s%s", ansi.FormatRoundedBox("pynezz.dev CLI\n"+buildVersion), "\n")

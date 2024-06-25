@@ -1,18 +1,24 @@
 package templates
 
-templ Home() {
-    <link rel="stylesheet" href="/styles/templ.css">
-    <div class={"div", Style()}>
-      <div>
-        <h1>Home</h1>
-        <h2>testing of go-templ</h2>
-        <p>Welcome to this generated page!</p>
-      </div>
-      <div>
-        <a href="/login"><button class={"button", btn(txt, surface0)}>Login</button></a>
-        <a href="/register"><button class={"button", btn(txt, surface0)}>Register</button></a>
+import (
+  "github.com/pynezz/pynezz_com/templates/layout"
+)
 
-        <a href="/about"><button class={"button", btn(txt, surface0)}>About</button></a>
-      </div>
+templ Home() {
+    <body>
+     <div class={"div", Style()}>
+      @layout.Header()
+          <div class={"div", card()}>
+          <h1>Home</h1>
+          <h2>testing of go-templ</h2>
+          <p>Welcome to this generated page!</p>
+        <div>
+            <a href="/login"><button class={"button", btn(txt, surface0)}>Login</button></a>
+            <a href="/register"><button class={"button", btn(txt, surface0)}>Register</button></a>
+            <a href="/about"><button class={"button", btn(txt, surface0)}>About</button></a>
+          </div>
+        </div>
+    @layout.Footer()
     </div>
+  </body>
 }
