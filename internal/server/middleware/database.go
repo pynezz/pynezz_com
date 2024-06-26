@@ -15,12 +15,10 @@ import (
 
 const (
 	// database names
-	Users   = "users"
 	Content = "content"
 )
 
 var dbNames = map[string]string{
-	Users:   "users.db",
 	Content: "content.db",
 	"main":  "main.db", // The main database
 	// Remember to add new databases here if needed in the future
@@ -33,18 +31,41 @@ type Database struct {
 }
 
 var DBInstance *Database // The global database instance
+var ContentsDB *Database // The content database instance (globals are bad, I'll fix this later)
 
 func init() {
 	conf := gorm.Config{
 		PrepareStmt: true,
 	}
+	initContentsDB(conf)
+	initMainDB(conf)
+}
 
+func initContentsDB(conf gorm.Config) {
+	contentsBase, err := InitDB(Content, conf, models.PostsMetadata{})
+	if err != nil {
+		ansi.PrintError(err.Error())
+	}
+
+	if err := contentsBase.AutoMigrate(&models.PostsMetadata{}); err != nil {
+		ansi.PrintError(err.Error())
+	}
+
+	ContentsDB = &Database{
+		Driver: contentsBase,
+		Tables: make(map[string]interface{}),
+	}
+
+	ContentsDB.SetDriver(contentsBase)
+	ContentsDB.AddTable(models.PostsMetadata{}, "posts_metadata")
+}
+
+func initMainDB(conf gorm.Config) {
 	mainBase, err := InitDB("main.db", conf, models.User{}, models.Admin{})
 	if err != nil {
 		ansi.PrintError(err.Error())
 	}
 
-	// Migrate the database
 	if err := mainBase.AutoMigrate(&models.User{}, &models.Admin{}); err != nil {
 		ansi.PrintError(err.Error())
 	}
@@ -167,6 +188,12 @@ func isValidUser(u *models.User) bool {
 		return true
 	}
 	return false
+}
+
+func GetPosts(limit int) models.Posts {
+	var posts models.Posts
+	DBInstance.Driver.Limit(limit).Find(&posts)
+	return posts
 }
 
 // getUser is a helper function that returns a user from the database

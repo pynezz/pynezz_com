@@ -32,6 +32,10 @@ func handleRegister(c echo.Context) error {
 
 func gotoDashboard(c echo.Context) error {
 	cc := c.(*middleware.CustomContext)
+
+	if cc.User.Username == "" {
+		return Render(c, http.StatusUnauthorized, templates.DashboardError())
+	}
 	return Render(c, http.StatusOK, templates.Dashboard(cc.User))
 }
 

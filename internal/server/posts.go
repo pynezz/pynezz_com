@@ -62,6 +62,7 @@ func (p PostsHandler) handleShowLastPosts(c echo.Context) error {
 		limit = 25
 	}
 
+	middleware.
 	// posts, err := parser.GetLastPosts(limit)
 	body := fmt.Sprintln("here's the last", limit, " posts. You can tweak the limit by adding a 'limit' query parameter to the URL.")
 
