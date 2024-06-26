@@ -5,8 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/pynezz/pynezz_com/internal/parser"
+	"github.com/pynezz/pynezz_com/internal/server/middleware"
 	"github.com/pynezz/pynezz_com/templates"
 )
 
@@ -16,16 +18,37 @@ type PostsHandler struct{}
 
 func (p PostsHandler) handleShowPosts(c echo.Context) error {
 	id := c.Param("id")
-	jwt := c.Get("jwt")
-	response := fmt.Sprintln("here's post ", id)
-	if jwt == nil {
-		response += " (you're not logged in)"
-	} else {
-		// validate JWT
-		response += " (you're logged in)"
+	limit := c.Param("limit")
+	fmt.Println("id", id)
+	fmt.Println("limit", limit)
+	token := jwt.Token{}
+
+	cookie, err := c.Request().Cookie("Authorization")
+	if err != nil {
+		fmt.Println("error getting cookie", err)
 	}
 
-	return Render(c, http.StatusOK, templates.Show("posts", "here's post "+id))
+	if cookie != nil {
+		fmt.Println("cookie value", cookie.Value)
+		ret, err := middleware.VerifyJWTToken(cookie.Value)
+		if err != nil {
+			fmt.Println("error verifying JWT token", err)
+		} else {
+			// TODO: Refresh token as well
+			token = *ret
+			fmt.Println("token verified", ret)
+		}
+
+	}
+
+	response := fmt.Sprintln("here's post ", id)
+	if token.Valid {
+		response += " (you're logged in)"
+	} else {
+		response += " (you're not logged in)"
+	}
+
+	return Render(c, http.StatusOK, templates.Show("posts", response))
 }
 
 // Fetch the last 5 posts or so

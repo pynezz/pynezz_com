@@ -5,10 +5,31 @@ import (
 )
 
 templ Show(title string, body string) {
-  @layout.Header()
-  <link rel="stylesheet" href="/styles/templ.css">
-  <div>
-  <h1>{title}</h1>
-  <p>{body}</p>
-  </div>
+  <body>
+    <div class={"div", Style()}>
+      @layout.Header()
+      <div>
+        <h1>{title}</h1>
+        <p>{body}</p>
+      </div>
+      @layout.Footer()
+    </div>
+  </body>
 }
+
+// Can I do this?
+// Probably not in here, though, maybe something similar in the calling function?
+// templ Show(post []models.Post) {
+//   <body>
+//     <div class={"div", Style()}>
+//       @layout.Header()
+//       {{for _, p := range post {
+//         fmt.Sprintf(`<div>
+//           <h1>{p.Title}</h1>
+//           <p>{p.Body}</p>
+//         </div>`, p.Title, p.Body)
+//       }}}
+//       @layout.Footer()
+//     </div>
+//   </body>
+// }

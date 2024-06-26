@@ -1,12 +1,19 @@
 package middleware
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
 )
+
+// CustomContext extends echo.Context with user information
+type CustomContext struct {
+	echo.Context
+	User models.User
+}
 
 // Bouncer is a middleware that checks if the user is authenticated
 func Bouncer(next echo.HandlerFunc) echo.HandlerFunc {
@@ -15,12 +22,13 @@ func Bouncer(next echo.HandlerFunc) echo.HandlerFunc {
 
 		cookie, err := c.Request().Cookie("Authorization")
 		if err != nil {
-			return err
+			fmt.Println("Error getting cookie: ", err)
+			return echo.ErrCookieNotFound
 		}
 
 		token, err := VerifyJWTToken(cookie.Value)
 		if err != nil {
-			return err
+			return echo.ErrInternalServerError
 		}
 
 		fmt.Println("Token send by client: ", token)
@@ -28,6 +36,32 @@ func Bouncer(next echo.HandlerFunc) echo.HandlerFunc {
 		if !token.Valid {
 			return echo.ErrUnauthorized
 		}
+
+		username, err := token.Claims.GetSubject()
+		if err != nil {
+			return c.Redirect(http.StatusFound, "/login")
+		}
+
+		user := models.User{Username: username}
+		if res, httpCode := getUser(token.Raw, username); res != "" && (httpCode == http.StatusOK || httpCode == http.StatusAccepted) {
+			fmt.Println("User is authenticated")
+			err := json.Unmarshal([]byte(res), &user)
+			if err != nil {
+				return echo.ErrInternalServerError
+			}
+			cc := &CustomContext{c, user}
+			return next(cc)
+		}
+
+		// if res, httpCode := getUser(token.Raw, username); res != "" && (httpCode == http.StatusOK || httpCode == http.StatusAccepted) {
+		// 	// User is authenticated
+		// 	fmt.Println("User is authenticated")
+
+		// 	return next(c), models.User{
+		// 		Username: username,
+		// 		UserID:   Uuid(username).AsUint(),
+		// 	}
+		// }
 
 		return next(c)
 	}
@@ -46,6 +80,10 @@ func Register(next echo.HandlerFunc) echo.HandlerFunc {
 		fmt.Println("Username: ", c.FormValue("username"))
 		fmt.Println("Password: ", c.FormValue("password"))
 
+		// Argon2 hash the password
+		argon2 := NewArgon2().InitArgon(c.FormValue("password"))
+		encodedHash := argon2.GetEncodedHash()
+
 		// Check if the user already exists
 		if userExists(&models.User{Username: c.FormValue("username")}) {
 			return c.JSON(http.StatusConflict, echo.Map{
@@ -53,10 +91,15 @@ func Register(next echo.HandlerFunc) echo.HandlerFunc {
 			})
 		}
 
+		username := c.FormValue("username")
+		userId := Uuid(c.FormValue(username)).AsUint()
+		fmt.Println("User ID: ", userId)
+
 		// Register the user
 		newUser := &models.User{
-			Username: c.FormValue("username"),
-			Password: c.FormValue("password"),
+			Username: username,
+			Password: encodedHash,
+			UserID:   Uuid(username).AsUint(),
 		}
 
 		// Save the user to the database
@@ -75,9 +118,6 @@ func Register(next echo.HandlerFunc) echo.HandlerFunc {
 			HttpOnly: true, // OWASP: https://owasp.org/www-community/HttpOnly
 		})
 
-		return c.JSON(http.StatusOK, echo.Map{
-			"message": "User registered",
-			"token:	": token,
-		})
+		return next(c)
 	}
 }

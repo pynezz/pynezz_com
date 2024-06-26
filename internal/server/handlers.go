@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/pynezz/pynezz_com/internal/server/middleware"
 	"github.com/pynezz/pynezz_com/templates"
 )
 
@@ -16,7 +17,10 @@ func aboutHandler(c echo.Context) error {
 }
 
 func handleLogin(c echo.Context) error {
-	return c.String(http.StatusOK, "Login page\n")
+	// css
+	// c.Get("/styles/templ.css")
+
+	return Render(c, http.StatusOK, templates.Login())
 }
 
 func handleRegister(c echo.Context) error {
@@ -25,3 +29,14 @@ func handleRegister(c echo.Context) error {
 
 	return Render(c, http.StatusOK, templates.Register())
 }
+
+func gotoDashboard(c echo.Context) error {
+	cc := c.(*middleware.CustomContext)
+	return Render(c, http.StatusOK, templates.Dashboard(cc.User))
+}
+
+// func gotoDashboard(c echo.Context, user models.User) error {
+// 	c.Redirect(http.StatusMovedPermanently, "/dashboard")
+
+// 	return Render(c, http.StatusOK, templates.Dashboard(user))
+// }

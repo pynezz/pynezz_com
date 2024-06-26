@@ -1,9 +1,12 @@
 package middleware
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"strings"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
 	"github.com/pynezz/pynezzentials/ansi"
 	"gorm.io/driver/sqlite"
@@ -138,6 +141,64 @@ func chkExt(database string) string {
 	return database
 }
 
+func isAuthorized(requestedUsername, token string) (valid bool, sameUser bool) {
+	// Check if the request is valid
+	if token == "" {
+		ansi.PrintError("Request is not valid")
+		return false, false
+	}
+
+	t, err := VerifyJWTToken(token)
+	if err != nil || !t.Valid {
+		if !t.Valid {
+			ansi.PrintError("Token is not valid")
+		} else {
+			ansi.PrintError(err.Error())
+		}
+
+		return false, false
+	}
+
+	return true, t.Claims.(jwt.MapClaims)["sub"] == requestedUsername
+}
+
+func isValidUser(u *models.User) bool {
+	if userExists(u) {
+		return true
+	}
+	return false
+}
+
+// getUser is a helper function that returns a user from the database
+// Users are able to fetch all username, but are only able to fetch more information, unless they're an admin.
+// The JWT token is used to verify the user's role.
+func getUser(token, username string) (string, uint) {
+
+	// quite nasty if statement, but works for now
+	if sameUser, valid := isAuthorized(username, token); !valid {
+		ansi.PrintError("Request is not valid")
+		return "", http.StatusUnauthorized
+	} else {
+		if isValidUser(&models.User{Username: username}) && !sameUser { // Authorized users are able to fetch any username
+			// Not sure if it's the right status code, but it makes it easier to differentiate between
+			// a valid returned full user and an partially unauthorized request, but still valid
+			return username, http.StatusAccepted
+		}
+	}
+
+	// user is authorized to fetch the full user data of the requested user
+	var user models.User
+	DBInstance.Driver.Where("username = ?", username).First(&user)
+
+	userJson, err := json.Marshal(user)
+	if err != nil {
+		ansi.PrintError(err.Error())
+		return "", http.StatusInternalServerError
+	}
+
+	return string(userJson), http.StatusOK
+}
+
 func userExists(u *models.User) bool {
 	if DBInstance == nil {
 		ansi.PrintError("Database driver is nil")
@@ -172,7 +233,7 @@ func writeUser(u *models.User) error {
 		return fmt.Errorf("user already exists")
 	}
 
-	tx := DBInstance.Driver.FirstOrCreate(u) // Create a new user
+	tx := DBInstance.Driver.Create(&u) // Create a new user
 	if tx.Error != nil || tx.RowsAffected == 0 {
 		if tx.Error != nil {
 			ansi.PrintError(tx.Error.Error())

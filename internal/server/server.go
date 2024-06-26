@@ -48,8 +48,12 @@ func setup(app *echo.Echo) {
 
 	// Use Bouncer middleware
 	app.GET("/login", middleware.Bouncer(handleLogin))
+	app.POST("/login", middleware.Bouncer(gotoDashboard))
+
 	app.GET("/register", handleRegister)
-	app.POST("/register", middleware.Register(handleLogin))
+	app.POST("/register", middleware.Register(middleware.Bouncer(gotoDashboard)))
+	app.GET("/dashboard", middleware.Bouncer(gotoDashboard))
+
 	app.GET("/about", aboutHandler)
 	app.GET("/posts/", newPostsHandler().handleShowLastPosts)
 	app.GET("/posts/:id", newPostsHandler().handleShowPosts)
