@@ -16,7 +16,6 @@ bin/
 # Go Modules
 vendor/
 Gopkg.lock
-go.sum
 
 # Logs and databases
 *.log
