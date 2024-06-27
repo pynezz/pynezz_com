@@ -20,8 +20,15 @@ func Serve(port string) {
 	app.Logger.Fatal(http.ListenAndServe(":"+port, handler))
 }
 
-func setup(app *echo.Echo) {
+func serveStatic(app *echo.Echo, files ...string) {
+	for _, file := range files {
+		app.GET("/"+file, func(c echo.Context) error {
+			return c.File("pynezz/public/" + file)
+		})
+	}
+}
 
+func setup(app *echo.Echo) {
 	ctx := app.AcquireContext()
 	defer app.ReleaseContext(ctx)
 
@@ -32,9 +39,7 @@ func setup(app *echo.Echo) {
 		}
 	})
 
-	app.GET("/favicon.ico", func(c echo.Context) error {
-		return c.File("pynezz/public/favicon.ico")
-	})
+	serveStatic(app, "favicon.ico styles/templ.css")
 
 	app.GET("/static/svgs/github-icon.svg", func(c echo.Context) error {
 		return c.File("pynezz/public/svgs/github-icon.svg")
