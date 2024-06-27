@@ -12,8 +12,8 @@ VERSION=$(shell git describe --tags --always --long)
 .PHONY: all test clean
 
 $(LINUX): main.go
-	CGO_ENABLED=1 go build -v -o $(LINUX) -tags linux -ldflags="-s -w -X main.buildVersion=$(VERSION)" .
-
+	CGO_ENABLED=1 GOARCH=amd64 GOOS=linux CC="zig cc -target x86_64-linux-gnu.2.31.0" CXX="zig c++ -target x86_64-linux-gnu.2.31.0" go build -v -o $(LINUX) -tags linux -ldflags="-s -w -X main.buildVersion=$(VERSION)" .
+# CGO_ENABLED=15.10.218-1
 # $(TEST_LINUX): cmd/testmodule/main.go
 # 	CGO_ENABLED=1 go build -v -o $(TEST_LINUX) -tags linux -ldflags="-s -w -X main.buildVersion=$(VERSION)" ./cmd/testmodule/main.go
 
@@ -28,9 +28,14 @@ windows: $(WINDOWS)
 linux: $(LINUX)
 # prototype: $(TEST_LINUX) $(LINUX)
 
-test: go test ./...
+test:	## Run tests
+	gen
+	go test ./...
 
-build: windows linux ## Build the application for Windows and Linux
+vet: ## Run go vet
+	go vet ./...
+
+build: gen windows linux ## Build the application for Windows and Linux
 	@echo $(VERSION)
 	@echo "Build complete"
 
@@ -38,7 +43,8 @@ build-windows: windows ## Build the application for Windows
 	@echo $(VERSION)
 	@echo "Build complete"
 
-build-linux: linux ## Build the application for Linux
+build-linux: linux  ## Build the application for Linux
+	@templ generate
 	@echo $(VERSION)
 	@echo "Build complete"
 
@@ -47,7 +53,10 @@ run: ## Build and run the application (Linux)
 
 gen: ## Generate code
 	@templ generate
-	@go run . serve -p 8080
+
+gen-run: gen ## Generate code and run the application
+	go run . serve -p 8080
+
 
 # run-prototype: # Run prototype
 # 	$(TEST_LINUX)

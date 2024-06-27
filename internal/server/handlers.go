@@ -13,7 +13,7 @@ func homeHandler(c echo.Context) error {
 }
 
 func aboutHandler(c echo.Context) error {
-	return c.String(http.StatusOK, "About page\n")
+	return Render(c, http.StatusOK, templates.About())
 }
 
 func handleLogin(c echo.Context) error {

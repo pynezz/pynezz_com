@@ -1,0 +1,32 @@
+package templates
+
+import (
+
+  "github.com/pynezz/pynezz_com/templates/layout"
+)
+
+templ About() {
+  <div class={"div", Style()}>
+    @layout.Header()
+
+    <div class={"div", aboutMe()}>
+      <h1>About</h1>
+      <p>
+        Hi, I'm Kevin, a 28 year old guy with a Bachelor's in Cyber Security, and a passion for software development.
+      </p>
+      <p>
+        This site is a project where I've built a blogging platform from scratch, using Go with Echo, Go-Templ, and SQLite.
+      </p>
+    </div>
+    @layout.Footer()
+  </div>
+}
+
+css aboutMe() {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Hack Nerd Font', 'Fira Mono', 'Fira Code', monospace;
+}

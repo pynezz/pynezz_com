@@ -116,6 +116,7 @@ func Register(next echo.HandlerFunc) echo.HandlerFunc {
 			Name:     "Authorization",
 			Value:    token,
 			HttpOnly: true, // OWASP: https://owasp.org/www-community/HttpOnly
+			SameSite: http.SameSiteStrictMode,
 		})
 
 		return next(c)

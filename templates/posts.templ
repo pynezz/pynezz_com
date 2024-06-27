@@ -1,7 +1,9 @@
 package templates
 
 import (
+
   "github.com/pynezz/pynezz_com/templates/layout"
+  "github.com/pynezz/pynezz_com/internal/server/middleware/models"
 )
 
 templ Show(title string, body string) {
@@ -15,6 +17,30 @@ templ Show(title string, body string) {
       @layout.Footer()
     </div>
   </body>
+}
+
+templ PostsList(posts []models.PostMetadata) {
+  <div class={"div", Style()}>
+    <h1>Recent Posts</h1>
+    <ul>
+
+      for _, p := range posts {
+        <li><strong> { p.Title } </strong>: { p.Summary } </li>
+        <a href={ templ.URL("/post/" + p.Slug) }>Read more</a>
+      }
+
+    </ul>
+  </div>
+}
+
+templ post(post models.PostMetadata) {
+  <div class={"div", Style()}>
+    <div>
+      <h1>{post.Title}</h1>
+      <p>{post.Summary}</p>
+      <a href={ templ.URL("/post/" + post.Slug) }>Read more</a>
+    </div>
+  </div>
 }
 
 // Can I do this?
