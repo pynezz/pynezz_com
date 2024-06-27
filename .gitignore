@@ -52,3 +52,9 @@ Thumbs.db
 .env.local
 .env.development
 .env.test
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log

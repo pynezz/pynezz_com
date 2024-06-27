@@ -68,7 +68,7 @@ func horizNav() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var6 = []any{navBarItemLink("monospace")}
+		var templ_7745c5c3_Var6 = []any{navBarItemLink("Hack Nerd Font Mono, monospace")}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var6...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

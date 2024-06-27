@@ -1,12 +1,17 @@
 {
-  "name": "pynezz_com",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+	"name": "pynezz_com",
+	"version": "1.0.0",
+	"description": "Simple website for pynezz.com built with Go and ...?",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tailwindcss build -o static/css/tailwind.css --minify",
+		"watch": "tailwindcss build -o static/css/tailwind.css --watch"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"tailwindcss": "^3.4.4"
+	}
 }

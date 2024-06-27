@@ -5,8 +5,11 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
+	"github.com/pynezz/pynezz_com/templates"
+	"github.com/pynezz/pynezzentials/ansi"
 )
 
 // CustomContext extends echo.Context with user information
@@ -23,12 +26,12 @@ func Bouncer(next echo.HandlerFunc) echo.HandlerFunc {
 		cookie, err := c.Request().Cookie("Authorization")
 		if err != nil {
 			fmt.Println("Error getting cookie: ", err)
-			return echo.ErrCookieNotFound
+			return render(c, http.StatusInternalServerError, templates.Login())
 		}
 
 		token, err := VerifyJWTToken(cookie.Value)
 		if err != nil {
-			return echo.ErrInternalServerError
+			return render(c, http.StatusUnauthorized, templates.Login())
 		}
 
 		fmt.Println("Token send by client: ", token)
@@ -39,7 +42,8 @@ func Bouncer(next echo.HandlerFunc) echo.HandlerFunc {
 
 		username, err := token.Claims.GetSubject()
 		if err != nil {
-			return c.Redirect(http.StatusFound, "/login")
+			return render(c, http.StatusInternalServerError, templates.Login())
+			// return c.Redirect(http.StatusFound, "/login")
 		}
 
 		user := models.User{Username: username}
@@ -53,15 +57,70 @@ func Bouncer(next echo.HandlerFunc) echo.HandlerFunc {
 			return next(cc)
 		}
 
-		// if res, httpCode := getUser(token.Raw, username); res != "" && (httpCode == http.StatusOK || httpCode == http.StatusAccepted) {
-		// 	// User is authenticated
-		// 	fmt.Println("User is authenticated")
+		return next(c)
+	}
+}
 
-		// 	return next(c), models.User{
-		// 		Username: username,
-		// 		UserID:   Uuid(username).AsUint(),
-		// 	}
-		// }
+func Login(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		fmt.Println("Got a POST request to /login")
+
+		fmt.Println("Logging in user")
+
+		if c.FormValue("username") == "" || c.FormValue("password") == "" {
+			return echo.ErrBadRequest
+		}
+
+		fmt.Println("Username: ", c.FormValue("username"))
+		// fmt.Println("Password: ", c.FormValue("password"))
+		password := c.FormValue("password")
+
+		// Check if the user exists
+		if !userExists(&models.User{Username: c.FormValue("username")}) {
+			return c.JSON(http.StatusUnauthorized, echo.Map{
+				"message:": "Failed to login user",
+			})
+		}
+
+		// Get the user from the database
+		user := &models.User{Username: c.FormValue("username")}
+		if res, httpCode := getUserHash(user.Username); res != "" && (httpCode == http.StatusOK || httpCode == http.StatusAccepted) {
+			params, salt, hash, err := DecodeHash(res)
+			encodedhash := HashToEncodedHash(params, hash, salt)
+			encodedSuppliedPassword := NewArgon2().InitArgonWithSalt(password, string(salt))
+			if encodedhash != encodedSuppliedPassword.GetEncodedHash() {
+				return c.JSON(http.StatusUnauthorized, echo.Map{
+					"message": "Failed to login user",
+				})
+			} else {
+				ansi.PrintSuccess("Password and hash match")
+			}
+
+			if err != nil {
+				return c.JSON(http.StatusInternalServerError, echo.Map{
+					"message": "Failed to login user",
+				})
+			}
+			// if ok, err := HashesMatch(password, salt); err != nil || !ok {
+			// 	return c.JSON(http.StatusUnauthorized, echo.Map{
+			// 		"message": "Failed to login user",
+			// 	})
+			// }
+		} else {
+			return c.JSON(http.StatusInternalServerError, echo.Map{
+				"message": "Failed to login user",
+			})
+		}
+
+		// Generate a JWT token
+		token := GenerateJWTToken(*user)
+		c.Response().Header().Set("Authorization: Bearer ", token)
+		c.SetCookie(&http.Cookie{
+			Name:     "Authorization",
+			Value:    token,
+			HttpOnly: true, // OWASP: https://owasp.org/www-community/HttpOnly
+			SameSite: http.SameSiteStrictMode,
+		})
 
 		return next(c)
 	}
@@ -121,4 +180,16 @@ func Register(next echo.HandlerFunc) echo.HandlerFunc {
 
 		return next(c)
 	}
+}
+
+// This custom Render replaces Echo's echo.Context.Render() with templ's templ.Component.Render().
+func render(ctx echo.Context, statusCode int, t templ.Component) error {
+	buf := templ.GetBuffer()
+	defer templ.ReleaseBuffer(buf)
+
+	if err := t.Render(ctx.Request().Context(), buf); err != nil {
+		return err
+	}
+
+	return ctx.HTML(statusCode, buf.String())
 }

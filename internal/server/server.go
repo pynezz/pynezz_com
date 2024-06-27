@@ -14,13 +14,9 @@ func Serve(port string) {
 	fmt.Println("Serving the webapp on port", port)
 	app := echo.New()
 	setup(app)
+
 	c1 := templates.Style()
 	handler := templ.NewCSSMiddleware(app, c1)
-	// app.GET("/styles/templ.css", func(c echo.Context) error {
-	// 	css := templates.RenderStyle()
-	// 	return c.Blob(http.StatusOK, "text/css", []byte(css))
-	// })
-
 	app.Logger.Fatal(http.ListenAndServe(":"+port, handler))
 }
 
@@ -48,7 +44,7 @@ func setup(app *echo.Echo) {
 
 	// Use Bouncer middleware
 	app.GET("/login", middleware.Bouncer(handleLogin))
-	app.POST("/login", middleware.Bouncer(gotoDashboard))
+	app.POST("/login", middleware.Login(middleware.Bouncer(gotoDashboard)))
 
 	app.GET("/register", handleRegister)
 	app.POST("/register", middleware.Register(middleware.Bouncer(gotoDashboard)))

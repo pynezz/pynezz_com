@@ -209,6 +209,22 @@ func GetPosts(limit int) models.Posts {
 	return posts
 }
 
+// getUserHash is almost the same as getUser, but it's used for login purposes
+func getUserHash(username string) (string, uint) {
+	var user models.User
+	DBInstance.Driver.Where("username = ?", username).First(&user)
+
+	ansi.PrintBold("returning hash only: " + user.Password + " for user: " + user.Username)
+	// Get only the hash	
+	// userJson, err := json.Marshal(user.Password)
+	// if err != nil {
+	// 	ansi.PrintError(err.Error())
+	// 	return "", http.StatusInternalServerError
+	// }
+
+	return user.Password, http.StatusOK // Only the hash is returned (password = hash)
+}
+
 // getUser is a helper function that returns a user from the database
 // Users are able to fetch all username, but are only able to fetch more information, unless they're an admin.
 // The JWT token is used to verify the user's role.
