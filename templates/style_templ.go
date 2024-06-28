@@ -12,6 +12,130 @@ const tw = `
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  .root {
+    --background: hsl(208, 11%, 72%);
+    --foreground: hsl(0, 4%, 14%);
+    --card: hsl(210, 15%, 20%);
+    --card-foreground: hsl(0, 0%, 95%);
+    --popover: hsl(210, 15%, 20%);
+    --popover-foreground: hsl(0, 0%, 95%);
+    --primary: hsl(210, 20%, 30%);
+    --primary-foreground: hsl(0, 0%, 95%);
+    --secondary: hsl(210, 20%, 25%);
+    --secondary-foreground: hsl(0, 0%, 95%);
+    --muted: hsl(210, 15%, 25%);
+    --muted-foreground: hsl(0, 0%, 75%);
+    --accent: hsl(210, 20%, 40%);
+    --accent-foreground: hsl(0, 0%, 95%);
+    --destructive: hsl(0, 70%, 50%);
+    --destructive-foreground: hsl(0, 0%, 95%);
+    --border: hsl(210, 20%, 25%);
+    --input: hsl(210, 20%, 25%);
+    --ring: hsl(210, 20%, 30%);
+    --radius: 0.5rem;
+  }
+  .light {
+    --background: hsl(208, 11%, 72%);
+    --foreground: hsl(0, 4%, 14%);
+    --card: hsl(210, 15%, 20%);
+    --card-foreground: hsl(0, 0%, 95%);
+    --popover: hsl(210, 15%, 20%);
+    --popover-foreground: hsl(0, 0%, 95%);
+    --primary: hsl(210, 20%, 30%);
+    --primary-foreground: hsl(0, 0%, 95%);
+    --secondary: hsl(210, 20%, 25%);
+    --secondary-foreground: hsl(0, 0%, 95%);
+    --muted: hsl(210, 15%, 25%);
+    --muted-foreground: hsl(0, 0%, 75%);
+    --accent: hsl(210, 20%, 40%);
+    --accent-foreground: hsl(0, 0%, 95%);
+    --destructive: hsl(0, 70%, 50%);
+    --destructive-foreground: hsl(0, 0%, 95%);
+    --border: hsl(210, 20%, 25%);
+    --input: hsl(210, 20%, 25%);
+    --ring: hsl(210, 20%, 30%);
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: hsl(210, 20%, 10%);
+    --foreground: hsl(0, 0%, 90%);
+    --card: hsl(210, 20%, 15%);
+    --card-foreground: hsl(0, 0%, 90%);
+    --popover: hsl(210, 20%, 15%);
+    --popover-foreground: hsl(0, 0%, 90%);
+    --primary: hsl(210, 20%, 30%);
+    --primary-foreground: hsl(0, 0%, 95%);
+    --secondary: hsl(210, 20%, 20%);
+    --secondary-foreground: hsl(0, 0%, 90%);
+    --muted: hsl(210, 20%, 25%);
+    --muted-foreground: hsl(0, 0%, 75%);
+    --accent: hsl(210, 20%, 35%);
+    --accent-foreground: hsl(0, 0%, 95%);
+    --destructive: hsl(0, 60%, 45%);
+    --destructive-foreground: hsl(0, 0%, 95%);
+    --border: hsl(210, 20%, 20%);
+    --input: hsl(210, 20%, 20%);
+    --ring: hsl(210, 20%, 30%);
+  }
+
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-lg;
+  }
+}
+
+@layer utilities {
+  .min-max-w {
+    max-width: 768px;
+    min-width: 768px;
+  }
+}
+`
+
+const twDark = `
+@layer components {
+  .dark {
+    @apply dark;
+  }
+}
+`
+
+const twLight = `
+@layer components {
+  .light {
+    @apply light;
+  }
+}
+`
+
+const bgDark = "#1a202c"
+
+const dark = `
+--bg: #1a202c;
+--bg2: #2d3748;
+
+--txt: #e2e8f0;
+--subtxt: #a0aec0;
+--subtxt2: #718096;
+
+--border: #2d3748;
+`
+
+const light = `
+--bg: #f7fafc;
+--bg2: #edf2f7;
+
+--txt: #2d3748;
+--subtxt: #4a5568;
+--subtxt2: #718096;
+
+--border: #edf2f7;
 `
 
 func Style() templ.CSSClass {
@@ -20,7 +144,7 @@ func Style() templ.CSSClass {
 	templ_7745c5c3_CSSBuilder.WriteString(`width:100%;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`margin:0;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`padding:0;`)
-	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`background-color`, bg)))
+	templ_7745c5c3_CSSBuilder.WriteString(`background-color:--bg;`)
 	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`color`, subtxt)))
 	templ_7745c5c3_CSSBuilder.WriteString(`font-family:'Inter', sans-serif;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`display:flex;`)
