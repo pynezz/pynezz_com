@@ -28,15 +28,23 @@ func About() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"h-screen dark\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		templ_7745c5c3_Err = layout.Header().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-row justify-center\"><div class=\"flex flex-col items-center font-mono h-max\"><h1 class=\"text-xxl\">About</h1><p class=\"text-md font-medium\">Hi, I'm Kevin, a 28 year old guy with a Bachelor's in Cyber Security, and a passion for software development.</p><p class=\"text-md font-medium\">This site is a project where I've built a blogging platform from scratch, using Go with Echo, Go-Templ, and SQLite.</p></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-row justify-center\"><div class=\"flex flex-col items-center font-mono \"><h1 class=\"text-xxl\">About</h1><p class=\"text-md font-medium\">Hi, I'm Kevin, a 28 year old guy with a Bachelor's in Cyber Security, and a passion for software development.</p><p class=\"text-md font-medium\">This site is a project where I've built a blogging platform from scratch, using Go with Echo, Go-Templ, and SQLite.</p></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = layout.Footer().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -54,7 +62,7 @@ func aboutMe() templ.CSSClass {
 	templ_7745c5c3_CSSBuilder.WriteString(`margin-right:20px;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`flex-direction:column;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`align-items:center;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`font-family:'Hack Nerd Font', 'Fira Mono', 'Fira Code', monospace;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`font-family:'Hack Nerd Font', 'Fira Mono', 'Fira Code', 'Roboto Mono', monospace;`)
 	templ_7745c5c3_CSSID := templ.CSSID(`aboutMe`, templ_7745c5c3_CSSBuilder.String())
 	return templ.ComponentCSSClass{
 		ID:    templ_7745c5c3_CSSID,

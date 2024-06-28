@@ -2,24 +2,34 @@ package templates
 
 import (
   "github.com/pynezz/pynezz_com/templates/layout"
-  "github.com/pynezz/pynezz_com/templates/components"
+ // "github.com/pynezz/pynezz_com/templates/components"
 )
 
 templ Home() {
-    <body>
-     <div class={"div", Style()}>
+    <body class="macchiato">
+     <div class="flex flex-col fg-txt align-center h-screen">
       @layout.Header()
-          <div class={"div", components.Card()}>
-          <h1>Home</h1>
-          <h2>testing of go-templ</h2>
-          <p>Welcome to this generated page!</p>
-        <div>
-            <a href="/login"><button class={"button", btn(txt, surface0)}>Login</button></a>
-            <a href="/register"><button class={"button", btn(txt, surface0)}>Register</button></a>
-            <a href="/about"><button class={"button", btn(txt, surface0)}>About</button></a>
+        <div class="bg-base text-center text-text flex-col h-screen justify-center">
+          <div class="grid justify-items-left rounded-xxl h-max bg-mantle justify-center text-left py-48 bg-crust">
+            <h1>Home</h1>
+            <h2>testing of go-templ</h2>
+            <p>Welcome to this generated page!</p>
+            <p class="text-mono text-overlay2 italic">and tailwindcss</p>
+            <div class="bg-crust">
+            <a href="/login">
+              <button type="btn" class="bg-surface2 my-12 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-md">
+                Login
+              </button>
+            </a>
+            <a href="/posts">
+              <button type="btn" class="bg-maroon my-12 grow-1 w-max text-crust hover:bg-flamingo font-bold py-2 px-4 rounded-md">
+                Posts
+              </button>
+              </a>
+            </div>
           </div>
         </div>
-    @layout.Footer()
+      @layout.Footer()
     </div>
   </body>
 }

@@ -28,7 +28,7 @@ templ: ## Templ generate
 	@templ generate -watch -proxy=http://localhost:8080
 
 tw: ## Run tailwindcss watcher
-	@npx tailwindcss -i ./pynezz/public/css/tailwind.css -o ./tmp/pynezz/public/css/styles.css --watch
+	@npx tailwindcss -i ./pynezz/src/css/tailwind.css -o ./static/css/styles.css --watch
 
 build: gen windows linux ## Build the application for Windows and Linux
 	@echo $(VERSION)

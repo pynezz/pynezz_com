@@ -23,7 +23,7 @@ func Serve(port string) {
 func serveStatic(app *echo.Echo, files ...string) {
 	for _, file := range files {
 		app.GET("/"+file, func(c echo.Context) error {
-			return c.File("pynezz/public/" + file)
+			return c.File("static/" + file)
 		})
 	}
 }
@@ -41,12 +41,12 @@ func setup(app *echo.Echo) {
 
 	serveStatic(app, "favicon.ico styles/templ.css")
 
-	app.GET("/static/css/tailwind.css", func(c echo.Context) error {
-		return c.File("pynezz/public/css/tailwind.css")
+	app.GET("/static/css/styles.css", func(c echo.Context) error {
+		return c.File("static/css/styles.css")
 	})
 
 	app.GET("/static/svgs/github-icon.svg", func(c echo.Context) error {
-		return c.File("pynezz/public/svgs/github-icon.svg")
+		return c.File("static/svgs/github-icon.svg")
 	})
 
 	app.GET("/", homeHandler)

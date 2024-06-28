@@ -1,9 +1,11 @@
 package layout
 
 templ Footer() {
-  <footer class={"footer", footer()}>
-    <p>© 2024 pynezz.dev</p>
-    <a href="https://www.github.com/pynezz/" class={ navBarItemLink("monospace") }><img src="/static/svgs/github-icon.svg" height="20px" /></a>
+  <footer class="dark bg-neutral-800 w-full flex flex-row align-center justify-center">
+    <p class="p-4 text-neutral-100 align-content-center">© 2024 pynezz.dev</p>
+    <a href="https://www.github.com/pynezz/" class="my-auto mx-0">
+      <img src="/static/svgs/github-icon.svg" class="h-6" />
+    </a>
   </footer>
 }
 

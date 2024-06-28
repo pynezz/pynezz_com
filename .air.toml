@@ -4,10 +4,10 @@ root = "."
 tmp_dir = "bin"
 
 [build]
-bin = "./tmp/main"
-cmd = "go build -o ./tmp/main . `./tmp/main serve -p 8080`"
+bin = "./bin/main serve -p 8080"
+cmd = "go build -o ./bin/main ."
 delay = 1000
-exclude_dir = ["pynezz/public", "tmp", "node_modules"]
+exclude_dir = ["static", "tmp", "node_modules"]
 # exclude_regex = [".*_templ.go"]
 exclude_file = []
 exclude_unchanged = false

@@ -6,10 +6,10 @@ import (
 )
 
 templ About() {
-  // <div class={"div", Style()}>
+  <div class="h-screen dark">
     @layout.Header()
     <div class="flex flex-row justify-center">
-      <div class="flex flex-col items-center font-mono h-max">
+      <div class="flex flex-col items-center font-mono ">
         <h1 class="text-xxl">About</h1>
         <p class="text-md font-medium">
           Hi, I'm Kevin, a 28 year old guy with a Bachelor's in Cyber Security, and a passion for software development.
@@ -29,7 +29,7 @@ templ About() {
     //   </p>
     // </div>
     @layout.Footer()
-  // </div>
+  </div>
 }
 
 css aboutMe() {
@@ -38,5 +38,5 @@ css aboutMe() {
   margin-right: 20px;
   flex-direction: column;
   align-items: center;
-  font-family: 'Hack Nerd Font', 'Fira Mono', 'Fira Code', monospace;
+  font-family: 'Hack Nerd Font', 'Fira Mono', 'Fira Code', 'Roboto Mono', monospace;
 }
