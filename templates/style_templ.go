@@ -8,6 +8,12 @@ package templates
 import "github.com/a-h/templ"
 import "strings"
 
+const tw = `
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+`
+
 func Style() templ.CSSClass {
 	var templ_7745c5c3_CSSBuilder strings.Builder
 	templ_7745c5c3_CSSBuilder.WriteString(`height:100%;`)

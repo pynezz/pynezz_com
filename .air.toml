@@ -5,9 +5,9 @@ tmp_dir = "bin"
 
 [build]
   bin = "./bin/main"
-  cmd = "templ generate && go run . serve --port 8080"
-  delay = 1000
-  exclude_dir = ["static", "node_modules"]
+  cmd = "templ generate && go build -o ./bin/main && ./bin/main serve -p 8080"
+  delay = 1
+  exclude_dir = ["pynezz/public", "node_modules"]
   exclude_regex = [".*_templ.go"]
   exclude_unchanged = false
   follow_symlink = false

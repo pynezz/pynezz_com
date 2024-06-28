@@ -2,13 +2,14 @@ package templates
 
 import (
   "github.com/pynezz/pynezz_com/templates/layout"
+  "github.com/pynezz/pynezz_com/templates/components"
 )
 
 templ Home() {
     <body>
      <div class={"div", Style()}>
       @layout.Header()
-          <div class={"div", card()}>
+          <div class={"div", components.Card()}>
           <h1>Home</h1>
           <h2>testing of go-templ</h2>
           <p>Welcome to this generated page!</p>

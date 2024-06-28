@@ -41,6 +41,10 @@ func setup(app *echo.Echo) {
 
 	serveStatic(app, "favicon.ico styles/templ.css")
 
+	app.GET("/static/css/tailwind.css", func(c echo.Context) error {
+		return c.File("pynezz/public/css/tailwind.css")
+	})
+
 	app.GET("/static/svgs/github-icon.svg", func(c echo.Context) error {
 		return c.File("pynezz/public/svgs/github-icon.svg")
 	})

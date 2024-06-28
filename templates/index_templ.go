@@ -11,6 +11,7 @@ import "io"
 import "bytes"
 
 import (
+	"github.com/pynezz/pynezz_com/templates/components"
 	"github.com/pynezz/pynezz_com/templates/layout"
 )
 
@@ -57,7 +58,7 @@ func Home() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var4 = []any{"div", card()}
+		var templ_7745c5c3_Var4 = []any{"div", components.Card()}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
