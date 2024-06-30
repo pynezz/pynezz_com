@@ -2,6 +2,7 @@ package parser
 
 import (
 	"errors"
+	"strings"
 )
 
 // Read from char 0-2 (inclusive)
@@ -11,7 +12,7 @@ func readMetadata(md []byte) ([]byte, error) {
 	// Read from char 0-2 (inclusive)
 	for i := 0; i < 2; i++ {
 		if md[i] != '-' {
-			return nil, errors.New("No metadata found")
+			return nil, errors.New("no metadata found")
 		}
 	}
 
@@ -28,7 +29,7 @@ func readMetadata(md []byte) ([]byte, error) {
 	}
 
 	// If it doesn't exist, return ""
-	return nil, errors.New("error: error reading metadata, no closing delimiter found.\nFormat:\n\t---\n\tmetadata\n\t---\n\tcontent\n")
+	return nil, errors.New("error: error reading metadata, no closing delimiter found\nFormat:\n\t---\n\tmetadata\n\t---\n\tcontent")
 }
 
 // Parse the metadata into a Metadata struct for later use
@@ -42,6 +43,8 @@ func parseMetadata(md []byte) (Metadata, error) {
 			break
 		}
 	}
+
+	lines := strings.Split(string(md), "\n")
 
 	// read until the next ":"
 	// read until the next "\n"

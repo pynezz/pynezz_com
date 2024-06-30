@@ -43,5 +43,15 @@ func MarkdownToHTML(mdPath string) []byte {
 
 // TODO: Use some library here? Or write my own...?
 func parseContent(file string) string {
+	
+
 	return ""
+}
+
+func ParseDescription(p Post) string {
+	if p.Metadata.Description != "" {
+		return p.Metadata.Description
+	}
+
+	return string(p.Content[:100])
 }

@@ -5,6 +5,7 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/pynezz/pynezz_com/internal/parser"
 	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
 )
 
@@ -13,6 +14,40 @@ func (d *Database) GetPosts(limit int) ([]models.PostMetadata, error) {
 	result := d.Driver.Limit(limit).Find(&posts)
 	return posts, result.Error
 }
+
+func (d *Database) GetPostBySlug(slug string) (models.PostMetadata, error) {
+	var post models.PostMetadata
+	result := d.Driver.Where("slug = ?", slug).First(&post)
+	return post, result.Error
+}
+
+func (d *Database) GetPostByID(id uint) (models.PostMetadata, error) {
+	var post models.PostMetadata
+	result := d.Driver.Where("id = ?", id).First(&post)
+	return post, result.Error
+}
+
+func (d *Database) GetPostsByTag(tag string) ([]models.PostMetadata, error) {
+	var posts []models.PostMetadata
+	result := d.Driver.Where("tags LIKE ?", fmt.Sprintf("%%%s%%", tag)).Find(&posts)
+	return posts, result.Error
+}
+
+func (d *Database) NewPost(post models.PostMetadata) error {
+	result := d.Driver.Create(&post)
+	return result.Error
+}
+
+func (d *Database) GenerateMetadata(post *models.Post) models.PostMetadata {
+	return models.PostMetadata{
+		Title:       post.Title,
+		Slug:        d.GenerateSlug(post.Title),
+		Description: parser.pars,
+		Tags:        strings.Join(post.Tags, ","),
+	}
+}
+
+
 
 func commonStopWord(word string) bool {
 	m := map[string]bool{
