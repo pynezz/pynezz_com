@@ -39,15 +39,15 @@ func (d *Database) NewPost(post models.PostMetadata) error {
 }
 
 func (d *Database) GenerateMetadata(post *models.Post) models.PostMetadata {
-	return models.PostMetadata{
+	parsedContents := parser.ParseMetadata([]byte(post.Content))
+	models.PostMetadata = models.PostMetadata{
 		Title:       post.Title,
 		Slug:        d.GenerateSlug(post.Title),
-		Description: parser.pars,
+		Description: parser.ParseDescription(post),
 		Tags:        strings.Join(post.Tags, ","),
 	}
 }
-
-
+					
 
 func commonStopWord(word string) bool {
 	m := map[string]bool{
