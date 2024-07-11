@@ -18,6 +18,8 @@ type cms struct{}
 func commands() map[string]ICommand {
 	prefix := "--"
 
+	// 	typo := regexp.MustCompile(`(.*?)`)
+
 	// fmt.Println("Creating commands...")
 	return map[string]ICommand{
 		prefix + "list": c["list"],
@@ -31,6 +33,8 @@ func commands() map[string]ICommand {
 		prefix + "status":    c["status"],
 		prefix + "tags":      c["tags"],
 		prefix + "config":    c["config"],
+		prefix + "parse":     c["parse"],
+		prefix + "build":     c["build"],
 	}
 }
 
@@ -48,6 +52,15 @@ func listCommands() string {
 		}
 	}
 	return s
+}
+
+func isValidCommand(cmd string) bool {
+	for _, v := range validCommands {
+		if cmd == v {
+			return true
+		}
+	}
+	return false
 }
 
 func Help(args ...string) string {
@@ -71,11 +84,6 @@ func Execute(args ...string) {
 			Help(args...)
 			return
 		}
-
-		// if listCommands() == arg {
-		// 	fmt.Println(listCommands())
-		// 	return
-		// }
 	}
 
 	if len(args) < 1 {
@@ -95,9 +103,19 @@ func Execute(args ...string) {
 					run(v, args...)
 				} else {
 					fmt.Printf("Command %s is not initialized.\n", k)
+					return
 				}
 				return
 			}
+		}
+	}
+	// If no valid command is found, check for typos
+	for _, arg := range args {
+		if !isValidCommand(arg) {
+			fmt.Printf("Invalid command: %s\n", arg)
+			fmt.Println("Did you mean one of these?")
+			fmt.Println(listCommands())
+			return
 		}
 	}
 }

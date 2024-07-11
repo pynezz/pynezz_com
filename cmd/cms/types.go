@@ -14,6 +14,7 @@ type Command struct {
 
 // Commands - reflecting the commands in the cms.go in cms.go
 type Config struct{ *Command }
+type ParseAll struct{ *Command }
 type PageTags struct{ *Command }
 type EditPage struct{ *Command }
 type ShowPage struct{ *Command }
@@ -23,6 +24,10 @@ type CreatePage struct{ *Command }
 type DeletePage struct{ *Command }
 type PublishPage struct{ *Command }
 type UnpublishPage struct{ *Command }
+
+// A no operation command for typo checking
+// Perfect opportunity to implement a spell checking algorithm
+type Nop struct{ *Command }
 
 // Help - returns the help message of the command
 func (bc *Command) Help() string {

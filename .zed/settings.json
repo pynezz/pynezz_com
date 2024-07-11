@@ -3,9 +3,8 @@
 // For a full list of overridable settings, and general information on folder-specific settings,
 // see the documentation: https://zed.dev/docs/configuring-zed#folder-specific-settings
 {
-  "buffer_font_size": 15,
-  "buffer_font_family": "Hack Nerd Font Mono", "Zed Plex Mono",
   "theme": "monokai Darker (Filter Octagon)",
+  "buffer_font_family": "Hack Nerd Font Mono",
   "vim_mode": false,
   "ui_font_size": 14,
   "line_height": 1,
