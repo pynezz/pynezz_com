@@ -65,11 +65,11 @@ func (c *DeletePage) Run(args ...interface{}) interface{} {
 func (c *PublishPage) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("publishpage function called!")
 	if len(args) < 1 {
-		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
+		ansi.PrintError(c.HelpStr)
 		return nil
 	}
 
-	id, _ := args[0].(string)
+	id := fmt.Sprintf("%s", args[0]) // args[0].(string)
 
 	return publishPage(id)
 }

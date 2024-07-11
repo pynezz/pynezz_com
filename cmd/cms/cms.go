@@ -20,12 +20,13 @@ func commands() map[string]ICommand {
 
 	// fmt.Println("Creating commands...")
 	return map[string]ICommand{
-		prefix + "list":      c["list"],
+		prefix + "list": c["list"],
+		// prefix + "build":     c["build"], // Build markdown files to HTML // Might be better suited on the publish command
 		prefix + "page":      c["page"],
 		prefix + "create":    c["create"],
 		prefix + "edit":      c["edit"],
 		prefix + "delete":    c["delete"],
-		prefix + "publish":   c["publish"],
+		prefix + "publish":   c["publish"], // Publish a page / convert markdown to HTML (which in turns creates a new HTML file in the public directory, updates the database, and the site)
 		prefix + "unpublish": c["unpublish"],
 		prefix + "status":    c["status"],
 		prefix + "tags":      c["tags"],
@@ -64,6 +65,18 @@ func run(c ICommand, args ...string) {
 
 func Execute(args ...string) {
 	fmt.Printf("Hello from the CMS module!\n")
+	for i, arg := range args {
+		fmt.Printf("[%d]:%s\n", i, arg)
+		if arg == "help" && len(args) > 1 {
+			Help(args...)
+			return
+		}
+
+		// if listCommands() == arg {
+		// 	fmt.Println(listCommands())
+		// 	return
+		// }
+	}
 
 	if len(args) < 1 {
 		fmt.Println(listCommands())
@@ -71,7 +84,7 @@ func Execute(args ...string) {
 	}
 
 	if ok := testDbConnection(); !ok {
-		fmt.Println("Database connection failed.")
+		ansi.PrintError("❌ Database connection failed.")
 		return
 	}
 	// If the command exists, run it

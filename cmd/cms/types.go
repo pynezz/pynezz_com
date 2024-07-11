@@ -24,18 +24,12 @@ type DeletePage struct{ *Command }
 type PublishPage struct{ *Command }
 type UnpublishPage struct{ *Command }
 
-// // Help returns the help string of the command
-//
-//	func (c Command) Help(args ...string) string {
-//		return c.HelpString
-//	}
+// Help - returns the help message of the command
 func (bc *Command) Help() string {
 	return bc.HelpStr
 }
+
+// Name - returns the name of the command
 func (bc *Command) Name() string {
 	return bc.NameStr
 }
-
-// func (c *Command[I, O]) Run(args I) O {
-// 	return nil
-// }

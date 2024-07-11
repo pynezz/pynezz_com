@@ -7,8 +7,10 @@ import (
 
 	"github.com/pynezz/pynezz_com/internal/parser"
 	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
+	"gorm.io/datatypes"
 )
 
+// GetPosts retrieves all posts from the database up to a specified limit
 func (d *Database) GetPosts(limit int) ([]models.PostMetadata, error) {
 	var posts []models.PostMetadata
 	result := d.Driver.Limit(limit).Find(&posts)
@@ -27,27 +29,47 @@ func (d *Database) GetPostByID(id uint) (models.PostMetadata, error) {
 	return post, result.Error
 }
 
+// GetPostByPath retrieves a post from the database based on the path to the markdown file
+func (d *Database) GetPostByPath(path string) (models.Post, error) {
+	var post models.Post
+	result := d.Driver.Where("path = ?", path).First(&post)
+	return post, result.Error
+}
+
+// GetPostsByTag retrieves all posts from the database that contain a specific tag
 func (d *Database) GetPostsByTag(tag string) ([]models.PostMetadata, error) {
 	var posts []models.PostMetadata
 	result := d.Driver.Where("tags LIKE ?", fmt.Sprintf("%%%s%%", tag)).Find(&posts)
 	return posts, result.Error
 }
 
+// NewPost creates a new post in the database, given the metadata of the post
+// This is differennt from the parser.NewPost function, which creates the necessary metadata for a post
 func (d *Database) NewPost(post models.PostMetadata) error {
 	result := d.Driver.Create(&post)
 	return result.Error
 }
 
+// GenerateMetadata generates metadata for a post based off the contents of a markdown file
+// This is the metadata that is stored in the database for each post
+// The middleware will generate this metadata when a new post is created or on a schedule
+// The metadata is used to generate the post's URL, tags, and other information
+// Finally, the metadata is fetched from the database, and the post is generated and displayed on the website
 func (d *Database) GenerateMetadata(post *models.Post) models.PostMetadata {
-	parsedContents := parser.ParseMetadata([]byte(post.Content))
-	models.PostMetadata = models.PostMetadata{
-		Title:       post.Title,
-		Slug:        d.GenerateSlug(post.Title),
-		Description: parser.ParseDescription(post),
-		Tags:        strings.Join(post.Tags, ","),
+	parsedMetadata, err := parser.ParseMetadata([]byte(post.Content)) // Parse the metadata of the contents of the markdown file
+	if err != nil {
+		fmt.Println("Error parsing metadata:", err)
+	}
+
+	pPost := parser.NewPost(post.Content) // Create a new post
+	parser.SetDescription(pPost)          // Set the description of the post based off the content or the description set in the metadata
+
+	return models.PostMetadata{
+		Title: post.Title,
+		Slug:  d.GenerateSlug(post.Title),
+		Tags:  datatypes.JSON(strings.Join(parsedMetadata.Tags, ",")), // Convert the tags to a JSON array ( // TODO: is this valid?)
 	}
 }
-					
 
 func commonStopWord(word string) bool {
 	m := map[string]bool{

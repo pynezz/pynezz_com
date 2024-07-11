@@ -17,10 +17,33 @@ var warning = func(warning string) {
 	ansi.PrintBold(ansi.HexColor256(r, g, b, warning+"\n"))
 }
 
+// ridiculously over-engineered warning message for not implemented features
+var warnNotImplemented = func(msg string) {
+	r, g, b, _ := ansi.HexToRGB("#e64553")    // catppuccin latte maroon
+	wr, wg, wb, _ := ansi.HexToRGB("#f9e2af") // catppuccin latte peach
+	l := len(msg)
+	for i := 0; i < l; i++ {
+		if i%2 == 0 {
+			fmt.Print(ansi.HexColor256(r, g, b, ansi.RoundedHoriz))
+		} else {
+			fmt.Print(ansi.HexColor256(wr, wg, wb, ansi.RoundedHoriz))
+		}
+	}
+	fmt.Printf("\n%s\n", msg)
+	for i := 0; i < l; i++ {
+		if i%2 == 0 {
+			fmt.Print(ansi.HexColor256(r, g, b, ansi.RoundedHoriz))
+		} else {
+			fmt.Print(ansi.HexColor256(wr, wg, wb, ansi.RoundedHoriz))
+		}
+	}
+	fmt.Println()
+}
+
 ////go:embed templates/*
 // var resources embed.FS
 
-	var buildVersion string
+var buildVersion string
 
 // var t = template.Must(template.ParseFS(resources, "templates/*", "templates/layout/*"))
 
@@ -34,7 +57,7 @@ func main() {
 	Execute(args...)
 }
 
-var displayHelp func(...string) = func(args ...string) {
+var displayHelp func(args ...string) = func(args ...string) {
 	fmt.Printf(`Usage:
 	%s [module] [options]
 Options:
@@ -82,7 +105,7 @@ func Execute(args ...string) {
 	}
 
 	if needHelp {
-		// fmt.Println("No help available for this module.")
+		fmt.Println("No help available for this module.")
 		return
 	}
 	f := map[string]func(...string){
