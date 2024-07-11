@@ -2,6 +2,9 @@ package parser
 
 import (
 	"errors"
+	"fmt"
+	"strings"
+	"time"
 )
 
 // Read from char 0-2 (inclusive)
@@ -11,7 +14,7 @@ func readMetadata(md []byte) ([]byte, error) {
 	// Read from char 0-2 (inclusive)
 	for i := 0; i < 2; i++ {
 		if md[i] != '-' {
-			return nil, errors.New("No metadata found")
+			return nil, errors.New("no metadata found")
 		}
 	}
 
@@ -28,11 +31,11 @@ func readMetadata(md []byte) ([]byte, error) {
 	}
 
 	// If it doesn't exist, return ""
-	return nil, errors.New("error: error reading metadata, no closing delimiter found.\nFormat:\n\t---\n\tmetadata\n\t---\n\tcontent\n")
+	return nil, errors.New("error: error reading metadata, no closing delimiter found\nFormat:\n\t---\n\tmetadata\n\t---\n\tcontent")
 }
 
 // Parse the metadata into a Metadata struct for later use
-func parseMetadata(md []byte) (Metadata, error) {
+func ParseMetadata(md []byte) (Metadata, error) {
 	m := Metadata{}
 
 	// read until the next "\n"
@@ -43,9 +46,23 @@ func parseMetadata(md []byte) (Metadata, error) {
 		}
 	}
 
-	// read until the next ":"
-	// read until the next "\n"
-	// read until the next "---"
+	lines := strings.Split(string(md), "\n")
+	data := make(map[string]string) // key-value pairs
+
+	for _, line := range lines {
+		if line == "" {
+			continue
+		}
+		data[strings.Split(line, ":")[0]] = strings.Split(line, ":")[1]
+	}
+
+	// Set the metadata fields
+	m.Description = data["description"]
+	m.Date, _ = time.Parse("2006-01-02", data["date"])
+	m.LastModified, _ = time.Parse("2006-01-02", data["last_modified"])
+	m.Tags = strings.Split(data["tags"], ",")
+
+	fmt.Println("parsed data:\n", m)
 
 	return m, nil
 }

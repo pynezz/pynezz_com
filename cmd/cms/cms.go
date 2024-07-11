@@ -18,18 +18,23 @@ type cms struct{}
 func commands() map[string]ICommand {
 	prefix := "--"
 
+	// 	typo := regexp.MustCompile(`(.*?)`)
+
 	// fmt.Println("Creating commands...")
 	return map[string]ICommand{
-		prefix + "list":      c["list"],
+		prefix + "list": c["list"],
+		// prefix + "build":     c["build"], // Build markdown files to HTML // Might be better suited on the publish command
 		prefix + "page":      c["page"],
 		prefix + "create":    c["create"],
 		prefix + "edit":      c["edit"],
 		prefix + "delete":    c["delete"],
-		prefix + "publish":   c["publish"],
+		prefix + "publish":   c["publish"], // Publish a page / convert markdown to HTML (which in turns creates a new HTML file in the public directory, updates the database, and the site)
 		prefix + "unpublish": c["unpublish"],
 		prefix + "status":    c["status"],
 		prefix + "tags":      c["tags"],
 		prefix + "config":    c["config"],
+		prefix + "parse":     c["parse"],
+		prefix + "build":     c["build"],
 	}
 }
 
@@ -49,6 +54,15 @@ func listCommands() string {
 	return s
 }
 
+func isValidCommand(cmd string) bool {
+	for _, v := range validCommands {
+		if cmd == v {
+			return true
+		}
+	}
+	return false
+}
+
 func Help(args ...string) string {
 	return listCommands()
 }
@@ -64,6 +78,13 @@ func run(c ICommand, args ...string) {
 
 func Execute(args ...string) {
 	fmt.Printf("Hello from the CMS module!\n")
+	for i, arg := range args {
+		fmt.Printf("[%d]:%s\n", i, arg)
+		if arg == "help" && len(args) > 1 {
+			Help(args...)
+			return
+		}
+	}
 
 	if len(args) < 1 {
 		fmt.Println(listCommands())
@@ -71,7 +92,7 @@ func Execute(args ...string) {
 	}
 
 	if ok := testDbConnection(); !ok {
-		fmt.Println("Database connection failed.")
+		ansi.PrintError("❌ Database connection failed.")
 		return
 	}
 	// If the command exists, run it
@@ -82,9 +103,19 @@ func Execute(args ...string) {
 					run(v, args...)
 				} else {
 					fmt.Printf("Command %s is not initialized.\n", k)
+					return
 				}
 				return
 			}
+		}
+	}
+	// If no valid command is found, check for typos
+	for _, arg := range args {
+		if !isValidCommand(arg) {
+			fmt.Printf("Invalid command: %s\n", arg)
+			fmt.Println("Did you mean one of these?")
+			fmt.Println(listCommands())
+			return
 		}
 	}
 }

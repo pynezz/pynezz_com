@@ -38,14 +38,13 @@ func (p PostsHandler) handleShowPosts(c echo.Context) error {
 			token = *ret
 			fmt.Println("token verified", ret)
 		}
-
 	}
 
 	response := fmt.Sprintln("here's post ", id)
 	if token.Valid {
-		response += " (you're logged in)"
+		response += "(you're logged in)"
 	} else {
-		response += " (you're not logged in)"
+		response += "(you're not logged in)"
 	}
 
 	return Render(c, http.StatusOK, templates.Show("posts", response))

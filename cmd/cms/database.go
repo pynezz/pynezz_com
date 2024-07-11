@@ -1,37 +1,36 @@
 package cms
 
 import (
-	"github.com/pynezz/pynezz_com/internal/server/middleware"
-	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
 	"github.com/pynezz/pynezzentials/ansi"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
-const dbPath = "users.db" // Testing purposes. This should be in the config file
+const dbPath = "main.db" // Testing purposes. This should be in the config file
 
 func testDbConnection() bool {
+	ansi.PrintColor(ansi.DarkYellow, "🔌 Checking database connection... ")
 	conf := gorm.Config{
 		PrepareStmt: true,
 	}
 
-	usersDb, err := middleware.InitDB(dbPath, conf, models.User{})
+	// Ping the database
+	usersDb, err := gorm.Open(sqlite.Open(dbPath), &conf)
+	if err != nil {
+		ansi.PrintError(err.Error())
+		return false
+	}
+	sqlObj, err := usersDb.DB()
 	if err != nil {
 		ansi.PrintError(err.Error())
 		return false
 	}
 
-	// Migrate the database
-	if err := usersDb.AutoMigrate(); err != nil {
+	if err := sqlObj.Ping(); err != nil {
 		ansi.PrintError(err.Error())
 		return false
 	}
 
-	ansi.PrintInfo("Testing db connection...")
-	if err := usersDb.Exec("SELECT 1").Error; err != nil {
-		ansi.PrintError(err.Error())
-		return false
-	}
 	ansi.PrintColorBold(ansi.LightGreen, "🎉 Database connected!")
-
 	return true
 }

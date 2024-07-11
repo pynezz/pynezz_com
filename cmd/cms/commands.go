@@ -5,6 +5,7 @@ import (
 
 	"github.com/pynezz/pynezz_com/internal/parser"
 	ansi "github.com/pynezz/pynezzentials/ansi"
+	"github.com/pynezz/pynezzentials/fsutil"
 )
 
 // Declaration of the Commands goes here
@@ -27,6 +28,8 @@ import (
 var c = map[string]ICommand{
 	"list":      &ListPages{&Command{HelpStr: "List all pages", NameStr: "list"}},
 	"edit":      &EditPage{&Command{HelpStr: "Edit a page", NameStr: "edit"}},
+	"parse":     &ParseAll{&Command{HelpStr: "Parse and build all pages", NameStr: "parse"}},
+	"build":     &ParseAll{&Command{HelpStr: "Parse and build all pages", NameStr: "parse"}}, // alias for parse
 	"create":    &CreatePage{&Command{HelpStr: "Create a page", NameStr: "create"}},
 	"delete":    &DeletePage{&Command{HelpStr: "Delete a page", NameStr: "delete"}},
 	"publish":   &PublishPage{&Command{HelpStr: "Publish a page", NameStr: "publish"}},
@@ -35,6 +38,38 @@ var c = map[string]ICommand{
 	"tags":      &PageTags{&Command{HelpStr: "Show the tags of a page", NameStr: "tags"}},
 	"config":    &Config{&Command{HelpStr: "Show the config of a page", NameStr: "config"}},
 	"page":      &ShowPage{&Command{HelpStr: "Show a page", NameStr: "page"}},
+
+	"nop": &Nop{&Command{HelpStr: "Noop", NameStr: "nop"}}, // for typo checking
+}
+
+var validCommands = []string{"list", "edit", "parse", "build", "create", "delete", "publish", "unpublish", "status", "tags", "config", "page"}
+
+func noop() bool {
+	fmt.Println("Noop called")
+	return false
+}
+
+func parseAll() bool {
+	fmt.Println("ParseAll called")
+
+	// Read "content/*.md" files
+	// Parse the content
+	// Create the pages
+	// Write the pages to "public/*.html" files
+	// Return true if successful, false otherwise
+	// Use the parser package for this
+
+	files, err := fsutil.GetFiles("content")
+	if err != nil {
+		ansi.PrintError("error reading contents of 'content' directory")
+	}
+
+	for _, file := range files {
+		c, _ := fsutil.GetFileContent(file)
+		fmt.Println(c)
+	}
+
+	return false
 }
 
 func showPage(id string) bool {

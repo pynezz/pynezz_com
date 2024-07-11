@@ -27,7 +27,7 @@ func MarkdownToHTML(mdPath string) []byte {
 	md, _ := r.ReadBytes('\n')
 
 	if mdatabytes, err := readMetadata(md); err == nil {
-		*metadata, err = parseMetadata(mdatabytes)
+		*metadata, err = ParseMetadata(mdatabytes)
 		if err != nil {
 			return []byte{}
 		}
@@ -43,5 +43,20 @@ func MarkdownToHTML(mdPath string) []byte {
 
 // TODO: Use some library here? Or write my own...?
 func parseContent(file string) string {
+
 	return ""
+}
+
+// ParseDescription sets the description of a post if it exists, otherwise it returns the first 100 characters of the content
+func SetDescription(p *Post) {
+	if p.Metadata.Description != "" {
+		return
+	}
+
+	if len(p.Content) < 100 {
+		p.Metadata.Description = string(p.Content)
+		return
+	}
+
+	p.Metadata.Description = string(p.Content[:100])
 }

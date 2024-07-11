@@ -34,7 +34,7 @@ import (
 // }
 
 func Execute(args ...string) string {
-	fmt.Println("Hello from the main package!")
+	// fmt.Println("Hello from the main package!")
 	fmt.Printf("Args: %v\n", args)
 	if len(args) < 2 {
 		return ""

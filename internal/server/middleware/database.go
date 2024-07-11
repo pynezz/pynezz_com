@@ -71,6 +71,8 @@ func initContentsDB(conf gorm.Config) {
 	ContentsDB.SetDriver(contentsBase)
 	ContentsDB.AddTable(models.PostMetadata{}, "posts_metadata")
 	ContentsDB.AddTable(models.Post{}, "posts")
+
+	ansi.PrintSuccess("Contents database initialized")
 }
 
 func initMainDB(conf gorm.Config) {
@@ -80,6 +82,7 @@ func initMainDB(conf gorm.Config) {
 	}
 
 	if err := mainBase.AutoMigrate(&models.User{}, &models.Admin{}); err != nil {
+		ansi.PrintError("Error migrating the main database")
 		ansi.PrintError(err.Error())
 	}
 
@@ -91,6 +94,8 @@ func initMainDB(conf gorm.Config) {
 	DBInstance.SetDriver(mainBase)
 	DBInstance.AddTable(models.User{}, "users")
 	DBInstance.AddTable(models.Admin{}, "admins")
+
+	ansi.PrintSuccess("Main database initialized")
 }
 
 func (d *Database) AddTable(model interface{}, name string) {
@@ -153,10 +158,11 @@ func (d *Database) Migrate() error {
 }
 
 func isValidDb(database string) (string, bool) {
+	// ansi.PrintDebug("Checking if the database name is valid... " + database)
 	database = chkExt(database)
 	for _, db := range dbNames {
 		if db == database+".db" {
-			ansi.PrintSuccess("Database name is valid: " + database)
+			// ansi.PrintSuccess("Database name is valid: " + database)
 			return database, true
 		}
 	}
@@ -196,11 +202,9 @@ func isAuthorized(requestedUsername, token string) (valid bool, sameUser bool) {
 	return true, t.Claims.(jwt.MapClaims)["sub"] == requestedUsername
 }
 
+// isValidUser checks if a user exists in the database
 func isValidUser(u *models.User) bool {
-	if userExists(u) {
-		return true
-	}
-	return false
+	return userExists(u)
 }
 
 func GetPosts(limit int) models.Posts {
@@ -215,7 +219,7 @@ func getUserHash(username string) (string, uint) {
 	DBInstance.Driver.Where("username = ?", username).First(&user)
 
 	ansi.PrintBold("returning hash only: " + user.Password + " for user: " + user.Username)
-	// Get only the hash	
+	// Get only the hash
 	// userJson, err := json.Marshal(user.Password)
 	// if err != nil {
 	// 	ansi.PrintError(err.Error())

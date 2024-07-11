@@ -2,40 +2,84 @@ package cms
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+	"strconv"
 
 	"github.com/pynezz/pynezzentials/ansi"
 )
+
+func needHelp(arg string) bool {
+	return arg == "help" || arg == "--help" || arg == "-h"
+}
+
+var listHelp = func(args ...string) string {
+	return fmt.Sprintf(`Usage:
+%s %s [min] [max]
+
+Options:
+    min	Minimum number of pages to list
+    max	Maximum number of pages to list
+Example:
+    listpages 1 10`, args[0], args[1])
+}
 
 func (c *ListPages) Run(args ...interface{}) interface{} {
 	var requiredArgs = 2
 	ansi.PrintDebug("listpages function called!")
 
-	if len(args) < requiredArgs {
+	subArray := args[0].([]string) // Get the arguments from the interface, as it's passing a slice of strings: [["args"]]
+	subArray = subArray[1:]        // Remove the command name from the arguments
+
+	if len(subArray) < requiredArgs {
 		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of %d", len(args), requiredArgs))
+		ansi.PrintWarning(listHelp(filepath.Base(os.Args[0]), c.Name()))
 		return nil
 	}
 
-	min, _ := args[0].(int)
-	max, _ := args[1].(int)
+	if len(subArray) > requiredArgs {
+		for _, arg := range subArray {
+			ansi.PrintDebug("Arg: " + arg)
+			if needHelp(arg) {
+				return c.Help()
+			}
+		}
+		ansi.PrintError("Too many arguments: " + strconv.Itoa(len(subArray)) + " instead of " + strconv.Itoa(requiredArgs))
+		ansi.PrintWarning(listHelp(filepath.Base(os.Args[0]), c.Name()))
+		return nil
+	}
+
+	min, _ := strconv.Atoi(subArray[0])
+	max, _ := strconv.Atoi(subArray[1])
+
+	if max < min {
+		ansi.PrintError("Max must be greater than min")
+		ansi.PrintWarning(listHelp(filepath.Base(os.Args[0]), c.Name()))
+		return nil
+	}
 
 	return listPages(min, max)
 }
 
 func (c *CreatePage) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("createpage function called!")
-
+	fmt.Println("Args: ", args)
 	if len(args) < 1 {
 		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
 		return nil
 	}
 
+	if len(args) > 1 {
+		for _, arg := range args {
+			if needHelp(arg.(string)) {
+				return c.Help()
+			}
+		}
+	}
+
 	path, _ := args[0].(string)
 
 	return createPage(path)
-}
-
-func (*CreatePage) Help() string {
-	return "Create a page"
 }
 
 func (c *EditPage) Run(args ...interface{}) interface{} {
@@ -65,11 +109,11 @@ func (c *DeletePage) Run(args ...interface{}) interface{} {
 func (c *PublishPage) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("publishpage function called!")
 	if len(args) < 1 {
-		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of 1", len(args)))
+		ansi.PrintError(c.HelpStr)
 		return nil
 	}
 
-	id, _ := args[0].(string)
+	id := fmt.Sprintf("%s", args[0]) // args[0].(string)
 
 	return publishPage(id)
 }
@@ -132,4 +176,20 @@ func (c *ShowPage) Run(args ...interface{}) interface{} {
 	id, _ := args[0].(string)
 
 	return showPage(id)
+}
+
+func (c *ParseAll) Run(args ...interface{}) interface{} {
+	ansi.PrintDebug("parseall function called!")
+	return parseAll()
+}
+
+func (c *Nop) Run(args ...interface{}) interface{} {
+
+	// Spell checking algorithm
+	// 1. Get the word
+	// 2. Check if the word is in the dictionary (commands list)
+	// 3. If the word is in the dictionary, return the word
+	// 4. If not, calculate the Levenshtein distance between the word and all the words in the dictionary
+	// 5. Suggest the word with the smallest distance to the user
+	return noop()
 }

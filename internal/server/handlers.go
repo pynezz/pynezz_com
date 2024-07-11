@@ -19,6 +19,13 @@ func aboutHandler(c echo.Context) error {
 func handleLogin(c echo.Context) error {
 	// css
 	// c.Get("/styles/templ.css")
+	cookie, _ := c.Cookie("Authorization")
+	if cookie != nil {
+		valid, _ := middleware.VerifyJWTToken(cookie.Value)
+		if valid.Valid {
+			return c.Redirect(http.StatusMovedPermanently, "/dashboard")
+		}
+	}
 
 	return Render(c, http.StatusOK, templates.Login())
 }
