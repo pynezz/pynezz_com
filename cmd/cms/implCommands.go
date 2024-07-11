@@ -2,16 +2,34 @@ package cms
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/pynezz/pynezzentials/ansi"
 )
 
+func needHelp(arg string) bool {
+	return arg == "help" || arg == "--help" || arg == "-h"
+}
+
+var listHelp = func(args ...string) string {
+	return fmt.Sprintf(`Usage:
+%s %s [min] [max]
+Options:
+	min	Minimum number of pages to list
+	max	Maximum number of pages to list
+Example:
+	listpages 1 10`, args[0], args[1])
+}
+
 func (c *ListPages) Run(args ...interface{}) interface{} {
+
 	var requiredArgs = 2
 	ansi.PrintDebug("listpages function called!")
 
 	if len(args) < requiredArgs {
 		ansi.PrintError(fmt.Sprintf("Not enough arguments: %d instead of %d", len(args), requiredArgs))
+		ansi.PrintWarning(listHelp(filepath.Base(os.Args[0]), c.Name()))
 		return nil
 	}
 
@@ -29,14 +47,23 @@ func (c *CreatePage) Run(args ...interface{}) interface{} {
 		return nil
 	}
 
+	if len(args) > 1 {
+		for _, arg := range args {
+			if needHelp(arg.(string)) {
+				return c.Help()
+			}
+		}
+	}
+
 	path, _ := args[0].(string)
 
 	return createPage(path)
 }
 
-func (*CreatePage) Help() string {
-	return "Create a page"
-}
+// func (c *CreatePage) Help() string {
+// 	str := "ok"
+//   return str
+// }
 
 func (c *EditPage) Run(args ...interface{}) interface{} {
 	ansi.PrintDebug("editpage function called!")
