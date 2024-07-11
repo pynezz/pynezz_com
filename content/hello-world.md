@@ -3,11 +3,7 @@
 If you're reading this, the site is up and running!
 This means that:
 - The server is running (Go)
-<<<<<<< HEAD
 - The reverse proxy is working ([OpenResty](https://openresty.org/))
-=======
-- The reverse proxy is working ([OpenResty])
->>>>>>> be76dab (md: added markdown content)
 - The client side code is working ([Go-Templ](https://templ.guide))
 - The markdown to HTML conversion is working (built from scratch)
 - The database is working (SQLite)
