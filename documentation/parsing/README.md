@@ -7,6 +7,52 @@
 		- [Custom callout](#custom-callout)
 		- [Parsing the custom callout](#parsing-the-custom-callout)
 
+## Changelog
+
+### Latest
+
+**12th of July 2024**
+![12th of July 2024 progress](./assets/img/progress-1_120724.png)
+
+🎉 **Progress!** After running the CMS module with the `--parse` parameter, it indeed did parse the markdown file, although it contains a lot of rough edges in this initial run.
+
+```bash
+❯ go run . cms --parse
+[+] Contents database initialized
+[+] Main database initialized
+╭────────────────╮
+│ pynezz.dev CLI │
+╰────────────────╯
+
+Hello from the CMS module!
+[0]:--parse
+🔌 Checking database connection...
+🎉 Database connected!
+running command:  parse
+[DEBUG] parseall function called!
+ParseAll called
+[i] Found directory: content
+[i] Found file: content/hello-world.md
+[i] Found file: content/test.md
+Converting hello-world.md to hello-world.md.html
+[DEBUG] file not parsed: content/hello-world.md
+Parsing markdown file hello-world.md to HTML
+parsed data:
+ {  0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC []}
+[+] Metadata parsed successfully
+Converting hello-world.md to hello-world.md.html
+[i] parsed content written to file: hello-world.html (ਂ bytes)
+Converting test.md to test.md.html
+[DEBUG] file not parsed: content/test.md
+Parsing markdown file test.md to HTML
+parsed data:
+ {  0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC []}
+[+] Metadata parsed successfully
+Converting test.md to test.md.html
+[i] parsed content written to file: test.html (Ϊ bytes)
+```
+
+
 ## Introduction
 
 First, we'll need to define a set of markdown elements, such as headings, links, dividers, and codeblocks.
