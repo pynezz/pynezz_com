@@ -1,5 +1,7 @@
 # Hello world!
 
+# Another top level heading
+
 If you're reading this, the site is up and running!
 This means that:
 - The server is running (Go)

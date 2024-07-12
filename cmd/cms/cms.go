@@ -33,8 +33,8 @@ func commands() map[string]ICommand {
 		prefix + "status":    c["status"],
 		prefix + "tags":      c["tags"],
 		prefix + "config":    c["config"],
-		prefix + "parse":     c["parse"],
-		prefix + "build":     c["build"],
+		prefix + "parse":     c["parse"], // Parse all markdown files in the content directory
+		prefix + "build":     c["build"], // Alias for parse
 	}
 }
 

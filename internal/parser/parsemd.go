@@ -2,6 +2,7 @@ package parser
 
 import (
 	"bufio"
+	"crypto/sha256"
 	"fmt"
 	"path"
 
@@ -60,3 +61,35 @@ func SetDescription(p *Post) {
 
 	p.Metadata.Description = string(p.Content[:100])
 }
+
+func NewPost(content string) *Post {
+	p := &Post{
+		Content: []byte(content),
+	}
+
+	return &Post{
+		CalculateSha256Sum: func() string {
+			if p.sha256sum == "" && p.Content != nil {
+				hash := sha256.New()
+				hash.Write(p.Content)
+				p.sha256sum = string(hash.Sum(nil))
+			}
+			return p.sha256sum
+		},
+	}
+}
+
+func NewPostsPage() *PostsPage {
+	return &PostsPage{}
+}
+
+func NewPage() *Page {
+	return &Page{}
+}
+
+func NewSite() *Site {
+	return &Site{}
+}
+
+// genToc generates a table of contents for a markdown file
+func genToc()
