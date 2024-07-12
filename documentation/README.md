@@ -118,3 +118,8 @@ Markdown supports yaml formatted metadata. Parsing yaml is quite straight forwar
 If I go for a directory with markdown files located on the server, authentication may be unnecessary.
 
 ---
+
+## Sources
+
+-  [writing github docs using markdown](https://docs.github.com/en/contributing/writing-for-github-docs/using-markdown-and-liquid-in-github-docs#callout-tags)
+- [markdownlint rules](https://xiangxing98.github.io/Markdownlint_Rules.html#md001)

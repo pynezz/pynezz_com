@@ -2,6 +2,8 @@ package cms
 
 import (
 	"fmt"
+	"path/filepath"
+	"strings"
 
 	"github.com/pynezz/pynezz_com/internal/parser"
 	ansi "github.com/pynezz/pynezzentials/ansi"
@@ -65,8 +67,35 @@ func parseAll() bool {
 	}
 
 	for _, file := range files {
-		c, _ := fsutil.GetFileContent(file)
-		fmt.Println(c)
+		// check if the file is already parsed:
+		// if it is, skip it
+		// if it is not, parse it
+
+		if isParsed(file) {
+			ansi.PrintInfo("file already parsed: " + file)
+			continue
+		}
+
+		ansi.PrintDebug("file not parsed: " + file)
+		res := parser.MarkdownToHTML(file)
+		if res == nil {
+			ansi.PrintError("error parsing file: " + file)
+		}
+
+		// write the parsed content to a file
+		// the file should be in the "public" directory
+		newName := filenameConvert(file)
+		f, err := fsutil.CreateFile("pynezz/public/" + newName)
+		if err != nil {
+			ansi.PrintError("error writing parsed content to file: " + newName)
+		}
+		written, err := f.Write(res)
+		if err != nil {
+			ansi.PrintError("error writing parsed content to file: " + newName)
+		}
+
+		ansi.PrintInfo("parsed content written to file: " + newName + " (" + string(written) + " bytes)")
+
 	}
 
 	return false
@@ -158,4 +187,32 @@ func config(id string) bool {
 	ansi.PrintInfo("page config called with param: " + id)
 
 	return false
+}
+
+func isParsed(file string) bool {
+	// check the "public" directory for the file
+	// if it exists, return true
+	// if it does not exist, return false
+	// use the fsutil package for this
+	// example: fsutil.Exists("public/" + file)
+	// return false
+	// return true
+	return fsutil.FileExists("public/" + filenameConvert(file)) // if the file exists, it is parsed
+}
+
+// filenameConvert converts a markdown filename to an html filename
+// and vice versa
+// example: filenameConvert("file.md") -> "file.html"
+// example: filenameConvert("file.html") -> "file.md"
+func filenameConvert(file string) string {
+	fileName := filepath.Base(file)
+	fileType := filepath.Ext(file)
+
+	if fileType == ".md" {
+		fmt.Println("Converting " + fileName + " to " + fileName + ".html")
+		return strings.Split(fileName, ".")[0] + ".html"
+	}
+
+	fmt.Println("Converting " + fileName + " to " + strings.TrimSuffix(fileName, fileType) + ".html")
+	return strings.TrimSuffix(fileName, fileType) + ".md"
 }
