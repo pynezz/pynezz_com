@@ -1,6 +1,8 @@
 # Converting markdown to HTML
 
 - [Converting markdown to HTML](#converting-markdown-to-html)
+  - [Changelog](#changelog)
+    - [Latest](#latest)
 	- [Introduction](#introduction)
 	- [Default elements](#default-elements)
 		- [Callout syntax](#callout-syntax)
@@ -12,11 +14,11 @@
 ### Latest
 
 **12th of July 2024**
-![12th of July 2024 progress](./assets/img/progress-1_120724.png)
+![12th of July 2024 progress](../assets/img/progress-1_120724.png)
 
 🎉 **Progress!** After running the CMS module with the `--parse` parameter, it indeed did parse the markdown file, although it contains a lot of rough edges in this initial run.
 
-```bash
+```output
 ❯ go run . cms --parse
 [+] Contents database initialized
 [+] Main database initialized
