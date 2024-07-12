@@ -1,9 +1,8 @@
-# Hello world!
-
-# Another top level heading
+# Hello world
 
 If you're reading this, the site is up and running!
 This means that:
+
 - The server is running (Go)
 - The reverse proxy is working ([OpenResty](https://openresty.org/))
 - The client side code is working ([Go-Templ](https://templ.guide))

@@ -1,10 +1,11 @@
 # Converting markdown to HTML
 
-- [[#Introduction|Introduction]]
-- [[#Default elements|Default elements]]
-	- [[#Default elements#Custom callout|Custom callout]]
-	- [[#Default elements#Parsing the custom callout|Parsing the custom callout]]
-
+- [Converting markdown to HTML](#converting-markdown-to-html)
+	- [Introduction](#introduction)
+	- [Default elements](#default-elements)
+		- [Callout syntax](#callout-syntax)
+		- [Custom callout](#custom-callout)
+		- [Parsing the custom callout](#parsing-the-custom-callout)
 
 ## Introduction
 
@@ -65,10 +66,10 @@ but it gives a great amount of control over the layout and flow
 
 Some more types:
 
->[!info]
-> info
+>[!NOTE] Information
+> Information callout
 
->[!warning]
+>[!WARNING]
 >Warning callout
 
 >[!summary]
@@ -140,4 +141,20 @@ const (
 	Info  CalloutType = "info"
 	...
 )
+```
+
+The parser will look for the callout syntax, and parse it into the correct HTML.
+
+Something like this:
+
+```go
+package parser
+
+func ParseCallout(calloutType CalloutType, contents string) string {
+	if calloutType == nil {
+		return fmt.Sprintf("<blockquote><p>%s</p></blockquote>", contents)
+	}
+
+	return fmt.Sprintf("<blockquote class='%s'><p>%s</p></blockquote>", calloutType, contents)
+}
 ```
