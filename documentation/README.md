@@ -57,6 +57,8 @@ The project have a set of requirements, which is listed below. All the required 
 
 #### Markdown
 
+Progress on this part can be found [here](./parsing)
+
 I'm writing my all my main digital notes in Obsidian due to the simplicity of writing markdown, and have done for several years now. This makes the first requirement easy, the framework would need to work with markdown.
 
 It should come to no surprise that my framework will be inspired by [Hugo](https://gohugo.io).
