@@ -61,7 +61,7 @@ I'm writing my all my main digital notes in Obsidian due to the simplicity of wr
 
 It should come to no surprise that my framework will be inspired by [Hugo](https://gohugo.io).
 
-More about this here: [[#Markdown to HTML]]
+More about this [here](#markdown-to-html)
 
 #### Authentication
 
@@ -71,7 +71,7 @@ I'm not going to roll my own crypto, just implement the authentication myself.
 
 There's however an obvious second solution: Just have a directory with markdown files and sub directories, and routes based on the file structure .
 
-More about this here: [[#Implementing authentication]]
+More about this [here](#implementing-authentication)
 
 #### Theming and styles
 
