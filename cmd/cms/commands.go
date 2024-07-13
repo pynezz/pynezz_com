@@ -94,7 +94,7 @@ func parseAll() bool {
 			ansi.PrintError("error writing parsed content to file: " + newName)
 		}
 
-		ansi.PrintInfo("parsed content written to file: " + newName + " (" + string(written) + " bytes)")
+		ansi.PrintInfo(fmt.Sprintf("parsed content written to file: %s (%d bytes)", newName, written))
 
 	}
 
