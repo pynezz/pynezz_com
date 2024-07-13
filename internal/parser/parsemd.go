@@ -195,7 +195,7 @@ func (md *MarkdownDocument) AddSection(title Heading, content []TextContent) {
 
 func (md *MarkdownDocument) String() string {
 	// Add creation date and title
-	document := fmt.Sprintf("<h1>%s</h1>\n<p class=\"date\">%s</p>\n", md.Metadata.Title, md.Metadata.Date.Format("02.01.2006"))
+	document := fmt.Sprintf("<article class=\"content\"><h1>%s</h1>\n<p class=\"date\">%s</p>\n", md.Metadata.Title, md.Metadata.Date.Format("02.01.2006"))
 	for _, section := range md.Sections {
 		document += section.String()
 	}
@@ -212,7 +212,7 @@ func (md *MarkdownDocument) String() string {
 	// document += css()
 
 	prepend := "<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title>" + md.Metadata.Title + "</title>" + cssRel() + "\n</head>\n<body>\n"
-	append := "</body>\n</html>"
+	append := "\n</article>\n</body>\n</html>"
 	document = prepend + nav() + document + append
 
 	return document
