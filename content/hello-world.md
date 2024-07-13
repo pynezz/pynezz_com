@@ -1,8 +1,7 @@
 ---
-path: content/hello-world.md
+Title: Hello, world!
+Path: content/hello-world.md
 ---
-
-# Hello world
 
 If you're reading this, the site is up and running!
 This means that:

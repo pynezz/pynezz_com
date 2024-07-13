@@ -13,69 +13,102 @@ var (
 // (and the standard adhered to in this project)
 // https://xiangxing98.github.io/Markdownlint_Rules.html#md001
 // (raw: https://raw.githubusercontent.com/DavidAnson/markdownlint/v0.24.0/doc/Rules.md)
-
-type h1 string
-type h2 string
-type h3 string
-type h4 string
-type h5 string
-type h6 string
+// Define common types
 type p string
 type a string
+
 type img string
+
+type em string
+type b string
+type strong string
+type italic string
+
+type code string
+type codeblock string
+
+type h1 string
+
+type pre string
+
+type blockquote string
+
+type hr string
+type br string
+
+type table string
+type tr string
+type th string
+type td string
+
 type ul string
 type ol string
 type li string
 
-// `code`
-type code string
+func (h heading) isHeading() {}
+func (h heading) String() string {
+	return h.content
+}
+func (h heading) HTMLTag() string {
+	return h.tag
+}
 
-// ```language
-// codeblock
-// ```
-type codeblock string
+// TextContent interface for content elements.
+type TextContent interface {
+	isTextContent()
+	String() string
+}
 
-// preformatted text
-// ```
-// preformatted text
-// ```
-type pre string
+// General text content struct to embed common text content behavior
+type textContent struct {
+	content string
+}
 
-// > blockquote
-type blockquote string
+func (t textContent) isTextContent() {}
+func (t textContent) String() string {
+	return t.content
+}
 
-// ---
-type hr string
+// Specific text content types embedding textContent
+type textP struct{ textContent }
+type textA struct{ textContent }
+type textImg struct{ textContent }
+type textEm struct{ textContent }
+type textB struct{ textContent }
+type textStrong struct{ textContent }
+type textItalic struct{ textContent }
+type textCode struct{ textContent }
+type textCodeblock struct{ textContent }
+type textPre struct{ textContent }
+type textBlockquote struct{ textContent }
+type textHr struct{ textContent }
+type textBr struct{ textContent }
+type textTable struct{ textContent }
+type textTr struct{ textContent }
+type textTh struct{ textContent }
+type textTd struct{ textContent }
+type textUl struct{ textContent }
+type textOl struct{ textContent }
+type textLi struct{ textContent }
 
-// | table | header |
-type br string
+// General heading struct to embed common heading behavior
+type heading struct {
+	content string
+	tag     string
+}
 
-// | table | row |
-type table string
-
-// | table | header |
-type tr string
-
-type th string
-type td string
-
-// **strong** - for important text
-type strong string
-
-// **bold** - for bold text, use sparingly
-type bold string
-type b string
-
-// *italic* - for
-type italic string
-
-// *emphasis* - for emphasis
-type em string
+// Specific heading types embedding heading
+type h2 struct{ heading }
+type h3 struct{ heading }
+type h4 struct{ heading }
+type h5 struct{ heading }
+type h6 struct{ heading }
 
 // interface for title elements -
 type Heading interface {
 	isHeading()
 	String() string
+	HTMLTag() string
 }
 
 type Metadata struct {
@@ -113,13 +146,6 @@ type Site struct {
 	Pages []Page
 
 	sha256sum string
-}
-
-// The text content interface is used to enforce that the content of a section
-// is of type TextContent, such as p, a, em, b, i
-type TextContent interface {
-	isTextContent()
-	String() string
 }
 
 // Section struct to represent a section with a title and content

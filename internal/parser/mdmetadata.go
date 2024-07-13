@@ -67,27 +67,19 @@ func ParseMetadata(md []byte) (Metadata, error) {
 		}
 	}
 
-	for k, v := range data {
-		ansi.PrintColor(ansi.DarkGreen, k+":"+v)
-	}
-
 	m.Title = data["Title"]
 	m.Description = data["Description"]
 	if d := data["Date"]; d != "" { // if date is provided, parse it
-		ansi.PrintDebug("date provided, parsing: " + d)
 		m.Date = parseDate(d)
 	} else { // if not, default to today's date
-		ansi.PrintDebug("no date provided, defaulting to today's date")
-		ansi.PrintDebug("provided date: " + data["Date"])
 		m.Date = parseDate(time.Now().Format("02.01.2006")) //passing to parseDate to ensure time.Time struct is created correctly)
 	}
-	ansi.PrintSuccess("date parsed: " + m.Date.Format("02.01.2006"))
 	m.LastModified, _ = time.Parse("02.01.2006", data["last_modified"])
 	if m.LastModified.IsZero() {
 		m.LastModified = time.Now()
 	}
 
-	m.Tags = strings.Split(data["tags"], ",")
+	m.Tags = strings.Split(strings.Trim(data["Tags"], "[]"), ",")
 
 	fmt.Println("parsed data:\n", m)
 	return m, nil
@@ -159,6 +151,17 @@ func parseDaMoYr(date string) (string, string, string) {
 	}
 	fmt.Println("parsed date: " + d + "." + m + "." + y)
 	return d, m, y
+}
+
+// extractMetadata separates metadata from content
+func extractMetadata(mdContent string) (string, string) {
+	if strings.HasPrefix(mdContent, "---") {
+		end := strings.Index(mdContent[3:], "---")
+		if end != -1 {
+			return mdContent[:end+6], mdContent[end+6:]
+		}
+	}
+	return "", mdContent
 }
 
 // // Parse the metadata into a Metadata struct for later use
