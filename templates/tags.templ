@@ -1,0 +1,33 @@
+package templates
+
+import (
+  "fmt"
+
+  "github.com/pynezz/pynezz_com/templates/layout"
+  "github.com/pynezz/pynezz_com/internal/server/middleware/models"
+)
+
+templ Tags(tags []models.Tag) {
+  <div class={"div", Style()}>
+    @layout.Header()
+    <section class={"section", section()}>
+      <h1 class={"h1", h1()}> Welcome { user.Username } </h1>
+      for _, tag := range tags {
+        <div>
+          <p>Tag: { tag.Name }</p>
+          <p>Created at: { fmt.Sprintf("%s", tag.CreatedAt.Local().Format("15:04:05 02.01 2006")) }</p>
+        </div>
+      }
+    </div>
+    @layout.Footer()
+  </div>
+}
+
+css section() {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  max-width: 800px;
+}
