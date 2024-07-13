@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/pynezz/pynezzentials/ansi"
 )
 
 // Read from char 0-2 (inclusive)
@@ -64,9 +66,13 @@ func ParseMetadata(md []byte) (Metadata, error) {
 		}
 	}
 
-	m.Title = data["title"]
-	m.Description = data["description"]
-	m.Date, _ = time.Parse("2006-01-02", data["date"])
+	for k, v := range data {
+		ansi.PrintColor(ansi.DarkGreen, k+":"+v)
+	}
+
+	m.Title = data["Title"]
+	m.Description = data["Description"]
+	m.Date, _ = time.Parse("2006-01-02", data["Date"])
 	m.LastModified, _ = time.Parse("2006-01-02", data["last_modified"])
 	m.Tags = strings.Split(data["tags"], ",")
 

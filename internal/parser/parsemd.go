@@ -38,6 +38,7 @@ func MarkdownToHTML(mdPath string) []byte {
 
 	mdContent := strings.Join(lines, "\n")
 	mdatabytes, err := readMetadata([]byte(mdContent))
+	ansi.PrintColor(ansi.Yellow, "metadata: "+string(mdatabytes))
 	if err == nil {
 		*metadata, err = ParseMetadata(mdatabytes)
 		if err != nil {
