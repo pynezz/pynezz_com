@@ -163,7 +163,7 @@ section p {
     /* margin: 0.25rem 0; */
     font-family: "Hack Nerd Font Mono", "Fira Mono", "Fira Code", "Roboto Mono", "Menlo", Courier, monospace;
 }
-
+    
 .main-nav {
     display: flex;
     flex-direction: row;

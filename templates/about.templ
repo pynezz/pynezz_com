@@ -7,7 +7,7 @@ import (
 
 templ About() {
   // <div class={"div", layout.Style()}>
-    @layout.Header( "about" )
+    @layout.Header( "/", "about" )
 
     <div class={"div", aboutMe()}>
       <h1>About</h1>
@@ -19,7 +19,7 @@ templ About() {
       </p>
     </div>
     @layout.Footer()
-// </div> 
+// </div>
 }
 
 css aboutMe() {

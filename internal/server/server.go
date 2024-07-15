@@ -53,8 +53,8 @@ func setup(app *echo.Echo) {
 
 	app.GET("/about", aboutHandler)
 	app.GET("/posts/", postsHandler.handleShowLastPosts)
-	app.GET("/posts/:id", postsHandler.handleShowPosts)
-	app.GET("/post/:slug", postsHandler.GetPostBySlug)
+	app.GET("/posts/:slug", postsHandler.GetPostBySlug)
+	// app.GET("/posts/:id", postsHandler.handleShowPosts)
 
 	// Todo - consider doing this, or just managing it via the CLI in the backend
 	// app.GET("/post/:slug/edit", postsHandler.EditPost)

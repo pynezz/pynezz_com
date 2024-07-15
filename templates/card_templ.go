@@ -14,7 +14,6 @@ func card() templ.CSSClass {
 	templ_7745c5c3_CSSBuilder.WriteString(`border-radius:8px;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1);`)
 	templ_7745c5c3_CSSBuilder.WriteString(`height:fit-content;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`padding:2rem;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`width:max-content;`)
 	templ_7745c5c3_CSSID := templ.CSSID(`card`, templ_7745c5c3_CSSBuilder.String())
 	return templ.ComponentCSSClass{

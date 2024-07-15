@@ -6,45 +6,33 @@ import (
 )
 
 templ Show(title string, body string, post models.Post) {
-    // <div class={ "div", Style() }>
-      @layout.Header( "/posts/" )
-      <article class="content">
-        <h1>{title}</h1>
+  @layout.Header( "~", "posts", post.Slug )
+    <div class={"div", layout.Wrapper}>
+      <article class={"article", string(twArticle)}>
+        <h1 class={"h1", layout.Title}>{title}</h1>
         <p>{body}</p>
         <p class="date"> {post.Metadata.Date.Format("02-01-2006" ) } </p>
       </article>
-      @layout.Footer()
-    // </div>
+  </div>
+  @layout.Footer()
 }
 
 templ PostsList(posts []models.PostMetadata) {
-  // <div class={"div", Style()}>
-  @layout.Header( "/posts/" )
-    <h1>Recent Posts</h1>
+  @layout.Header( "~", "posts" )
+  <div class={"div", layout.Wrapper}>
+    <h1 class={"h1", twTitle}>Recent Posts</h1>
     <ul>
     if len(posts) == 0 {
       <li>No posts found</li>
     } else {
       for _, p := range posts {
         <li><strong> { p.Title } </strong>: { p.Summary } </li>
-        <a href={ templ.URL("/post/" + p.Slug) }>Read more</a>
+        <a href={ templ.URL("/posts/" + p.Slug) }>Read more</a>
       }
     }
     </ul>
-  // </div>   
-    @layout.Footer()
-
-}
-
-templ post(post models.PostMetadata) {
-  @layout.Header( "/posts/" )
-  <div class={"div", Style()}>
-    <div>
-      <h1>{post.Title}</h1>
-      <p>{post.Summary}</p>
-      <a href={ templ.URL("/post/" + post.Slug) }>Read more</a>
-    </div>
   </div>
+  @layout.Footer()
 }
 
 // Can I do this?

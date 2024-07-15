@@ -2,19 +2,34 @@ package templates
 
 import "github.com/pynezz/pynezz_com/templates/layout"
 
+
+// const defBtn = "button text-white rounded px-4 py-2 transition duration-200 ease-in-out"
+// // const txt = "twtext-white"
+// const blue = "bg-blue hover:bg-blue-700"
+// const tw_btnColor = "bg-base hover:text-text"
+// const cardStyle tw = "bg-base font-normal text-text rounded-md p-4 shadow"
+
+const (
+	defBtn = "button text-white rounded px-4 py-2 transition duration-200 ease-in-out"
+	blue = "bg-blue hover:bg-blue-700"
+	btnColor = "bg-base hover:text-text"
+	cardStyle = "flex flex-auto flex-col font-normal text-text rounded-md p-4 shadow-lg bg-mantle w-fit"
+)
+
 templ Home() {
   // <div class={"div", Style() }>
 	@layout.Header("~")
-	<div class={ "div", card() }>
-		<h1>Home</h1>
+  <div class={"div", layout.Wrapper}>
+	<div class={"div", cardStyle}>
+		<h1 class={"h1", 	layout.Title}>Home</h1>
 		<h2>testing of go-templ</h2>
 		<p>Welcome to this generated page!</p>
 		<div>
-			<a href="/login"><button class={ "button", btn(txt, surface0) }>Login</button></a>
-			<a href="/register"><button class={ "button", btn(txt, surface0) }>Register</button></a>
-			<a href="/about"><button class={ "button", btn(txt, surface0) }>About</button></a>
+			// <a href="/login"><button class={ defBtn, blue }>Login</button></a>
+			// <a href="/register"><button class={ defBtn,  }>Register</button></a>
+			<a href="/about"><button class={defBtn, btnColor}>About</button></a>
 		</div>
 	</div>
+  </div>
 	@layout.Footer()
-  // </div>   
 }

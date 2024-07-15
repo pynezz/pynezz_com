@@ -1,18 +1,12 @@
 package layout
 
+const f = "bg-crust w-full h-12 flex items-center justify-center text-text"
+
 templ Footer() {
-  <footer class={"footer", footer()}>
+  <footer class={"footer", f}>
     <p>© 2024 pynezz.dev</p>
-    <a href="https://www.github.com/pynezz/" class={ navBarItemLink("monospace") }><img src="/static/svgs/github-icon.svg" height="20px" /></a>
+    <a href="https://www.github.com/pynezz/" class={navBarItemLink}>
+      <img src="/static/svgs/github-icon.svg" class={"img", Icon} />
+    </a>
   </footer>
-}
-
-
-css footer() {
-  display: flex;
-  justify-content: center;
-
-  background-color: {crust};
-  width: 100%;
-
 }

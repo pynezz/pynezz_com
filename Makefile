@@ -37,11 +37,14 @@ build-linux: linux  ## Build the application for Linux
 	@echo $(VERSION)
 	@echo "Build complete"
 
+tw: # Build Tailwindcss
+	@npm run build:css
+
 run: ## Build and run the application (Linux)
 	$(LINUX) && ./$(LINUX)
 
-gen: ## Generate code
-	@templ generate
+gen: tw ## Generate code
+	@templ generate		
 
 gen-run: gen ## Generate code and run the application
 	go run . serve -p 8080

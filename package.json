@@ -1,17 +1,21 @@
 {
 	"name": "pynezz_com",
 	"version": "1.0.0",
-	"description": "Simple website for pynezz.com built with Go and ...?",
+	"description": "Simple website for pynezz.com built with Go, Templ, and Tailwind",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "tailwindcss build -o static/css/tailwind.css --minify",
-		"watch": "tailwindcss build -o static/css/tailwind.css --watch"
+		"watch": "tailwindcss build -o static/css/tailwind.css --watch",
+		"build:css": "npx tailwindcss -i ./pynezz/tailwind.css -o ./pynezz/public/css/styles.css --minify"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"tailwindcss": "^3.4.4"
+		"@catppuccin/tailwindcss": "^0.1.6",
+		"autoprefixer": "^10.4.19",
+		"postcss": "^8.4.39",
+		"tailwindcss": "^3.4.5"
 	}
 }

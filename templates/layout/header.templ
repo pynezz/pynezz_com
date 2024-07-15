@@ -1,6 +1,11 @@
 package layout
 
-templ links(path string) {
+import (
+	"strings"
+
+)
+
+templ links() {
 	<head>
 		<title>pynezz.dev</title>
 		<meta charset="utf-8"/>
@@ -13,12 +18,12 @@ templ links(path string) {
 		<meta og:site_name="pynezz.dev"/>
 		<meta og:locale="en_US"/>
 		<meta og:author="Kevin aka. pynezz"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 		// // @Style()
 		// if path == "/posts/" {
 		// 	<link rel="stylesheet" href="/css/post.css"/>
 		// } else {
-			<link rel="stylesheet" href="/css/styles.css"/>
+		<link rel="stylesheet" href="/css/styles.css"/>
 		// }
 	</head>
 }
@@ -37,45 +42,152 @@ templ links(path string) {
 //   // </header>
 // }
 
-templ Header(path string) {
-  @links( path )
-  <header class={"header", header()}>
-  <div>
-    <h3 class={"h3", title()}><a href="/" class={navBarItemLink("Hack Nerd Font Mono, monospace")}>pynezz.dev</a></h3>
-  </div>
-    <ul class={"ul", navBarList()}>
-		<li class={"li", navBarItem("left")}>
-			<a href="/" class={ navBarItemLink("Hack Nerd Font Mono, monospace")}>/</a>
-		</li>
-    <li class={ navBarItem("left") }>
-      <a href="/posts/" class={ navBarItemLink("Hack Nerd Font Mono") }>posts</a>
-    </li>
-	</ul>
-  </header>
+// Tailwind styles
+const headerStyle = "flex flex-row bg-crust items-center justify-between max-h-fit w-full max-w-full z-1 backdrop-blur-md"
+const title = "text-lg font-mono text-text m-0 px-8"
+const navBarItem = "li flex items-center justify-center h-12 px-4"
+const navBarItemLink = "text-text font-mono text-lg p-sm"
+const breadCrumb = "font-mono italic text-subtext1 p-sm hover:text-text transition duration-200 ease-in-out px-0 mx-0"
+const navBarList = "flex flex-row"
+
+// var genPath = func(path []string) string {
+// var res string
+// parts := strings.Split(strings.Trim(path, "/"), "/")
+// 				if len(parts) > 4 {
+// 					// Show "..." and last 4 parts
+// 					<li class={"li", navBarItem}>
+// 						<span class={"a", navBarItemLink}>...</span>
+// 					</li>
+// 					parts = parts[len(parts)-4:]
+// 				}
+// 				fullPath := ""
+// 				for i, p := range parts {
+// 					fullPath += "/" + p
+// 					if i < len(parts)-1 {
+// 						<li class={"li", navBarItem}>
+// 							<a href={templ.SafeURL(fullPath)} class={"a", navBarItemLink}>{p}</a>
+// 						</li>
+// 					} else {
+// 						<li class={"li", navBarItem}>
+// 							<span class={"a", navBarItemLink}>{p}</span>
+// 						</li>
+// 					}
+// 				}
+// }
+templ Header(path ...string) {
+	// @links is the head tag with all the meta tags and styles
+	@links()
+	<header class={ "header", headerStyle }>
+		<div>
+			<h3 class={ "h3", title }>
+				<a href="/" class={ "a", navBarItemLink }>pynezz.dev</a>
+			</h3>
+		</div>
+		<ul class={ "ul", navBarList }>
+			<li class={ "li", navBarItem }>
+				<a href="/" class={ "a", navBarItemLink }>/</a>
+			</li>
+			<li class={navBarItem }>
+
+				<a href="posts/" class={ "a", navBarItemLink }>posts</a>
+			</li>
+			 if len(path) > 4 {
+        <li class={"li", navBarItem}>
+          <span class={"a", navBarItemLink}>...</span>
+        </li>
+        for i, p := range path[len(path)-4:] {
+          <li class={navBarItem }>
+            if i < len(path)-1 {
+							<a href={templ.SafeURL("/" + strings.Join(path[:len(path)-4+i+1], "/"))} class={"a", breadCrumb }>{ p }</a>
+					} else {
+              <span class={"a", navBarItemLink}>{p}</span>
+            }
+          </li>
+        }
+      } else {
+        for i, p := range path {
+          <li class={navBarItem }>
+            if i < len(path)-1 {
+              <a href={templ.SafeURL("/" + strings.Join(path[:i+1], "/"))} class={"a", breadCrumb }>{ p }</a>
+            } else {
+              <span class={"a", navBarItemLink}>{p}</span>
+            }
+          </li>
+        }
+      }
+		</ul>
+				</header>
 }
 
-css header() {
-	display: flex;
-	flex-direction: row;
-	background-color: { crust };
-	align-items: center;
-	justify-content: space-between;
-	max-height: fit-content;
-	width: 100%;
-	max-width: 100%;
-	float: top;
-	z-index: 1;
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
-}
+// <a href={templ.SafeURL(strings.Replace("/" + strings.Join(path[:len(path)-4+i+1], "/"),"~", "/", -1))} class={"a", navBarItemLink }>{ strings.Trim(p, "/") }</a>
+
+
+// for i, p := range path {
+// 	<li class={"li", navBarItem }>
+// 	p = strings.Trim(p, "/")
+// 	<a href={templ.SafeURL(strings.Trim(fmt.Sprintf("%s/", strings.Join(path[:i], "/	")), "/"))} class={"a", navBarItemLink }>{p}</a>
+// 	</li>
+// }
+
+// css header() {
+// 	display: flex;
+// 	flex-direction: row;
+// 	background-color: { crust };
+// 	align-items: center;
+// 	justify-content: space-between;
+// 	max-height: fit-content;
+// 	width: 100%;
+// 	max-width: 100%;
+// 	float: top;
+// 	z-index: 1;
+// 	backdrop-filter: blur(10px);
+// 	-webkit-backdrop-filter: blur(10px);
+// }
 
 // padding-left: 5em;
 // margin-right: 5em;
 
-css title() {
-	font-size: 1.35em;
-	font-family: "Hack Nerd Font Mono", monospace;
-	color: { txt };
-	margin: 0;
-	padding: 0rem 2rem 0rem 2rem;
-}
+// css title() {
+// 	font-size: 1.35em;
+// 	font-family: "Hack Nerd Font Mono", monospace;
+// 	color: { txt };
+// 	margin: 0;
+// 	padding: 0rem 2rem 0rem 2rem;
+// }
+// <script>
+// 		function generateBreadcrumb(path) {
+// 			const breadcrumb = document.getElementById('breadcrumb');
+// 			const parts = path.split('/').filter(part => part);
+// 			const maxParts = 4;
+
+// 			const homeLink = document.createElement('li');
+// 			homeLink.className = "{{navBarItem}}";
+// 			homeLink.innerHTML = '<a href="/" class="{{navBarItemLink}}">~</a>';
+// 			breadcrumb.appendChild(homeLink);
+
+// 			if (parts.length > maxParts) {
+// 				const ellipsis = document.createElement('li');
+// 				ellipsis.className = "{{navBarItem}}";
+// 				ellipsis.innerHTML = '<span class="{{navBarItemLink}}">...</span>';
+// 				breadcrumb.appendChild(ellipsis);
+// 				parts.splice(0, parts.length - maxParts);
+// 			}
+
+// 			let fullPath = '';
+// 			parts.forEach((part, index) => {
+// 				fullPath += '/' + part;
+// 				const item = document.createElement('li');
+// 				item.className = "{{navBarItem}}";
+
+// 				if (index < parts.length - 1) {
+// 					item.innerHTML = `<a href="${fullPath}" class="{{navBarItemLink}}">${part}</a>`;
+// 				} else {
+// 					item.innerHTML = `<span class="{{navBarItemLink}}">${part}</span>`;
+// 				}
+// 				breadcrumb.appendChild(item);
+// 			});
+// 		}
+
+// 		const path = "{{path}}";
+// 		generateBreadcrumb(path);
+// 	</script>

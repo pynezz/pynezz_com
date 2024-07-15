@@ -1,8 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./view/**/*.templ"],
+  content: [
+    "./templates/**/*.templ",
+    "./templates/**/*.go"
+  ],
   theme: {
     extend: {},
   },
-  plugins: [],
+  fontFamily: {
+    mono: ['"Hack Nerd Font Mono"', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+    sans: ['"Inter"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif']
+  },
+  plugins: [require("@catppuccin/tailwindcss")({
+    // prefix: "ctp",
+    defaultFlavour: "mocha"
+  })],
 }
