@@ -9,7 +9,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/pynezz/pynezz_com/internal/parser"
 	"github.com/pynezz/pynezz_com/internal/server/middleware"
+	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
 	"github.com/pynezz/pynezz_com/templates"
+	"github.com/pynezz/pynezzentials/ansi"
 )
 
 type Metadata parser.Metadata
@@ -47,7 +49,9 @@ func (p PostsHandler) handleShowPosts(c echo.Context) error {
 		response += "(you're not logged in)"
 	}
 
-	return Render(c, http.StatusOK, templates.Show("posts", response))
+	posts := middleware.GetPostsMetadata(0)
+
+	return Render(c, http.StatusOK, templates.PostsList(posts))
 }
 
 // Fetch the last 5 posts or so
@@ -63,25 +67,43 @@ func (p PostsHandler) handleShowLastPosts(c echo.Context) error {
 
 	// contentsMiddleware := middleware.ContentsDB
 
+	posts := middleware.GetPostsMetadata(limit)
+
 	// posts := contentsMiddleware.GetPosts(limit)
 	// posts, err := parser.GetLastPosts(limit)
-	body := fmt.Sprintln("here's the last", limit, " posts. You can tweak the limit by adding a 'limit' query parameter to the URL.")
-
-	return Render(c, http.StatusOK, templates.Show("post", body))
+	// body := fmt.Sprintln("here's the last", limit, " posts. You can tweak the limit by adding a 'limit' query parameter to the URL.")
+	return Render(c, http.StatusOK, templates.PostsList(posts))
 }
 
-// Post is a struct that represents a post.
-type Post struct {
-	ID       int      `json:"id"`
-	Title    string   `json:"title"`
-	Metadata Metadata `json:"metadata"`
-	Content  string   `json:"content"`
-	Path     string   `json:"path"` // Path to the markdown file - e.g. "/posts/2021-01-01-post.md"
-}
+// // Post is a struct that represents a post.
+// type Post struct {
+// 	ID       int      `json:"id"`
+// 	Title    string   `json:"title"`
+// 	Metadata Metadata `json:"metadata"`
+// 	Content  string   `json:"content"`
+// 	Path     string   `json:"path"` // Path to the markdown file - e.g. "/posts/2021-01-01-post.md"
+// }
 
 // NewPostsHandler creates a new PostsHandler.
 func newPostsHandler() *PostsHandler {
 	return &PostsHandler{}
+}
+
+func (ph *PostsHandler) GetPostBySlug(c echo.Context) error {
+	slug := c.Param("slug")
+	ansi.PrintInfo("[POSTSHANDLER] Post with slug " + slug + " requested")
+
+	if slug == "" {
+		return Render(c, http.StatusNotFound, templates.Show("404", "Post not found", models.Post{}))
+	}
+
+	p, err := middleware.GetPostBySlug(slug)
+	if err != nil {
+		ansi.PrintError("[POSTSHANDLER] Error getting post by slug: " + err.Error())
+		return Render(c, http.StatusNotFound, templates.Show("404", "Post not found", models.Post{}))
+	}
+
+	return Render(c, http.StatusOK, templates.Show(p.Metadata.Title, p.Content.String(), p))
 }
 
 // // AddPost adds a post to the PostsHandler.

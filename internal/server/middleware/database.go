@@ -34,6 +34,7 @@ type Database struct {
 type IContentsDB interface {
 	GetPostsMetadata(limit int) ([]models.PostMetadata, error)
 	GetPosts(limit int) models.Posts
+	GetPostBySlug(slug string) (models.PostMetadata, error)
 
 	GenerateSlug(title string) string
 }
@@ -54,7 +55,7 @@ func init() {
 }
 
 func initContentsDB(conf gorm.Config) {
-	contentsBase, err := InitDB(dbNames[Content], conf, models.PostMetadata{}, models.Post{})
+	contentsBase, err := InitDB(dbNames[Content], conf, &models.PostMetadata{}, &models.Post{})
 	if err != nil {
 		ansi.PrintError(err.Error())
 	}
@@ -207,10 +208,75 @@ func isValidUser(u *models.User) bool {
 	return userExists(u)
 }
 
+// GetPosts returns all the posts in the database or a limited number of posts
+// if the limit is 0, all the posts are returned
 func GetPosts(limit int) models.Posts {
 	var posts models.Posts
-	DBInstance.Driver.Limit(limit).Find(&posts)
+
+	if limit == 0 {
+		ContentsDB.Driver.Model(&models.Posts{}).Find(&posts)
+		return posts
+	}
+	ContentsDB.Driver.Limit(limit).Find(&posts)
 	return posts
+}
+
+func GetPostBySlug(slug string) (models.Post, error) {
+	var post models.Post
+	var postMetadata models.PostMetadata
+	tx := ContentsDB.Driver.Where("LOWER(slug) = ?", strings.ToLower(slug)).First(&postMetadata)
+	if tx.Error != nil {
+		ansi.PrintError(tx.Error.Error())
+		return models.Post{}, tx.Error
+	}
+	post = models.Post{
+		Metadata: models.Metadata{
+			Title:       postMetadata.Title,
+			Description: postMetadata.Summary,
+			Date:        postMetadata.CreatedAt,
+			Tags:        postMetadata.Tags,
+		},
+	}	
+	// TODO: Fix this - it's supposed to work with post straight from the database, but it doesn't
+	// because it's never written to the database - check the parser for implementing this
+	ansi.PrintBold("Post found: " + post.Metadata.Title)
+	return post, nil
+}
+
+// GetPostsMetadata returns all the posts metadata in the database or a limited number of posts
+func GetPostsMetadata(limit int) []models.PostMetadata {
+	// var postMetadata models.PostMetadata
+	var postsMetadata []models.PostMetadata
+	if limit == 0 {
+		ContentsDB.Driver.Find(&postsMetadata).Where("deleted_at IS NULL")
+		return postsMetadata
+	}
+	ContentsDB.Driver.Limit(limit).Find(&postsMetadata)
+	return postsMetadata
+}
+
+func GetPost(slug string) models.Post {
+	ansi.PrintDebug("Getting post with slug: " + slug)
+	// find the post with the given slug
+	var post models.Post
+	tx := ContentsDB.Driver.Where("LOWER(slug) = ?", strings.ToLower(slug)).First(&post)
+	if tx.Error != nil {
+		ansi.PrintError(tx.Error.Error())
+		return models.Post{}
+	}
+	ansi.PrintBold("Post found: " + post.Title)
+	return post
+}
+
+func GetPostMetadata(slug string) models.PostMetadata {
+	var postMetadata models.PostMetadata
+	tx := ContentsDB.Driver.Model(&models.PostMetadata{}).Find(models.PostMetadata{}).Where("slug = ?", slug).First(&postMetadata)
+	if tx.Error != nil {
+		ansi.PrintError(tx.Error.Error())
+		return models.PostMetadata{}
+	}
+	ansi.PrintBold("Post metadata found: " + postMetadata.Title)
+	return postMetadata
 }
 
 // getUserHash is almost the same as getUser, but it's used for login purposes
@@ -307,4 +373,15 @@ func writeUser(u *models.User) error {
 
 	ansi.PrintSuccess("User created successfully!")
 	return nil
+}
+
+func GetTags() []models.Tag {
+	var tags []models.Tag
+	tx := ContentsDB.Driver.Find(&tags)
+	if tx.Error != nil {
+		ansi.PrintError(tx.Error.Error())
+		return []models.Tag{}
+	}
+	ansi.PrintSuccess("Tags found: " + fmt.Sprintf("%d", len(tags)))
+	return tags
 }

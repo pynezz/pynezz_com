@@ -17,8 +17,6 @@ func aboutHandler(c echo.Context) error {
 }
 
 func handleLogin(c echo.Context) error {
-	// css
-	// c.Get("/styles/templ.css")
 	cookie, _ := c.Cookie("Authorization")
 	if cookie != nil {
 		valid, _ := middleware.VerifyJWTToken(cookie.Value)
@@ -31,9 +29,6 @@ func handleLogin(c echo.Context) error {
 }
 
 func handleRegister(c echo.Context) error {
-	// css
-	c.Get("/styles/templ.css")
-
 	return Render(c, http.StatusOK, templates.Register())
 }
 

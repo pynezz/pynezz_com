@@ -68,6 +68,7 @@ func ParseMetadata(md []byte) (Metadata, error) {
 	}
 
 	m.Title = data["Title"]
+	ansi.PrintColorBold(ansi.Purple, "Title: "+m.Title)
 	m.Description = data["Description"]
 	if d := data["Date"]; d != "" { // if date is provided, parse it
 		m.Date = parseDate(d)

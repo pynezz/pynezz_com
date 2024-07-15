@@ -1,5 +1,5 @@
 /* Minimalistic markdown blog format styles */
- ::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 8px;
     height: 8px;
     background: #212020
@@ -20,35 +20,42 @@
 }
 
 body {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  flex-direction: column;
-  font-family: "Inter UI", "Roboto", "Segoe UI", Helvetica, Arial, sans-serif;
-  background-color: #24273a; /* macchiato Base */
-  color: #cad3f5; /* macchiato Text */
-  min-height: 100vh;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    flex-direction: column;
+    font-family: "Inter UI", "Roboto", "Segoe UI", Helvetica, Arial, sans-serif;
+    background-color: #24273a;
+    /* macchiato Base */
+    color: #cad3f5;
+    /* macchiato Text */
+    min-height: 100vh;
 }
 
 a {
     color: #0076ff;
     text-decoration: none;
-    transition: color .2s
-}
-a:hover {
-    color: #00a8ff
+    transition: color .2s;
 }
 
-h2,h3,h4,h5,h6 {
+a:hover {
+    color: #00a8ff;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
     display: flex;
     align-items: center;
-    line-height: 1.3
+    line-height: 1.3;
     margin-bottom: 0.25rem;
     margin-top: 1.5rem;
 }
 
 h1 {
-    font-size: 2.625rem
+    font-size: 2.625rem;
     border-bottom: 1px solid #cad3f5;
     padding-bottom: 0.5rem;
     margin-top: 1.5rem;
@@ -128,31 +135,47 @@ section p {
 }
 
 .nav-item {
-  float: left;
-  color:#a6e3a1;  /* mocha Text */
-  background-color: #181825;  /* macchiato Base */
-  border-right: 1px solid #11111b;  /* mocha crust */
-  padding-left: 1rem;
-  padding-right: 1rem;
+    float: left;
+    color: #a6e3a1;
+    /* mocha Text */
+    background-color: #181825;
+    /* macchiato Base */
+    border-right: 1px solid #11111b;
+    /* mocha crust */
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .nav-link {
-  display: block;
-  color: #cad3f5;  /* macchiato Text */
-  /* background-color: #24273a;  /* macchiato Base */
-  width: 100%;
-  padding: 2rem 0.75rem;
-  font-weight: 700;
-  /* margin: 0.25rem 0; */
-  font-family: "Hack Nerd Font Mono", "Fira Mono", "Fira Code", "Roboto Mono", "Menlo", Courier, monospace;
+    display: block;
+    color: #cad3f5;
+    /* macchiato Text */
+    /* background-color: #24273a;  /* macchiato Base */
+    width: 100%;
+    padding: 2rem 0.75rem;
+    font-weight: 700;
+    /* margin: 0.25rem 0; */
+    font-family: "Hack Nerd Font Mono", "Fira Mono", "Fira Code", "Roboto Mono", "Menlo", Courier, monospace;
 }
 
 .main-nav {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  background-color: #181825;  /* macchiato Base */
-  padding: 0;
-  border-bottom: 2px solid #f5e0dc;  /* mocha crust */
- 	list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #181825;
+    /* macchiato Base */
+    padding: 0;
+    border-bottom: 2px solid #f5e0dc;
+    /* mocha crust */
+    list-style-type: none;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    max-height: fit-content;
+    min-width: 100vw;
+    max-width: 100vw;
 }

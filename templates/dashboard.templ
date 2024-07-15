@@ -9,7 +9,7 @@ import (
 
 templ Dashboard(user models.User) {
   <div class={"div", Style()}>
-    @layout.Header()
+    @layout.Header( "Dashboard" )
     <div class={"div", formDiv()}>
       <h1 class={"h1", h1()}> Welcome { user.Username } </h1>
       <div>
@@ -23,7 +23,7 @@ templ Dashboard(user models.User) {
 
 templ DashboardError() {
   <div class={"div", Style()}>
-    @layout.Header()
+    @layout.Header( "Dashboard" )
     <div class={"div", formDiv()}>
       <h1 class={"h1", h1()}> Error </h1>
       <div>

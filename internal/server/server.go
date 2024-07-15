@@ -2,30 +2,17 @@ package server
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/pynezz/pynezz_com/internal/server/middleware"
-	"github.com/pynezz/pynezz_com/templates"
 )
 
 func Serve(port string) {
 	fmt.Println("Serving the webapp on port", port)
 	app := echo.New()
 	setup(app)
-
-	c1 := templates.Style()
-	handler := templ.NewCSSMiddleware(app, c1)
-	app.Logger.Fatal(http.ListenAndServe(":"+port, handler))
-}
-
-func serveStatic(app *echo.Echo, files ...string) {
-	for _, file := range files {
-		app.GET("/"+file, func(c echo.Context) error {
-			return c.File("pynezz/public/" + file)
-		})
-	}
+	app.Start(":" + port)
 }
 
 func setup(app *echo.Echo) {
@@ -39,11 +26,15 @@ func setup(app *echo.Echo) {
 		}
 	})
 
-	serveStatic(app, "favicon.ico styles/templ.css")
-
+	// static
+	app.Static("/static", "pynezz/public/")
+	app.Static("/css", "pynezz/public/css/")
+	app.Static("/", "pynezz/public/")
 	app.GET("/static/svgs/github-icon.svg", func(c echo.Context) error {
 		return c.File("pynezz/public/svgs/github-icon.svg")
 	})
+
+	postsHandler := newPostsHandler()
 
 	app.GET("/", homeHandler)
 
@@ -56,8 +47,12 @@ func setup(app *echo.Echo) {
 	app.GET("/dashboard", middleware.Bouncer(gotoDashboard))
 
 	app.GET("/about", aboutHandler)
-	app.GET("/posts/", newPostsHandler().handleShowLastPosts)
-	app.GET("/posts/:id", newPostsHandler().handleShowPosts)
+	app.GET("/posts/", postsHandler.handleShowLastPosts)
+	app.GET("/posts/:id", postsHandler.handleShowPosts)
+	app.GET("/post/:slug", postsHandler.GetPostBySlug)
+
+	// Todo - consider doing this, or just managing it via the CLI in the backend
+	// app.GET("/post/:slug/edit", postsHandler.EditPost)
 }
 
 // This custom Render replaces Echo's echo.Context.Render() with templ's templ.Component.Render().

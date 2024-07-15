@@ -52,6 +52,7 @@ var header = func() string {
 }
 
 func main() {
+
 	fmt.Println(header())
 	args := os.Args[1:]
 	Execute(args...)

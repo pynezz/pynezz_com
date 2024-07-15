@@ -1,24 +1,21 @@
 package templates
 
 import (
-  "fmt"
-
   "github.com/pynezz/pynezz_com/templates/layout"
   "github.com/pynezz/pynezz_com/internal/server/middleware/models"
 )
 
 templ Tags(tags []models.Tag) {
   <div class={"div", Style()}>
-    @layout.Header()
+    @layout.Header( "Tags" )
     <section class={"section", section()}>
-      <h1 class={"h1", h1()}> Welcome { user.Username } </h1>
+      <h1 class={"h1", h1()}> Tags </h1>
       for _, tag := range tags {
         <div>
           <p>Tag: { tag.Name }</p>
-          <p>Created at: { fmt.Sprintf("%s", tag.CreatedAt.Local().Format("15:04:05 02.01 2006")) }</p>
         </div>
       }
-    </div>
+    </section>
     @layout.Footer()
   </div>
 }

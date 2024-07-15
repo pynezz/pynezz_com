@@ -5,9 +5,13 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/pynezz/pynezz_com/internal/helpers"
 	"github.com/pynezz/pynezz_com/internal/parser"
+	"github.com/pynezz/pynezz_com/internal/server/middleware"
+	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
 	ansi "github.com/pynezz/pynezzentials/ansi"
 	"github.com/pynezz/pynezzentials/fsutil"
+	"gorm.io/datatypes"
 )
 
 // Declaration of the Commands goes here
@@ -77,9 +81,10 @@ func parseAll() bool {
 		}
 
 		ansi.PrintDebug("file not parsed: " + file)
-		res := parser.MarkdownToHTML(file)
-		if res == nil {
+		bytes, doc := parser.MarkdownToHTML(file)
+		if bytes == nil {
 			ansi.PrintError("error parsing file: " + file)
+			return false
 		}
 
 		// write the parsed content to a file
@@ -88,17 +93,48 @@ func parseAll() bool {
 		f, err := fsutil.CreateFile("pynezz/public/" + newName)
 		if err != nil {
 			ansi.PrintError("error writing parsed content to file: " + newName)
+			return false
 		}
-		written, err := f.Write(res)
+		written, err := f.Write(bytes)
 		if err != nil {
 			ansi.PrintError("error writing parsed content to file: " + newName)
+			return false
 		}
 
 		ansi.PrintInfo(fmt.Sprintf("parsed content written to file: %s (%d bytes)", newName, written))
 
+		// write to database
+		// the database should be in the "db" directory
+		// post := middleware.ContentsDB.GenerateMetadata(bytes)
+		post := parser.Post{
+			Metadata: doc.Metadata,
+			// Content:  []byte(doc.String()),
+		}
+		slug := middleware.ContentsDB.GenerateSlug(post.Metadata.Title)
+		postMetadata := models.PostMetadata{
+			Title: post.Metadata.Title,
+			Path:  newName,
+			Slug:  slug,
+
+			// PostID: int(crc32.ChecksumIEEE([]byte(slug))), // always unique and reproducible.
+			// Changed to Adler32 - check the hash_bench.go in root directory for explanation.
+			PostID: int(helpers.Adler32(slug)), // always unique and reproducible
+			Tags:   datatypes.JSON(strings.Join(post.Metadata.Tags, ",")),
+		}
+
+		// write to database
+		if err := middleware.ContentsDB.NewPost(postMetadata); err != nil {
+			ansi.PrintError("error writing to database")
+			return false
+		}
+
+		ansi.PrintInfo("written to database")
+
+		// ! IMPORTANT: parser and models have different ways of handling the same data
+
 	}
 
-	return false
+	return true
 }
 
 func showPage(id string) bool {

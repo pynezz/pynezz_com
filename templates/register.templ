@@ -125,8 +125,8 @@ css lighten() {
 }
 
 templ Register() {
-  <div class={"div", Style()}>
-  @layout.Header()
+  // <div class={"div", Style()}>
+  @layout.Header(  "Register"  )
     <div class={"div", formDiv()}>
       <h1 class={"h1", h1()}> Register </h1>
       <p>registration is needed to post content</p>
@@ -143,5 +143,5 @@ templ Register() {
       </p>
     </div>
     @layout.Footer()
-  </div>
+  // </div>
 }

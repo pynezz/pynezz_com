@@ -7,8 +7,8 @@ import (
 )
 
 templ Login() {
-  <div class={"div", Style()}>
-  @layout.Header()
+  // <div class={"div", Style()}>
+  @layout.Header( "login" )
     <div class={"div", formDiv()}>
       <h1 class={"h1", h1()}> Login </h1>
       <p>Current time: { time.Now().UTC().Local().Format("01-02-2006 15:04:05") }</p>
@@ -24,5 +24,5 @@ templ Login() {
       </p>
     </div>
     @layout.Footer()
-  </div>
+  // </div>
 }

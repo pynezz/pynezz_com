@@ -1,39 +1,43 @@
 package templates
 
 import (
-
   "github.com/pynezz/pynezz_com/templates/layout"
   "github.com/pynezz/pynezz_com/internal/server/middleware/models"
 )
 
-templ Show(title string, body string) {
-  <body>
-    <div class={"div", Style()}>
-      @layout.Header()
-      <div>
+templ Show(title string, body string, post models.Post) {
+    <div class={ "div", Style() }>
+      @layout.Header( "/posts/" )
+      <article class="content">
         <h1>{title}</h1>
         <p>{body}</p>
-      </div>
+        <p class="date"> {post.Metadata.Date.Format("02-01-2006" ) } </p>
+      </article>
       @layout.Footer()
     </div>
-  </body>
 }
 
 templ PostsList(posts []models.PostMetadata) {
   <div class={"div", Style()}>
+  @layout.Header( "/posts/" )
     <h1>Recent Posts</h1>
     <ul>
-
+    if len(posts) == 0 {
+      <li>No posts found</li>
+    } else {
       for _, p := range posts {
         <li><strong> { p.Title } </strong>: { p.Summary } </li>
         <a href={ templ.URL("/post/" + p.Slug) }>Read more</a>
       }
-
+    }
     </ul>
   </div>
+    @layout.Footer()
+
 }
 
 templ post(post models.PostMetadata) {
+  @layout.Header( "/posts/" )
   <div class={"div", Style()}>
     <div>
       <h1>{post.Title}</h1>

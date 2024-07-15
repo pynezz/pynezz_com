@@ -11,21 +11,24 @@ import (
 )
 
 // MarkdownToHTML converts markdown to HTML
-func MarkdownToHTML(mdPath string) []byte {
+func MarkdownToHTML(mdPath string) ([]byte, MarkdownDocument) {
 	metadataStr, contentStr, err := parseMarkdownFile(mdPath)
 	if err != nil {
-		return []byte{}
+		return []byte{}, MarkdownDocument{}
 	}
 
 	metadata, err := ParseMetadata([]byte(metadataStr))
 	if err != nil {
-		return []byte("error: encountered an error while parsing metadata\n")
+		return []byte("error: encountered an error while parsing metadata\n"), MarkdownDocument{}
 	}
 
 	document := parseContent(strings.Split(contentStr, "\n"))
 	document.Metadata = metadata
 
-	return []byte(document.String())
+	// write to database
+	// middleware.DBInstance.NewPost()
+	// slug := middleware.DBInstance.GenerateSlug(document.Metadata.Title
+	return []byte(document.String()), *document
 }
 
 // parseMarkdownFile reads the markdown file and separates metadata from content
