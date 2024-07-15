@@ -6,7 +6,7 @@ import (
 )
 
 templ Tags(tags []models.Tag) {
-  <div class={"div", Style()}>
+  // <div class={"div", Style()}>
     @layout.Header( "Tags" )
     <section class={"section", section()}>
       <h1 class={"h1", h1()}> Tags </h1>
@@ -17,7 +17,7 @@ templ Tags(tags []models.Tag) {
       }
     </section>
     @layout.Footer()
-  </div>
+  // </div>
 }
 
 css section() {

@@ -43,7 +43,7 @@ func Style() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<style>\n    html {\n        font-size: 16px;\n        box-sizing: border-box;\n        padding: 0;\n        margin: 0;\n    }\n\n    body {\n        font-family: 'Roboto', sans-serif;\n        margin: 0;\n        padding: 0;\n        background-color: { bg };\n    }\n    a {\n        text-decoration: none;\n    }\n    a:link {\n      text-decoration: none;\n    }\n    a:visited {\n      text-decoration: none;\n    }\n    a:hover {\n      text-decoration: none;\n    }\n    a:active {\n      text-decoration: none;\n    }\n  </style>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<style>\n    html {\n        font-size: 16px;\n        box-sizing: border-box;\n        padding: 0;\n        margin: 0;\n    }\n\n    body {\n        font-family: 'Inter', 'Roboto', 'Segoe UI', 'Helvetica Neue', 'Arial', 'Noto Sans', sans-serif;\n        margin: 0;\n        padding: 0;\n        background-color: { bg };\n    }\n    a {\n        text-decoration: none;\n    }\n    a:link {\n      text-decoration: none;\n    }\n    a:visited {\n      text-decoration: none;\n    }\n    a:hover {\n      text-decoration: none;\n    }\n    a:active {\n      text-decoration: none;\n    }\n  </style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

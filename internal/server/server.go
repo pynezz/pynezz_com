@@ -11,6 +11,7 @@ import (
 func Serve(port string) {
 	fmt.Println("Serving the webapp on port", port)
 	app := echo.New()
+
 	setup(app)
 	app.Start(":" + port)
 }
@@ -19,12 +20,16 @@ func setup(app *echo.Echo) {
 	ctx := app.AcquireContext()
 	defer app.ReleaseContext(ctx)
 
+	// set server header
 	app.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
 			ctx.Response().Header().Set(echo.HeaderServer, "pynezz.dev")
 			return next(ctx)
 		}
 	})
+
+	// set security headers
+	app.Use(middleware.SecurityHeaders)
 
 	// static
 	app.Static("/static", "pynezz/public/")

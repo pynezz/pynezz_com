@@ -8,7 +8,7 @@ import (
 )
 
 templ Dashboard(user models.User) {
-  <div class={"div", Style()}>
+  // <div class={"div", Style()}>
     @layout.Header( "Dashboard" )
     <div class={"div", formDiv()}>
       <h1 class={"h1", h1()}> Welcome { user.Username } </h1>
@@ -18,7 +18,7 @@ templ Dashboard(user models.User) {
       </div>
     </div>
     @layout.Footer()
-  </div>
+  // </div>
 }
 
 templ DashboardError() {

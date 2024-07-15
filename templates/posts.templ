@@ -6,7 +6,7 @@ import (
 )
 
 templ Show(title string, body string, post models.Post) {
-    <div class={ "div", Style() }>
+    // <div class={ "div", Style() }>
       @layout.Header( "/posts/" )
       <article class="content">
         <h1>{title}</h1>
@@ -14,11 +14,11 @@ templ Show(title string, body string, post models.Post) {
         <p class="date"> {post.Metadata.Date.Format("02-01-2006" ) } </p>
       </article>
       @layout.Footer()
-    </div>
+    // </div>
 }
 
 templ PostsList(posts []models.PostMetadata) {
-  <div class={"div", Style()}>
+  // <div class={"div", Style()}>
   @layout.Header( "/posts/" )
     <h1>Recent Posts</h1>
     <ul>
@@ -31,7 +31,7 @@ templ PostsList(posts []models.PostMetadata) {
       }
     }
     </ul>
-  </div>
+  // </div>   
     @layout.Footer()
 
 }

@@ -3,6 +3,7 @@ package templates
 import "github.com/pynezz/pynezz_com/templates/layout"
 
 templ Home() {
+  // <div class={"div", Style() }>
 	@layout.Header("~")
 	<div class={ "div", card() }>
 		<h1>Home</h1>
@@ -15,4 +16,5 @@ templ Home() {
 		</div>
 	</div>
 	@layout.Footer()
+  // </div>   
 }

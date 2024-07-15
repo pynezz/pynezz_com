@@ -193,3 +193,15 @@ func render(ctx echo.Context, statusCode int, t templ.Component) error {
 
 	return ctx.HTML(statusCode, buf.String())
 }
+
+func SecurityHeaders(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		c.Response().Header().Set("X-Frame-Options", "DENY")
+		c.Response().Header().Set("X-Content-Type-Options", "nosniff")
+		c.Response().Header().Set("X-XSS-Protection", "1; mode=block")
+
+		// this will need to be implemented, but it breaks the site as of now - need to fix it
+		// c.Response().Header().Set("Content-Security-Policy", "default-src 'self'")
+		return next(c)
+	}
+}	
