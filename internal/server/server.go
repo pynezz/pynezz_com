@@ -6,6 +6,7 @@ import (
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/pynezz/pynezz_com/internal/server/middleware"
+	"github.com/pynezz/pynezz_com/templates"
 )
 
 func Serve(port string) {
@@ -65,7 +66,7 @@ func Render(ctx echo.Context, statusCode int, t templ.Component) error {
 	buf := templ.GetBuffer()
 	defer templ.ReleaseBuffer(buf)
 
-	if err := t.Render(ctx.Request().Context(), buf); err != nil {
+	if err := templates.Root(t, ctx.Path()).Render(ctx.Request().Context(), buf); err != nil {
 		return err
 	}
 

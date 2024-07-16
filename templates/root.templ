@@ -1,0 +1,17 @@
+package templates
+
+import (
+  "github.com/pynezz/pynezz_com/templates/layout"
+)
+
+templ Root(content templ.Component, path ...string ) {
+  @layout.Links()
+  <body class="min-h-screen flex flex-col">
+    @layout.Header( path... )
+    <main class="flex-grow p-4">
+      @content
+    </main>
+    @layout.Footer()
+  </body>
+}
+    

@@ -17,10 +17,9 @@ templ Home() {
 	@layout.Header("~")
   <div class={"div", layout.Wrapper}>
 		<div class={"div", layout.CardStyle}>
-			<div class="flex flex-col justify-between">
-				<h1 class={"h1", 	layout.Title}>/</h1>
-				<h2 class={"h2", layout.SubHeading	}>Blogging about cyber security,<br />development, code, and tech.</h2>
-				<p class="px-2"></p>
+			<div class="flex flex-col justify-between p-4">
+				<h1 class={"h1", layout.Title}>/</h1>
+				<h2 class={"h2", layout.SubHeading }>Blogging about cyber security,<br />development, code, and tech.</h2>
 				// <a href="/about">
 				<span class="flex row-auto items-center content-between justify-between">
 					<button class={layout.CardBtn, layout.BtnHover} onclick="window.location.href='/about';">About</button>

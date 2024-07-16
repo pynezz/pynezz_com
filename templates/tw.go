@@ -8,3 +8,5 @@ const (
 	twIcon      = string(layout.Icon)
 	twArticle   = string(layout.Article)
 )
+
+const BaseURL = "https://pynezz.dev"

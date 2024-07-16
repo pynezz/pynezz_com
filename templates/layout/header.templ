@@ -1,30 +1,22 @@
 package layout
 
-import (
-	"strings"
+import "strings"
 
-)
-
-templ links() {
+templ Links() {
 	<head>
 		<title>pynezz.dev</title>
 		<meta charset="utf-8"/>
-		<link rel="icon" href="favicon.ico" type="image/x-icon"/>
+		<link rel="icon" href="/favicon.ico" type="image/x-icon"/>
 		<meta og:title="pynezz.dev"/>
 		<meta og:description="A meta blog (blog about building a blog) as well as a blog about programming, technology, and information security."/>
-		<meta og:image="https://pynezz.dev/img/og-image.png"/>
-		<meta og:url="https://pynezz.dev"/>
+		<meta og:image="https://pynezz.dev/static/img/t_isometric_xs.webp" />
+		<meta og:url="https://pynezz.dev" />
 		<meta og:type="website"/>
-		<meta og:site_name="pynezz.dev"/>
+		<meta og:site_name="pynezz.dev" />
 		<meta og:locale="en_US"/>
 		<meta og:author="Kevin aka. pynezz"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-		// // @Style()
-		// if path == "/posts/" {
-		// 	<link rel="stylesheet" href="/css/post.css"/>
-		// } else {
 		<link rel="stylesheet" href="/css/styles.css"/>
-		// }
 	</head>
 }
 
@@ -41,14 +33,6 @@ templ links() {
 // 	  	</ul>
 //   // </header>
 // }
-
-// Tailwind styles
-const headerStyle = "flex flex-row bg-crust items-center justify-between max-h-fit w-full max-w-full backdrop-blur-md"
-const title = "text-lg font-mono text-text m-0 px-8"
-const navBarItem = "li flex items-center justify-center h-12 px-4"
-const navBarItemLink = "text-text font-mono text-lg p-sm"
-const breadCrumb = "font-mono italic text-subtext1 p-sm hover:text-text transition duration-200 ease-in-out px-0 mx-0"
-const navBarList = "flex flex-row"
 
 // var genPath = func(path []string) string {
 // var res string
@@ -74,9 +58,16 @@ const navBarList = "flex flex-row"
 // 					}
 // 				}
 // }
+
+// Tailwind styles
+const headerStyle = "flex flex-row bg-crust items-center justify-between max-h-fit w-full max-w-full backdrop-blur-md"
+const title = "text-lg font-mono text-text m-0 px-8"
+const navBarItem = "li flex items-center justify-center h-12 px-4"
+const navBarItemLink = "text-text font-mono text-lg p-sm"
+const breadCrumb = "font-mono italic text-subtext1 p-sm hover:text-text transition duration-200 ease-in-out px-0 mx-0"
+const navBarList = "flex flex-row"
+
 templ Header(path ...string) {
-	// @links is the head tag with all the meta tags and styles
-	@links()
 	<header class={ "header", headerStyle }>
 		<div>
 			<h3 class={ "h3", title }>
@@ -87,40 +78,38 @@ templ Header(path ...string) {
 			<li class={ "li", navBarItem }>
 				<a href="/" class={ "a", navBarItemLink }>/</a>
 			</li>
-			<li class={navBarItem }>
-
+			<li class={ navBarItem }>
 				<a href="posts/" class={ "a", navBarItemLink }>posts</a>
 			</li>
-			 if len(path) > 4 {
-        <li class={"li", navBarItem}>
-          <span class={"a", navBarItemLink}>...</span>
-        </li>
-        for i, p := range path[len(path)-4:] {
-          <li class={navBarItem }>
-            if i < len(path)-1 {
-							<a href={templ.SafeURL("/" + strings.Join(path[:len(path)-4+i+1], "/"))} class={"a", breadCrumb }>{ p }</a>
-					} else {
-              <span class={"a", navBarItemLink}>{p}</span>
-            }
-          </li>
-        }
-      } else {
-        for i, p := range path {
-          <li class={navBarItem }>
-            if i < len(path)-1 {
-              <a href={templ.SafeURL("/" + strings.Join(path[:i+1], "/"))} class={"a", breadCrumb }>{ p }</a>
-            } else {
-              <span class={"a", navBarItemLink}>{p}</span>
-            }
-          </li>
-        }
-      }
+			if len(path) > 4 {
+				<li class={ "li", navBarItem }>
+					<span class={ "a", navBarItemLink }>...</span>
+				</li>
+				for i, p := range path[len(path)-4:] {
+					<li class={ navBarItem }>
+						if i < len(path)-1 {
+							<a href={ templ.SafeURL("/" + strings.Join(path[:len(path)-4+i+1], baseURL)) } class={ "a", breadCrumb }>{ p }</a>
+						} else {
+							<span class={ "a", navBarItemLink }>{ p }</span>
+						}
+					</li>
+				}
+			} else {
+				for i, p := range path {
+					<li class={ navBarItem }>
+						if i < len(path)-1 {
+							<a href={ templ.SafeURL("/" + strings.Join(path[:i+1], "/"+baseURL)) } class={ "a", breadCrumb }>{ p }</a>
+						} else {
+							<span class={ "a", navBarItemLink }>{ p }</span>
+						}
+					</li>
+				}
+			}
 		</ul>
-				</header>
+	</header>
 }
 
 // <a href={templ.SafeURL(strings.Replace("/" + strings.Join(path[:len(path)-4+i+1], "/"),"~", "/", -1))} class={"a", navBarItemLink }>{ strings.Trim(p, "/") }</a>
-
 
 // for i, p := range path {
 // 	<li class={"li", navBarItem }>
