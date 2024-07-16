@@ -44,7 +44,7 @@ run: ## Build and run the application (Linux)
 	$(LINUX) && ./$(LINUX)
 
 gen: tw ## Generate code
-	@templ generate		
+	@templ generate
 
 gen-run: gen ## Generate code and run the application
 	go run . serve -p 8080

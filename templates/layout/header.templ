@@ -2,21 +2,46 @@ package layout
 
 import "strings"
 
+// const desc = "A meta blog (blog about building a blog) as well as a blog about programming, technology, and information security."
+// const baseUrl = "https://beta.pynezz.dev"
+// const img = "https://beta.pynezz.dev/static/img/t_isometric_xs.png"
+
 templ Links() {
-	<head>
-		<title>pynezz.dev</title>
-		<meta charset="utf-8"/>
-		<link rel="icon" href="/favicon.ico" type="image/x-icon"/>
-		<meta og:title="pynezz.dev"/>
-		<meta og:description="A meta blog (blog about building a blog) as well as a blog about programming, technology, and information security."/>
-		<meta og:image="https://pynezz.dev/static/img/t_isometric_xs.webp" />
-		<meta og:url="https://pynezz.dev" />
-		<meta og:type="website"/>
-		<meta og:site_name="pynezz.dev" />
-		<meta og:locale="en_US"/>
-		<meta og:author="Kevin aka. pynezz"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-		<link rel="stylesheet" href="/css/styles.css"/>
+<head>
+  <title>pynezz.dev</title>
+  <meta charset="utf-8" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
+	<!-- Primary Meta Tags -->
+  <meta property="og:title" content="pynezz.dev" />
+  <meta property="og:description" content="A meta blog (blog about building a blog) as well as a blog about programming, technology, and information security." />
+  <meta property="og:image" content="https://beta.pynezz.dev/static/img/t_isometric_xs.png" />
+  <meta property="og:url" content="https://beta.pynezz.dev" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="pynezz.dev" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:author" content="Kevin aka. pynezz" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="/css/styles.css" />
+
+	<meta name="description" content="A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security." />
+
+	<!-- Facebook Meta Tags -->
+	<meta property="og:url" content="https://beta.pynezz.dev/" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="pynezz.dev tech blog" />
+	<meta property="og:description" content="A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security." />
+	<meta property="og:image" content="https://beta.pynezz.dev/static/img/t_isometric_xs.png" />
+
+	<!-- Twitter Meta Tags -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta property="twitter:domain" content="beta.pynezz.dev" />
+	<meta property="twitter:url" content="https://beta.pynezz.dev/" />
+	<meta name="twitter:title" content="pynezz.dev tech blog" />
+	<meta name="twitter:description" content="A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security." />
+	<meta name="twitter:image" content="https://beta.pynezz.dev/static/img/t_isometric_xs.png" />
+
+	<!-- Meta Tags Generated via https://www.opengraph.xyz -->
 	</head>
 }
 
