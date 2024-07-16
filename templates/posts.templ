@@ -1,20 +1,29 @@
 package templates
 
 import (
+
   "github.com/pynezz/pynezz_com/templates/layout"
   "github.com/pynezz/pynezz_com/internal/server/middleware/models"
 )
 
-templ Show(title string, body string, post models.Post) {
-  @layout.Header( "~", "posts", post.Slug )
+templ wrap(title string, body string, post models.Post) {
+  <body>
     <div class={"div", layout.Wrapper}>
-      <article class={"article", string(twArticle)}>
-        <h1 class={"h1", layout.Title}>{title}</h1>
-        <p>{body}</p>
-        <p class="date"> {post.Metadata.Date.Format("02-01-2006" ) } </p>
-      </article>
-  </div>
-  @layout.Footer()
+    @layout.Header( "~", "posts", post.Slug )
+        // <div class={"div", layout.Wrapper}>
+          <article class={"article", string(twArticle)}>
+            <h1 class={"h1", layout.Title}>{title}</h1>
+            <p>{body}</p>
+            <p class="date"> {post.Metadata.Date.Format("02-01-2006" ) } </p>
+          </article>
+      // </div>
+      @layout.Footer()
+    </div>
+  </body>
+}
+
+templ Show(title string, body string, post models.Post) {
+  @wrap(title, body, post)
 }
 
 templ PostsList(posts []models.PostMetadata) {

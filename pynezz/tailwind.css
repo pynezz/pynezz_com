@@ -2,7 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #363a4f #212020;
+  scrollbar-base-color: #11111b;
+  scrollbar-highlight-color: #212020;
+  -ms-scrollbar-base-color: #11111b;
+  -ms-scrollbar-highlight-color: #212020;
+}
+
 body {
-    background-color: #24273a;
-    color: #cad3f5;
-}                     
+  background-color: #24273a;
+  color: #cad3f5;
+}
