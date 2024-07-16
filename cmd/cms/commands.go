@@ -32,18 +32,18 @@ import (
 // 9. Add the command to the switch statement in the Run method of the Command struct (in implCommands.go)
 // - example: case "list": run(c["list"], args...)
 var c = map[string]ICommand{
-	"list":      &ListPages{&Command{HelpStr: "List all pages", NameStr: "list"}},
 	"edit":      &EditPage{&Command{HelpStr: "Edit a page", NameStr: "edit"}},
 	"parse":     &ParseAll{&Command{HelpStr: "Parse and build all pages", NameStr: "parse"}},
 	"build":     &ParseAll{&Command{HelpStr: "Parse and build all pages", NameStr: "parse"}}, // alias for parse
+	"list":      &ListPages{&Command{HelpStr: "List all pages", NameStr: "list"}},
 	"create":    &CreatePage{&Command{HelpStr: "Create a page", NameStr: "create"}},
 	"delete":    &DeletePage{&Command{HelpStr: "Delete a page", NameStr: "delete"}},
 	"publish":   &PublishPage{&Command{HelpStr: "Publish a page", NameStr: "publish"}},
 	"unpublish": &UnpublishPage{&Command{HelpStr: "Unpublish a page", NameStr: "unpublish"}},
 	"status":    &PageStatus{&Command{HelpStr: "Show the status of a page", NameStr: "status"}},
 	"tags":      &PageTags{&Command{HelpStr: "Show the tags of a page", NameStr: "tags"}},
-	"config":    &Config{&Command{HelpStr: "Show the config of a page", NameStr: "config"}},
 	"page":      &ShowPage{&Command{HelpStr: "Show a page", NameStr: "page"}},
+	"config":    &Config{&Command{HelpStr: "Show the config of a page", NameStr: "config"}},
 
 	"nop": &Nop{&Command{HelpStr: "Noop", NameStr: "nop"}}, // for typo checking
 }

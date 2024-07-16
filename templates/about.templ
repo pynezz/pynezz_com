@@ -2,12 +2,12 @@ package templates
 
 import (
 
-  "github.com/pynezz/pynezz_com/templates/layout"
+  // "github.com/pynezz/pynezz_com/templates/layout"
 )
 
 templ About() {
   // <div class={"div", layout.Style()}>
-    @layout.Header( "/", "about" )
+    // @layout.Header( "/", "about" )
 
     <div class={"div", aboutMe()}>
       <h1>About</h1>
@@ -18,10 +18,10 @@ templ About() {
         This site is a project where I've built a blogging platform from scratch, using Go with Echo, Go-Templ, and SQLite.
       </p>
     </div>
-    @layout.Footer()
+    // @layout.Footer()
 // </div>
 }
-
+  
 css aboutMe() {
   margin-top: 20px;
   margin-left: 20px;

@@ -1,62 +1,44 @@
 package templates
 
 import (
-
-  "github.com/pynezz/pynezz_com/templates/layout"
-  "github.com/pynezz/pynezz_com/internal/server/middleware/models"
+	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
+	"github.com/pynezz/pynezz_com/templates/layout"
 )
 
-templ wrap(title string, body string, post models.Post) {
-  <body>
-    <div class={"div", layout.Wrapper}>
-    @layout.Header( "~", "posts", post.Slug )
-        // <div class={"div", layout.Wrapper}>
-          <article class={"article", string(twArticle)}>
-            <h1 class={"h1", layout.Title}>{title}</h1>
-            <p>{body}</p>
-            <p class="date"> {post.Metadata.Date.Format("02-01-2006" ) } </p>
-          </article>
-      // </div>
-      @layout.Footer()
-    </div>
-  </body>
-}
-
 templ Show(title string, body string, post models.Post) {
-  @wrap(title, body, post)
+
+  // If no post found, show 404 and link back to home page
+  if title[:3] == "404" {
+    <article class="justify-center content-evenly h-full text-center items-center">
+      <h1 class={ "h1", layout.Title+" pl-10"}>{ title }</h1> // Could just hard-code 404, but this is more flexible
+      <p class="pb-10">{ body }</p>
+      <a href={templ.SafeURL(BaseURL)} class={"a", layout.Link + " my-10"}>Home</a>
+    </article>
+  } else {
+
+  // Else, display the post
+    <article class={ "article", layout.Article }>
+      <h1 class={ "h1", layout.Title }>{ title }</h1>
+      <p>{ body }</p>
+      if title == "404" {
+        <a href={templ.SafeURL(BaseURL)} class={"a", layout.Link}>Home</a>
+      } else {
+        <p class="date"> { post.Metadata.Date.Format("02-01-2006" ) } </p>
+      }
+    </article>
+  }
 }
 
 templ PostsList(posts []models.PostMetadata) {
-  @layout.Header( "~", "posts" )
-  <div class={"div", layout.Wrapper}>
-    <h1 class={"h1", twTitle}>Recent Posts</h1>
-    <ul>
-    if len(posts) == 0 {
-      <li>No posts found</li>
-    } else {
-      for _, p := range posts {
-        <li><strong> { p.Title } </strong>: { p.Summary } </li>
-        <a href={ templ.URL("/posts/" + p.Slug) }>Read more</a>
-      }
-    }
-    </ul>
-  </div>
-  @layout.Footer()
+	<h1 class={ "h1", twTitle }>Recent Posts</h1>
+	<ul>
+		if len(posts) == 0 {
+			<li>No posts found</li>
+		} else {
+			for _, p := range posts {
+				<li><strong>{ p.Title } </strong>: { p.Summary } </li>
+				<a href={ templ.URL("/posts/" + p.Slug) }>Read more</a>
+			}
+		}
+	</ul>
 }
-
-// Can I do this?
-// Probably not in here, though, maybe something similar in the calling function?
-// templ Show(post []models.Post) {
-//   <body>
-//     <div class={"div", Style()}>
-//       @layout.Header()
-//       {{for _, p := range post {
-//         fmt.Sprintf(`<div>
-//           <h1>{p.Title}</h1>
-//           <p>{p.Body}</p>
-//         </div>`, p.Title, p.Body)
-//       }}}
-//       @layout.Footer()
-//     </div>
-//   </body>
-// }

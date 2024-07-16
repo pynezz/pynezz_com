@@ -65,8 +65,6 @@ func (p PostsHandler) handleShowLastPosts(c echo.Context) error {
 		limit = 25
 	}
 
-	// contentsMiddleware := middleware.ContentsDB
-
 	posts := middleware.GetPostsMetadata(limit)
 
 	// posts := contentsMiddleware.GetPosts(limit)
@@ -74,15 +72,6 @@ func (p PostsHandler) handleShowLastPosts(c echo.Context) error {
 	// body := fmt.Sprintln("here's the last", limit, " posts. You can tweak the limit by adding a 'limit' query parameter to the URL.")
 	return Render(c, http.StatusOK, templates.PostsList(posts))
 }
-
-// // Post is a struct that represents a post.
-// type Post struct {
-// 	ID       int      `json:"id"`
-// 	Title    string   `json:"title"`
-// 	Metadata Metadata `json:"metadata"`
-// 	Content  string   `json:"content"`
-// 	Path     string   `json:"path"` // Path to the markdown file - e.g. "/posts/2021-01-01-post.md"
-// }
 
 // NewPostsHandler creates a new PostsHandler.
 func newPostsHandler() *PostsHandler {
@@ -104,6 +93,29 @@ func (ph *PostsHandler) GetPostBySlug(c echo.Context) error {
 	}
 
 	return Render(c, http.StatusOK, templates.Show(p.Metadata.Title, p.Content.String(), p))
+}
+
+func (ph *PostsHandler) GetPostsByTag(c echo.Context) error {
+	tag := c.Param("tag")
+	ansi.PrintInfo("[POSTSHANDLER] Posts with tag " + tag + " requested")
+
+	if tag == "" {
+		return Render(c, http.StatusNotFound, templates.Show("404", "Tag not found", models.Post{}))
+	}
+
+	posts, err := middleware.GetPostsByTag(tag)
+	if err != nil {
+		ansi.PrintError("[POSTSHANDLER] Error getting posts by tag: " + err.Error())
+		return Render(c, http.StatusNotFound, templates.Show("404", "Tag not found", models.Post{}))
+	}
+	
+	return Render(c, http.StatusOK, templates.PostsList(posts))
+}
+
+func (ph *PostsHandler) GetTags(c echo.Context) error {
+	tags := middleware.GetTags()
+
+	return Render(c, http.StatusOK, templates.Tags(tags))
 }
 
 // // AddPost adds a post to the PostsHandler.

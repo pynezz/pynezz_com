@@ -1,23 +1,25 @@
 package templates
 
 import (
-  "github.com/pynezz/pynezz_com/templates/layout"
-  "github.com/pynezz/pynezz_com/internal/server/middleware/models"
+    "github.com/pynezz/pynezz_com/templates/layout"
 )
 
-templ Tags(tags []models.Tag) {
-  // <div class={"div", Style()}>
-    @layout.Header( "Tags" )
+const nth = "bg-crust w-full h-12 flex items-center justify-center text-text odd:bg-mauve"
+
+// TODO: Implement map[string]int for tags instead so I can sort by count
+templ Tags(tags []string) {
     <section class={"section", section()}>
       <h1 class={"h1", h1()}> Tags </h1>
-      for _, tag := range tags {
-        <div>
-          <p>Tag: { tag.Name }</p>
-        </div>
-      }
+      <div class="flex flex-row flex-wrap">
+        for i, tag := range tags {
+          if i % 2 == 0 {
+            <a href={templ.SafeURL(tag)} class={"a", layout.Link + " p-2 bg-surface0 rounded no-underline m-2"}>{ tag }</a>
+        } else {
+            <a href={templ.SafeURL(tag)} class={"a", layout.Link + " p-2 bg-surface1 rounded no-underline m-2"}>{ tag }</a>
+          }
+        }
+      </div>
     </section>
-    @layout.Footer()
-  // </div>
 }
 
 css section() {

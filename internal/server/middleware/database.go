@@ -236,7 +236,7 @@ func GetPostBySlug(slug string) (models.Post, error) {
 			Date:        postMetadata.CreatedAt,
 			Tags:        postMetadata.Tags,
 		},
-	}	
+	}
 	// TODO: Fix this - it's supposed to work with post straight from the database, but it doesn't
 	// because it's never written to the database - check the parser for implementing this
 	ansi.PrintBold("Post found: " + post.Metadata.Title)
@@ -375,13 +375,42 @@ func writeUser(u *models.User) error {
 	return nil
 }
 
-func GetTags() []models.Tag {
-	var tags []models.Tag
-	tx := ContentsDB.Driver.Find(&tags)
+// GetTags query the database for all tags in the PostMetadata table,
+// trims whitesspace and quotation marks, and returns them as a slice of strings.
+func GetTags() []string {
+	var tags models.Tag
+	var strTags []string
+
+	tx := ContentsDB.Driver.Model(&models.PostMetadata{}).Where("tags LIKE ?", "%").First(&tags)
 	if tx.Error != nil {
 		ansi.PrintError(tx.Error.Error())
-		return []models.Tag{}
+		return nil
 	}
-	ansi.PrintSuccess("Tags found: " + fmt.Sprintf("%d", len(tags)))
-	return tags
+
+	for _, tag := range strings.Split(tags.Tags.String(), ",") {
+		fmt.Printf("Tag: %s\n", tag)
+		tag = strings.Trim(tag, "\"' ")
+		strTags = append(strTags, tag)
+	}
+
+	return strTags
+}
+
+func GetPostsByTag(tag string) ([]models.PostMetadata, error) {
+	var posts []models.PostMetadata
+	var tagModel []models.Tag
+
+	tx := ContentsDB.Driver.Model(&posts).Where("tags IS NOT NULL").Find(&tagModel)
+	if tx.Error != nil {
+		ansi.PrintError(tx.Error.Error())
+		return []models.PostMetadata{}, tx.Error
+	}
+	err := ContentsDB.Driver.Model(&tagModel).Association("Posts").Find(&posts)
+	if err != nil {
+		ansi.PrintError(err.Error())
+		return []models.PostMetadata{}, err
+	}
+
+	ansi.PrintSuccess("Posts found: " + fmt.Sprintf("%d", len(posts)))
+	return posts, nil
 }

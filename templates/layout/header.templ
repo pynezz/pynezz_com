@@ -63,7 +63,7 @@ templ Links() {
 const headerStyle = "flex flex-row bg-crust items-center justify-between max-h-fit w-full max-w-full backdrop-blur-md"
 const title = "text-lg font-mono text-text m-0 px-8"
 const navBarItem = "li flex items-center justify-center h-12 px-4"
-const navBarItemLink = "text-text font-mono text-lg p-sm"
+const navBarItemLink = "text-text font-mono text-lg font-semibold"
 const breadCrumb = "font-mono italic text-subtext1 p-sm hover:text-text transition duration-200 ease-in-out px-0 mx-0"
 const navBarList = "flex flex-row"
 
@@ -75,12 +75,13 @@ templ Header(path ...string) {
 			</h3>
 		</div>
 		<ul class={ "ul", navBarList }>
-			<li class={ "li", navBarItem }>
-				<a href="/" class={ "a", navBarItemLink }>/</a>
-			</li>
 			<li class={ navBarItem }>
 				<a href="posts/" class={ "a", navBarItemLink }>posts</a>
 			</li>
+			<li class={ navBarItem }>
+				<a href="tags/" class={ "a", navBarItemLink }>tags</a>
+			</li>
+		<div class="border-r border-mauve border-opacity-50 				h-8 my-2"></div> // Separator
 			if len(path) > 4 {
 				<li class={ "li", navBarItem }>
 					<span class={ "a", navBarItemLink }>...</span>

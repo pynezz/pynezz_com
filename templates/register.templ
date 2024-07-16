@@ -1,7 +1,7 @@
 package templates
 
 import (
-  "github.com/pynezz/pynezz_com/templates/layout"
+  // "github.com/pynezz/pynezz_com/templates/layout"
 )
 
 const (
@@ -128,7 +128,7 @@ css lighten() {
 
 templ Register() {
   // <div class={"div", Style()}>
-  @layout.Header(  "Register"  )
+  // @layout.Header(  "Register"  )
     <div class={"div", formDiv()}>
       <h1 class={"h1", h1()}> Register </h1>
       <p>registration is needed to post content</p>
@@ -144,6 +144,6 @@ templ Register() {
         <a href="/login" class={"a", templ.KV("hover:lighten", false), aTxt()}> Login here </a>
       </p>
     </div>
-    @layout.Footer()
+    // @layout.Footer()
   // </div>
 }

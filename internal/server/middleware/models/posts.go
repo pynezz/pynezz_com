@@ -47,7 +47,7 @@ type Tags interface {
 
 type Tag struct {
 	gorm.Model
-	Name string `json:"name"`
+	Tags datatypes.JSON `json:"tags" gorm:"type:json"`
 }
 
 type Posts []Post

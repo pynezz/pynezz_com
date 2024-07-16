@@ -13,8 +13,8 @@ func homeHandler(c echo.Context) error {
 }
 
 func aboutHandler(c echo.Context) error {
-	return Render(c, http.StatusOK, templates.Root(templates.About()))
-}		
+	return Render(c, http.StatusOK, templates.About())
+}
 
 func handleLogin(c echo.Context) error {
 	cookie, _ := c.Cookie("Authorization")

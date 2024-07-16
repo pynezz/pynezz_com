@@ -3,13 +3,13 @@ package templates
 import (
   "time"
 
-  "github.com/pynezz/pynezz_com/templates/layout"
+  // "github.com/pynezz/pynezz_com/templates/layout"
 )
 
 
 templ Login() {
   // <div class={"div", Style()}>
-  @layout.Header( "login" )
+  // @layout.Header( "login" )
     <div class={"div", formDiv()}>
       <h1 class={"h1", h1()}> Login </h1>
       <p>Current time: { time.Now().UTC().Local().Format("01-02-2006 15:04:05") }</p>
@@ -24,6 +24,6 @@ templ Login() {
         <a href="/register" class={"a", templ.KV("hover:lighten", false), aTxt()}> Sign up here </a>
       </p>
     </div>
-    @layout.Footer()
+    // @layout.Footer()
   // </div>
 }

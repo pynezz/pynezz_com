@@ -29,11 +29,11 @@ const (
 	Container = "flex flex-1 justify-normal	mx-auto px-4 bg-overlay0 h-fit w-max"
 	Title     = "text-4xl font-bold text-text font-mono underline-offset-2 text-left px-2 pr-10"
 	Icon      = "w-8 h-8 px-2 transform hover:scale-105 transition-transform duration-200 ease-in-out"
-	Article   = "flex flex-col text-left max-w-64"
+	Article   = "flex flex-col text-left min-w-fit"
 	Wrapper   = "flex flex-col justify-center items-center h-screen w-full"
 
 	// Card
-	CardStyle  = "flex flex-row content-between font-normal text-text rounded-md shadow-lg bg-mantle flex-wrap p-4 m-4	"
+	CardStyle  = "flex flex-row content-between max-w-fit font-normal text-text rounded-md shadow-lg bg-mantle flex-wrap p-4 m-4	"
 	CardBtn    = "button bg-surface0 text-text rounded px-4 py-2 transition duration-200 ease-in-out w-max stroke-2 stroke-mauve"
 	BtnBlue    = "bg-blue hover:bg-blue-700"
 	BtnHover   = "hover:text-text hover:bg-surface1 hover:stroke-lavender stroke-2 str"
@@ -43,3 +43,5 @@ const (
 )
 
 const baseURL = "https://pynezz.dev"
+
+const Link = "text-text underline hover:text-surface1"

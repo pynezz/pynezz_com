@@ -6,7 +6,7 @@ import (
 
 templ Root(content templ.Component, path ...string ) {
   @layout.Links()
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col items-center">
     @layout.Header( path... )
     <main class="flex-grow p-4">
       @content

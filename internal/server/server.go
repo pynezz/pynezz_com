@@ -50,15 +50,20 @@ func setup(app *echo.Echo) {
 
 	app.GET("/register", handleRegister)
 	app.POST("/register", middleware.Register(middleware.Bouncer(gotoDashboard)))
-	app.GET("/dashboard", middleware.Bouncer(gotoDashboard))
 
+	app.GET("/dashboard", middleware.Bouncer(gotoDashboard))
 	app.GET("/about", aboutHandler)
+
+	app.GET("/posts", postsHandler.handleShowLastPosts)
 	app.GET("/posts/", postsHandler.handleShowLastPosts)
-	app.GET("/posts/:slug", postsHandler.GetPostBySlug)
-	// app.GET("/posts/:id", postsHandler.handleShowPosts)
+	app.GET("/posts/:slug", postsHandler.GetPostBySlug)	
+
+	app.GET("/tags/:tag", postsHandler.GetPostsByTag)
+	app.GET("/tags/", postsHandler.GetTags)
+	app.GET("/tags", postsHandler.GetTags)
 
 	// Todo - consider doing this, or just managing it via the CLI in the backend
-	// app.GET("/post/:slug/edit", postsHandler.EditPost)
+	// app.GET("/posts/:slug/edit", postsHandler.EditPost)
 }
 
 // This custom Render replaces Echo's echo.Context.Render() with templ's templ.Component.Render().

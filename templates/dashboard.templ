@@ -3,33 +3,33 @@ package templates
 import (
   "fmt"
 
-  "github.com/pynezz/pynezz_com/templates/layout"
+  // "github.com/pynezz/pynezz_com/templates/layout"
   "github.com/pynezz/pynezz_com/internal/server/middleware/models"
 )
 
 templ Dashboard(user models.User) {
   // <div class={"div", Style()}>
-    @layout.Header( "Dashboard" )
-    <div class={"div", formDiv()}>
+    // @layout.Header( "Dashboard" )
+    // <div class={"div", formDiv()}>
       <h1 class={"h1", h1()}> Welcome { user.Username } </h1>
       <div>
         <p>your ID is { fmt.Sprintf("%d", user.UserID) }</p>
         <p>created at { fmt.Sprintf("%s", user.CreatedAt.Local().Format("15:04:05 02.01 2006")) }</p>
       </div>
-    </div>
-    @layout.Footer()
+    // </div>
+    // @layout.Footer()
   // </div>
 }
 
 templ DashboardError() {
-  <div class={"div", Style()}>
-    @layout.Header( "Dashboard" )
+  // <div class={"div", Style()}>
+  //   @layout.Header( "Dashboard" )
     <div class={"div", formDiv()}>
       <h1 class={"h1", h1()}> Error </h1>
       <div>
         <p>Something went wrong</p>
       </div>
     </div>
-    @layout.Footer()
-  </div>
+  //   @layout.Footer()
+  // </div>
 }
