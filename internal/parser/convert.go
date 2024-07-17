@@ -15,6 +15,10 @@ func (h h2) HTMLTag() string {
 	return "h2"
 }
 
+// func (h h2) Class() string {
+// 	return h.style.
+// }
+
 func (h h3) isHeading() {}
 
 //	func (h h3) String() string {
@@ -150,5 +154,5 @@ func (s Section) String() string {
 	for _, c := range s.TextContent {
 		content += fmt.Sprintf("<p>%s</p>\n", c.String())
 	}
-	return fmt.Sprintf("<section><%s>%s</%s>\n%s</section>\n", s.Title.HTMLTag(), s.Title.String(), s.Title.HTMLTag(), content)
+	return fmt.Sprintf("<section class=\"flex flex-col align-start\"><%s %s>%s</%s>\n%s</section>\n", s.Title.HTMLTag(), s.Title.Class(), s.Title.String(), s.Title.HTMLTag(), content)
 }

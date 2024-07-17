@@ -75,31 +75,31 @@ func parseContent(lines []string) *MarkdownDocument {
 				md.AddSection(currentTitle, currentContent)
 				currentContent = nil
 			}
-			currentTitle = h2{heading{line[3:], "h2"}}
+			currentTitle = h2{heading{line[3:], "h2", H2Style}}
 		case strings.HasPrefix(line, "### "):
 			if currentTitle != nil {
 				md.AddSection(currentTitle, currentContent)
 				currentContent = nil
 			}
-			currentTitle = h3{heading{line[4:], "h3"}}
+			currentTitle = h3{heading{line[4:], "h3", H3Style}}
 		case strings.HasPrefix(line, "#### "):
 			if currentTitle != nil {
 				md.AddSection(currentTitle, currentContent)
 				currentContent = nil
 			}
-			currentTitle = h4{heading{line[5:], "h4"}}
+			currentTitle = h4{heading{line[5:], "h4", H4Style}}
 		case strings.HasPrefix(line, "##### "):
 			if currentTitle != nil {
 				md.AddSection(currentTitle, currentContent)
 				currentContent = nil
 			}
-			currentTitle = h5{heading{line[6:], "h5"}}
+			currentTitle = h5{heading{line[6:], "h5", H5Style}}
 		case strings.HasPrefix(line, "###### "):
 			if currentTitle != nil {
 				md.AddSection(currentTitle, currentContent)
 				currentContent = nil
 			}
-			currentTitle = h6{heading{line[7:], "h6"}}
+			currentTitle = h6{heading{line[7:], "h6", H6Style}}
 		case strings.HasPrefix(line, "|"):
 			currentContent = append(currentContent, parseTable(line))
 		// case strings.Contains(line, "[") && strings.Contains(line, "]("):

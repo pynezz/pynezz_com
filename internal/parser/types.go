@@ -53,6 +53,10 @@ func (h heading) HTMLTag() string {
 	return h.tag
 }
 
+func (h heading) Class() string {
+	return h.style
+}
+
 // TextContent interface for content elements.
 type TextContent interface {
 	isTextContent()
@@ -95,7 +99,16 @@ type textLi struct{ textContent }
 type heading struct {
 	content string
 	tag     string
+	style   string
 }
+
+const c = "class =\""
+const cEnd = "\""
+const H2Style = c + "text-text font-2xl font-sans underline font-bold mb-1 pt-4" + cEnd
+const H3Style = c + "text-subtext0 font-bold font-xl font-sans mb-1 pt-4" + cEnd
+const H4Style = c + "text-peach font-lg font-sans mb-1 pt-3" + cEnd
+const H5Style = c + "text-red font-md font-sans mb-1" + cEnd
+const H6Style = c + "text-mauve font-sm font-sans mb-1" + cEnd
 
 // Specific heading types embedding heading
 type h2 struct{ heading }
@@ -109,6 +122,7 @@ type Heading interface {
 	isHeading()
 	String() string
 	HTMLTag() string
+	Class() string
 }
 
 type Metadata struct {
@@ -154,10 +168,15 @@ type Site struct {
 type Section struct {
 	Title       Heading
 	TextContent []TextContent
+	// Style       Class
 }
 
 // MarkdownDocument struct represents a complete markdown document.
 type MarkdownDocument struct {
 	Metadata Metadata
 	Sections []Section
+}
+
+type Class struct {
+	Tailwind string
 }
