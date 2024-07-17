@@ -67,11 +67,14 @@ func (d *Database) DeletePost(post models.PostMetadata) error {
 	return result.Error
 }
 
-func (d *Database) WriteContentsToDatabase(content []byte) error {
+func (d *Database) WriteContentsToDatabase(slug string, content []byte) error {
+	ansi.PrintColor(ansi.Yellow, string(content))
 	post := models.Post{
 		Content: datatypes.JSON(content),
+		Slug:    slug,
 	}
-	return d.Driver.Create(&post).Error
+
+	return d.Driver.Where(&models.Post{Slug: post.Slug}).FirstOrCreate(&post).Error
 }
 
 // GenerateMetadata generates metadata for a post based off the contents of a markdown file.

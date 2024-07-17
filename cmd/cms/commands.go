@@ -130,6 +130,15 @@ func parseAll() bool {
 			return false
 		}
 
+		contentBytes := []byte{}
+		for _, b := range doc.Sections {
+			contentBytes = append(contentBytes, []byte(b.String())...)
+		}
+
+		if err := middleware.ContentsDB.WriteContentsToDatabase(slug, contentBytes); err != nil {
+			ansi.PrintError("error writing to database")
+			return false
+		}
 		ansi.PrintInfo("written to database")
 
 		// ! IMPORTANT: parser and models have different ways of handling the same data

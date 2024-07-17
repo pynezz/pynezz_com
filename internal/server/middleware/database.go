@@ -229,6 +229,10 @@ func GetPostBySlug(slug string) (models.Post, error) {
 		ansi.PrintError(tx.Error.Error())
 		return models.Post{}, tx.Error
 	}
+
+	// get content from the database
+	tx = ContentsDB.Driver.Where("slug = ?", postMetadata.Slug).First(&post)
+
 	post = models.Post{
 		Metadata: models.Metadata{
 			Title:       postMetadata.Title,
@@ -236,6 +240,7 @@ func GetPostBySlug(slug string) (models.Post, error) {
 			Date:        postMetadata.CreatedAt,
 			Tags:        postMetadata.Tags,
 		},
+		Content: post.Content,
 	}
 	// TODO: Fix this - it's supposed to work with post straight from the database, but it doesn't
 	// because it's never written to the database - check the parser for implementing this

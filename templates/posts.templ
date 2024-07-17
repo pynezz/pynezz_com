@@ -6,27 +6,22 @@ import (
 )
 
 templ Show(title string, body string, post models.Post) {
-
-  // If no post found, show 404 and link back to home page
-  if title[:3] == "404" {
-    <article class="justify-center content-evenly h-full text-center items-center">
-      <h1 class={ "h1", layout.Title+" pl-10"}>{ title }</h1> // Could just hard-code 404, but this is more flexible
-      <p class="pb-10">{ body }</p>
-      <a href={templ.SafeURL(BaseURL)} class={"a", layout.Link + " my-10"}>Home</a>
-    </article>
-  } else {
-
-  // Else, display the post
-    <article class={ "article", layout.Article }>
-      <h1 class={ "h1", layout.Title }>{ title }</h1>
-      <p>{ body }</p>
-      if title == "404" {
-        <a href={templ.SafeURL(BaseURL)} class={"a", layout.Link}>Home</a>
-      } else {
-        <p class="date"> { post.Metadata.Date.Format("02-01-2006" ) } </p>
-      }
-    </article>
-  }
+	// If no post found, show 404 and link back to home page
+	if title[:3] == "404" {
+		<article class="justify-center content-evenly h-full text-center items-center">
+			<h1 class={ "h1", layout.Title+" pl-10" }>{ title }</h1> // Could just hard-code 404, but this is more flexible
+			<p class="pb-10">{ body }</p>
+			<a href={ templ.SafeURL(BaseURL) } class={ "a", layout.Link + " my-10" }>Home</a>
+		</article>
+	} else {
+		// Else, display the post
+		<article class={ "article", layout.Article }>
+			<h1 class={ "h1", layout.Title }>{ title }</h1>
+			<p class="date">{ post.Metadata.Date.Format("02-01-2006" ) } </p>
+			<p class="tags">{ post.Metadata.Tags.String() } </p>
+			@templ.Raw(post.Content.String())
+		</article>
+	}
 }
 
 templ PostsList(posts []models.PostMetadata) {
