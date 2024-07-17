@@ -1,25 +1,44 @@
 # pynezz_com
 
-Simple website for pynezz.com built with Go and ...?
+Simple website for ~~pynezz.com~~ pynezz.dev built with Go and [Go-Templ](https://templ.guide)
 
 ## Description
 
 ### Goal
 
-The goal of this project is to create a simple website for pynezz.com, but from scratch. Including a light CMS for uploading new content. The website will be built with performance in mind and should be launchable from a single binary.
+The goal of this project is to create a simple website/static site generator and content management system (CMS), but from scratch. The website will be built with performance in mind and should be launchable from a single binary.
 
 The site will utilize no external resources, meaning it will contain no tracking, no cookies, and no external assets such as fonts and icons.
 Everything will be living on the server.
 
+#### Progress
+
+- [x] Single binary compilation
+- [ ] cms cli [partially done]
+    - [x] read and parse markdown files from directory
+    - [ ] unpuplish posts
+    - [ ] edit post (metadata, content)
+- [x] serve 
+
 ### CMS
 
-The plan is to be able to write markdown files, which will be parsed and displayed on the website. The metadata fields will be used to define certain properties of the content, like the title, date, and tags/categories.
+The `cms` module is able to read markdown files from a directory, parse them, generate a slug based on the title, insert tailwind styles, and insert them into the SQLite database. The `serve` module will then display the contents on the website. 
+
+**metadata**
+
+The metadata fields will be used to define certain properties of the content, like the title, date, and tags/categories.
 
 #### Planned features
 
-- [ ] Read and parse markdown files from a directory
-- [ ] Push the content to the frontend, with correct paths, and metadata
+- [x] Read and parse markdown files from a directory
+- [x] Push the content to the frontend, with correct paths, and metadata
+- [ ] Display and fetch posts by tag
 - [ ] Compress images for faster loading times
+- [ ] Configuration file
+
+#### Known issues
+
+- [ ] Filter by tags not working [error 404 due to incorrect database query, wrong model]
 
 ### Frontend
 
@@ -30,7 +49,12 @@ Inspiration will certainly be taken from [Hugo](https://gohugo.io/) in terms of 
 
 ### Backend
 
-The backend will be built with Go.
+The backend is written in pure Go.
+
+#### Known issues
+
+- [ ] Routing not working properly [relative path issue]
+- [ ] Tags should contain a field containing the count of posts with the tag [need refactoring] 
 
 ---
 
@@ -40,7 +64,9 @@ The backend will be built with Go.
 
 - Go
 - Make
-- Probably nodejs and npm/pnpm
+- nodejs and npm
+
+### 
 
 ### Installation
 
