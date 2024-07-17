@@ -80,7 +80,7 @@ func parseAll() bool {
 			continue
 		}
 
-		ansi.PrintDebug("file not parsed: " + file)
+		ansi.PrintDebug("file is not yet parsed: " + file)
 		bytes, doc := parser.MarkdownToHTML(file)
 		if bytes == nil {
 			ansi.PrintError("error parsing file: " + file)
@@ -90,6 +90,7 @@ func parseAll() bool {
 		// write the parsed content to a file
 		// the file should be in the "public" directory
 		newName := filenameConvert(file)
+		ansi.PrintDebug("newName: " + newName)
 		f, err := fsutil.CreateFile("pynezz/public/" + newName)
 		if err != nil {
 			ansi.PrintError("error writing parsed content to file: " + newName)
@@ -111,6 +112,7 @@ func parseAll() bool {
 			// Content:  []byte(doc.String()),
 		}
 		slug := middleware.ContentsDB.GenerateSlug(post.Metadata.Title)
+		ansi.PrintDebug("generated slug: " + slug)
 		postMetadata := models.PostMetadata{
 			Title: post.Metadata.Title,
 			Path:  newName,
@@ -227,13 +229,7 @@ func config(id string) bool {
 
 func isParsed(file string) bool {
 	// check the "public" directory for the file
-	// if it exists, return true
-	// if it does not exist, return false
-	// use the fsutil package for this
-	// example: fsutil.Exists("public/" + file)
-	// return false
-	// return true
-	return fsutil.FileExists("public/" + filenameConvert(file)) // if the file exists, it is parsed
+	return fsutil.FileExists("pynezz/public/" + filenameConvert(file)) // if the file exists, it is parsed
 }
 
 // filenameConvert converts a markdown filename to an html filename
@@ -241,9 +237,10 @@ func isParsed(file string) bool {
 // example: filenameConvert("file.md") -> "file.html"
 // example: filenameConvert("file.html") -> "file.md"
 func filenameConvert(file string) string {
-	fileName := filepath.Base(file)
+	fileName := strings.Split(filepath.Base(file), ".")[0]
 	fileType := filepath.Ext(file)
 
+	ansi.PrintDebug("converting filename: " + fileName + fileType)
 	if fileType == ".md" {
 		fmt.Println("Converting " + fileName + " to " + fileName + ".html")
 		return strings.Split(fileName, ".")[0] + ".html"

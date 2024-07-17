@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/pynezz/pynezz_com/internal/parser"
 	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
 	"github.com/pynezz/pynezzentials/ansi"
 	"gorm.io/datatypes"
@@ -53,7 +52,8 @@ func (d *Database) GetPostsByTag(tag string) ([]models.PostMetadata, error) {
 // NewPost creates a new post in the database, given the metadata of the post
 // This is differennt from the parser.NewPost function, which creates the necessary metadata for a post
 func (d *Database) NewPost(post models.PostMetadata) error {
-	result := d.Driver.FirstOrCreate(&post)
+	result := d.Driver.Where(&models.PostMetadata{Slug: post.Slug}).FirstOrCreate(&post)
+	ansi.PrintInfo(fmt.Sprintf("new post created: %s\n%d affected rows", post.Title, result.RowsAffected))
 	return result.Error
 }
 
@@ -80,27 +80,27 @@ func (d *Database) WriteContentsToDatabase(content []byte) error {
 // The metadata is used to generate the post's URL, tags, and other information.
 // Later, the metadata will be used to fetch from the database,
 // and the post is generated and displayed on the website
-func (d *Database) GenerateMetadata(content []byte) models.PostMetadata {
-	parsedMetadata, err := parser.ParseMetadata(content) // Parse the metadata of the contents of the markdown file
-	if err != nil {
-		fmt.Println("Error parsing metadata:", err)
-	}
+// func (d *Database) GenerateMetadata(content []byte) models.PostMetadata {
+// 	parsedMetadata, err := parser.ParseMetadata(content) // Parse the metadata of the contents of the markdown file
+// 	if err != nil {
+// 		fmt.Println("Error parsing metadata:", err)
+// 	}
 
-	pPost := parser.NewPost(string(content)) // Create a new post
-	parser.SetDescription(pPost)             // Set the description of the post based off the content or the description set in the metadata
+// 	pPost := parser.NewPost(string(content)) // Create a new post
+// 	parser.SetDescription(pPost)             // Set the description of the post based off the content or the description set in the metadata
 
-	ansi.PrintColor(ansi.Purple, "Title: "+parsedMetadata.Title)
-	md := models.PostMetadata{
-		Title: parsedMetadata.Title,
-		Slug:  d.GenerateSlug(parsedMetadata.Title),
-		Tags:  datatypes.JSON(strings.Join(parsedMetadata.Tags, ",")), // Convert the tags to a JSON array ( // TODO: is this valid?)
-	}
+// 	ansi.PrintColor(ansi.Purple, "Title: "+parsedMetadata.Title)
+// 	md := models.PostMetadata{
+// 		Title: parsedMetadata.Title,
+// 		Slug:  d.GenerateSlug(parsedMetadata.Title),
+// 		Tags:  datatypes.JSON(strings.Join(parsedMetadata.Tags, ",")), // Convert the tags to a JSON array ( // TODO: is this valid?)
+// 	}
 
-	// Write post to database
-	d.NewPost(md)
+// 	// Write post to database
+// 	d.NewPost(md)
 
-	return md
-}
+// 	return md
+// }
 
 func commonStopWord(word string) bool {
 	m := map[string]bool{
@@ -192,8 +192,11 @@ func (d *Database) GenerateSlug(title string) string {
 	var post []models.PostMetadata
 	d.Driver.Where("slug LIKE ?", slug+"%").Find(&post)
 	if len(post) == 0 {
+		ansi.PrintInfo("No posts found with slug: " + slug + " returning slug for use")
 		return slug
 	}
+
+	ansi.PrintWarning("Posts found with slug: " + slug + " generating new slug")
 
 	// Find the highest numbered slug
 	maxNum := 0
