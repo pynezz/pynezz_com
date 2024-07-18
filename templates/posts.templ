@@ -17,7 +17,7 @@ templ Show(title string, body string, post models.Post) {
 			<h1 class={ "h1", layout.Title+" pl-10" }>{ title }</h1> // Could just hard-code 404, but this is more flexible
 			<p class="pb-10">{ body }</p>
 			<a href={ templ.SafeURL(BaseURL) } class={ "a", layout.Link + " my-10" }>Home</a>
-		</article>
+	</article>
 	} else {
 		// Else, display the post
 		<article class={ "article", layout.Article }>
@@ -53,12 +53,12 @@ templ postCard(post models.PostMetadata) {
 			</span>
 			<b>{ post.Summary }</b>
 			<span class="flex mb-4 pr-10 m-2 py-2">
-			<a href={ templ.URL("/posts/" + post.Slug) } class="bg-sky text-base p-2 px-4 rounded-full underline decoration-dotted">Read more</a>
+			<a href={ templ.URL("/posts/" + post.Slug) } class={"a", layout.CardBtn+layout.BtnHover} aria-role="tab">Read more</a>
 				for _, tag := range strings.Split(string(post.Tags), ", ") {
 					if utf8.RuneCountInString(tag) > 1 {
 						<a href={templ.SafeURL("/tags/" + tag[1:utf8.RuneCountInString(tag)-1])} class={"a", layout.TagBtn + " bg-crust"}>{ tag }</a>
 					}
-				}			
+				}
 			</span>
 		// </div>
 		// <img src={post.Img} />
