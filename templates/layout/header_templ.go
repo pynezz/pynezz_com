@@ -39,52 +39,16 @@ func Links() templ.Component {
 	})
 }
 
-// templ Header(path string) {
-// 	@links(path)
-//   // <header class="header">
-// 		<ul class="main-nav">
-// 			<li class="nav-item">
-// 				<a href="/" class="nav-link">/</a>
-// 			</li>
-// 			<li class="nav-item">
-// 				<a href="/posts/" class="nav-link">posts</a>
-// 			</li>
-// 	  	</ul>
-//   // </header>
-// }
-
-// var genPath = func(path []string) string {
-// var res string
-// parts := strings.Split(strings.Trim(path, "/"), "/")
-// 				if len(parts) > 4 {
-// 					// Show "..." and last 4 parts
-// 					<li class={"li", navBarItem}>
-// 						<span class={"a", navBarItemLink}>...</span>
-// 					</li>
-// 					parts = parts[len(parts)-4:]
-// 				}
-// 				fullPath := ""
-// 				for i, p := range parts {
-// 					fullPath += "/" + p
-// 					if i < len(parts)-1 {
-// 						<li class={"li", navBarItem}>
-// 							<a href={templ.SafeURL(fullPath)} class={"a", navBarItemLink}>{p}</a>
-// 						</li>
-// 					} else {
-// 						<li class={"li", navBarItem}>
-// 							<span class={"a", navBarItemLink}>{p}</span>
-// 						</li>
-// 					}
-// 				}
-// }
-
 // Tailwind styles
-const headerStyle = "flex flex-row bg-crust items-center justify-between max-h-fit w-full max-w-full backdrop-blur-md"
+const headerStyle = "flex flex-row bg-crust items-center justify-between max-h-fit w-full max-w-full backdrop-blur-md ease-in-out	text-text"
 const title = "text-lg font-mono text-text m-0 px-8"
-const navBarItem = "li flex items-center justify-center h-12 px-4"
+const navBarItem = "li flex items-center justify-center h-12 px-4 text-text	"
 const navBarItemLink = "text-text font-mono text-lg font-semibold"
-const breadCrumb = "font-mono italic text-subtext1 p-sm hover:text-text transition duration-200 ease-in-out px-0 mx-0"
+const breadCrumb = "font-mono italic text-subtext1 p-sm hover:text-text px-0 mx-0"
 const navBarList = "flex flex-row"
+const burgerMenu = "lg:hidden flex items-center"
+const navBarListResponsive = "hidden lg:flex flex-col lg:flex-row transition-transform duration-200 ease-in-out"
+const navWrapper = "hidden sm:flex flex-col md:flex-row items-center justify-between sm:max-w-lg md:min-max-w mx-auto"
 
 func Header(path ...string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -166,16 +130,16 @@ func Header(path ...string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">pynezz.dev</a></h3></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">pynezz.dev</a></h3></div><!-- Burger menu -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var9 = []any{"ul", navBarList}
+		var templ_7745c5c3_Var9 = []any{"burger-menu", burgerMenu}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var9...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<ul class=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -188,16 +152,16 @@ func Header(path ...string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" onclick=\"toggleNav()\"><!-- SVG for burger icon --><svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 6h16M4 12h16m-7 6h7\"></path></svg></button>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var11 = []any{navBarItem}
+		var templ_7745c5c3_Var11 = []any{"ul", navBarListResponsive}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var11...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<ul id=\"nav-bar-list\" class=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -214,12 +178,12 @@ func Header(path ...string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var13 = []any{"a", navBarItemLink}
+		var templ_7745c5c3_Var13 = []any{navBarItem}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var13...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a href=\"posts/\" class=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -232,16 +196,16 @@ func Header(path ...string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">posts</a></li>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var15 = []any{navBarItem}
+		var templ_7745c5c3_Var15 = []any{"a", navBarItemLink}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var15...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a href=\"/posts/\" class=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -254,16 +218,16 @@ func Header(path ...string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">posts</a></li>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var17 = []any{"a", navBarItemLink}
+		var templ_7745c5c3_Var17 = []any{navBarItem}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var17...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a href=\"tags/\" class=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -276,39 +240,39 @@ func Header(path ...string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">tags</a></li><div class=\"border-r border-mauve border-opacity-50 \t\t\t\th-8 my-2\"></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var19 = []any{"a", navBarItemLink}
+		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var19...)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a href=\"/\ttags/\" class=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var20 string
+		templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var19).String())
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 1, Col: 0}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">tags</a></li><div class=\"border-r border-mauve border-opacity-50 h-8 my-2\"></div><!-- Separator -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if len(path) > 4 {
-			var templ_7745c5c3_Var19 = []any{"li", navBarItem}
-			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var19...)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var20 string
-			templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var19).String())
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 1, Col: 0}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var21 = []any{"a", navBarItemLink}
+			var templ_7745c5c3_Var21 = []any{"li", navBarItem}
 			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var21...)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span class=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -321,13 +285,35 @@ func Header(path ...string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var23 = []any{"a", navBarItemLink}
+			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var23...)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span class=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var24 string
+			templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var23).String())
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 1, Col: 0}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">...</span></li>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			for i, p := range path[len(path)-4:] {
-				var templ_7745c5c3_Var23 = []any{navBarItem}
-				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var23...)
+				var templ_7745c5c3_Var25 = []any{navBarItem}
+				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var25...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -335,12 +321,12 @@ func Header(path ...string) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var24 string
-				templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var23).String())
+				var templ_7745c5c3_Var26 string
+				templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var25).String())
 				if templ_7745c5c3_Err != nil {
 					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 1, Col: 0}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -349,8 +335,8 @@ func Header(path ...string) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				if i < len(path)-1 {
-					var templ_7745c5c3_Var25 = []any{"a", breadCrumb}
-					templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var25...)
+					var templ_7745c5c3_Var27 = []any{"a", breadCrumb}
+					templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var27...)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -358,8 +344,8 @@ func Header(path ...string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var26 templ.SafeURL = templ.SafeURL("/" + strings.Join(path[:len(path)-4+i+1], baseURL))
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var26)))
+					var templ_7745c5c3_Var28 templ.SafeURL = templ.SafeURL("/" + strings.Join(path[:len(path)-4+i], "/"+baseURL))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var28)))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -367,12 +353,12 @@ func Header(path ...string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var27 string
-					templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var25).String())
+					var templ_7745c5c3_Var29 string
+					templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var27).String())
 					if templ_7745c5c3_Err != nil {
 						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 1, Col: 0}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -380,12 +366,12 @@ func Header(path ...string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var28 string
-					templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(p)
+					var templ_7745c5c3_Var30 string
+					templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(p)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 117, Col: 115}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 83, Col: 117}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -394,8 +380,8 @@ func Header(path ...string) templ.Component {
 						return templ_7745c5c3_Err
 					}
 				} else {
-					var templ_7745c5c3_Var29 = []any{"a", navBarItemLink}
-					templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var29...)
+					var templ_7745c5c3_Var31 = []any{"a", navBarItemLink}
+					templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var31...)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -403,12 +389,12 @@ func Header(path ...string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var30 string
-					templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var29).String())
+					var templ_7745c5c3_Var32 string
+					templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var31).String())
 					if templ_7745c5c3_Err != nil {
 						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 1, Col: 0}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -416,12 +402,12 @@ func Header(path ...string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var31 string
-					templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(p)
+					var templ_7745c5c3_Var33 string
+					templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(p)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 119, Col: 46}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 85, Col: 46}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -437,8 +423,8 @@ func Header(path ...string) templ.Component {
 			}
 		} else {
 			for i, p := range path {
-				var templ_7745c5c3_Var32 = []any{navBarItem}
-				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var32...)
+				var templ_7745c5c3_Var34 = []any{navBarItem}
+				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var34...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -446,12 +432,12 @@ func Header(path ...string) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var33 string
-				templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var32).String())
+				var templ_7745c5c3_Var35 string
+				templ_7745c5c3_Var35, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var34).String())
 				if templ_7745c5c3_Err != nil {
 					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 1, Col: 0}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var35))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -460,8 +446,8 @@ func Header(path ...string) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				if i < len(path)-1 {
-					var templ_7745c5c3_Var34 = []any{"a", breadCrumb}
-					templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var34...)
+					var templ_7745c5c3_Var36 = []any{"a", breadCrumb}
+					templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var36...)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -469,8 +455,8 @@ func Header(path ...string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var35 templ.SafeURL = templ.SafeURL("/" + strings.Join(path[:i+1], "/"+baseURL))
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var35)))
+					var templ_7745c5c3_Var37 templ.SafeURL = templ.SafeURL("/" + strings.Join(path[:i], "/"+baseURL))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var37)))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -478,12 +464,12 @@ func Header(path ...string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var36 string
-					templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var34).String())
+					var templ_7745c5c3_Var38 string
+					templ_7745c5c3_Var38, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var36).String())
 					if templ_7745c5c3_Err != nil {
 						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 1, Col: 0}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var36))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var38))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -491,12 +477,12 @@ func Header(path ...string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var37 string
-					templ_7745c5c3_Var37, templ_7745c5c3_Err = templ.JoinStringErrs(p)
+					var templ_7745c5c3_Var39 string
+					templ_7745c5c3_Var39, templ_7745c5c3_Err = templ.JoinStringErrs(p)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 127, Col: 107}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 93, Col: 105}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var37))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var39))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -505,8 +491,8 @@ func Header(path ...string) templ.Component {
 						return templ_7745c5c3_Err
 					}
 				} else {
-					var templ_7745c5c3_Var38 = []any{"a", navBarItemLink}
-					templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var38...)
+					var templ_7745c5c3_Var40 = []any{"a", navBarItemLink}
+					templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var40...)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -514,12 +500,12 @@ func Header(path ...string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var39 string
-					templ_7745c5c3_Var39, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var38).String())
+					var templ_7745c5c3_Var41 string
+					templ_7745c5c3_Var41, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var40).String())
 					if templ_7745c5c3_Err != nil {
 						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 1, Col: 0}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var39))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var41))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -527,12 +513,12 @@ func Header(path ...string) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var40 string
-					templ_7745c5c3_Var40, templ_7745c5c3_Err = templ.JoinStringErrs(p)
+					var templ_7745c5c3_Var42 string
+					templ_7745c5c3_Var42, templ_7745c5c3_Err = templ.JoinStringErrs(p)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 129, Col: 46}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 95, Col: 46}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var40))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var42))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -554,75 +540,3 @@ func Header(path ...string) templ.Component {
 		return templ_7745c5c3_Err
 	})
 }
-
-// <a href={templ.SafeURL(strings.Replace("/" + strings.Join(path[:len(path)-4+i+1], "/"),"~", "/", -1))} class={"a", navBarItemLink }>{ strings.Trim(p, "/") }</a>
-
-// for i, p := range path {
-// 	<li class={"li", navBarItem }>
-// 	p = strings.Trim(p, "/")
-// 	<a href={templ.SafeURL(strings.Trim(fmt.Sprintf("%s/", strings.Join(path[:i], "/	")), "/"))} class={"a", navBarItemLink }>{p}</a>
-// 	</li>
-// }
-
-// css header() {
-// 	display: flex;
-// 	flex-direction: row;
-// 	background-color: { crust };
-// 	align-items: center;
-// 	justify-content: space-between;
-// 	max-height: fit-content;
-// 	width: 100%;
-// 	max-width: 100%;
-// 	float: top;
-// 	z-index: 1;
-// 	backdrop-filter: blur(10px);
-// 	-webkit-backdrop-filter: blur(10px);
-// }
-
-// padding-left: 5em;
-// margin-right: 5em;
-
-// css title() {
-// 	font-size: 1.35em;
-// 	font-family: "Hack Nerd Font Mono", monospace;
-// 	color: { txt };
-// 	margin: 0;
-// 	padding: 0rem 2rem 0rem 2rem;
-// }
-// <script>
-// 		function generateBreadcrumb(path) {
-// 			const breadcrumb = document.getElementById('breadcrumb');
-// 			const parts = path.split('/').filter(part => part);
-// 			const maxParts = 4;
-
-// 			const homeLink = document.createElement('li');
-// 			homeLink.className = "{{navBarItem}}";
-// 			homeLink.innerHTML = '<a href="/" class="{{navBarItemLink}}">~</a>';
-// 			breadcrumb.appendChild(homeLink);
-
-// 			if (parts.length > maxParts) {
-// 				const ellipsis = document.createElement('li');
-// 				ellipsis.className = "{{navBarItem}}";
-// 				ellipsis.innerHTML = '<span class="{{navBarItemLink}}">...</span>';
-// 				breadcrumb.appendChild(ellipsis);
-// 				parts.splice(0, parts.length - maxParts);
-// 			}
-
-// 			let fullPath = '';
-// 			parts.forEach((part, index) => {
-// 				fullPath += '/' + part;
-// 				const item = document.createElement('li');
-// 				item.className = "{{navBarItem}}";
-
-// 				if (index < parts.length - 1) {
-// 					item.innerHTML = `<a href="${fullPath}" class="{{navBarItemLink}}">${part}</a>`;
-// 				} else {
-// 					item.innerHTML = `<span class="{{navBarItemLink}}">${part}</span>`;
-// 				}
-// 				breadcrumb.appendChild(item);
-// 			});
-// 		}
-
-// 		const path = "{{path}}";
-// 		generateBreadcrumb(path);
-// 	</script>

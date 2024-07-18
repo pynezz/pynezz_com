@@ -1,17 +1,94 @@
 package templates
 
 import (
-  "github.com/pynezz/pynezz_com/templates/layout"
+	"github.com/pynezz/pynezz_com/templates/layout"
+	"github.com/pynezz/pynezz_com/templates/scripts"
 )
 
-templ Root(content templ.Component, path ...string ) {
-  @layout.Links()
-  <body class="min-h-screen flex flex-col items-center">
-    @layout.Header( path... )
-    <main class="flex-grow p-4">
-      @content
-    </main>
-    @layout.Footer()
-  </body>
+templ js() {
+	<script type="text/javascript">
+    function toggleNav() {
+        var nav = document.getElementById("nav-bar-list");
+        if (nav.classList.contains("hidden")) {
+            nav.classList.remove("hidden");
+        } else {
+            nav.classList.add("hidden");
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log("DOM loaded");
+        const dropdownToggle = document.getElementById('burger-dropdown');
+
+        // const headerElement = document.querySelector('header');
+        // const footerElement = document.querySelector('footer');
+        // const mainElement = document.querySelector("main");
+
+        const dropdownMenu = document.getElementById('burger-dropdown-menu');
+        // const toggleColor = document.querySelector('.theme-toggle__icon');
+        // const toggle = document.getElementById("dark-mode-toggle");
+
+        if (dropdownMenu && dropdownToggle) {
+            const showDropdown = () => {
+                dropdownMenu.classList.remove('opacity-0', 'invisible', '-translate-y-2');
+                dropdownMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+            };
+            const hideDropdown = () => {
+                dropdownMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                dropdownMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
+            };
+            dropdownToggle.addEventListener('mouseenter', showDropdown);
+            dropdownMenu.addEventListener('mouseenter', showDropdown);
+            dropdownToggle.addEventListener('mouseleave', hideDropdown);
+            dropdownMenu.addEventListener('mouseleave', hideDropdown);
+        }
+
+        if (mainElement) {
+            console.log("mainElement", mainElement);
+        } else {
+            console.log("mainElement not found");
+        }
+
+        if (localStorage.getItem("darkMode") === "disabled") {
+            if (mainElement) {
+                document.getElementById("dark-mode-toggle").checked = true;
+                mainElement.classList.add("frappe");
+                toggleColor.style.fill = 'yellow';
+            }
+        }
+
+        // if (toggle) {
+        //     toggle.addEventListener("change", function () {
+        //         if (mainElement) {
+        //             const darkModeDisabled = mainElement.classList.toggle("frappe");
+        //             headerElement.classList.toggle("frappe");
+        //             footerElement.classList.toggle("frappe");
+
+        //             if (darkModeDisabled) {
+        //                 localStorage.setItem("darkMode", "disabled");
+        //                 toggleColor.style.fill = 'yellow';
+        //             } else {
+        //                 localStorage.removeItem("darkMode");
+        //                 toggleColor.style.fill = 'blue';
+        //                 console.log(toggleColor)
+        //             }
+        //         }
+        //     });
+        // }
+    });
+  </script>
 }
-    
+
+templ Root(content templ.Component, nonce string, path ...string) {
+	@layout.Links()
+	<body class="min-h-screen flex flex-col items-center">
+		@layout.Header(path...)
+		<main class="flex-grow p-4">
+			@content
+		</main>
+		@layout.Footer()
+		@js()
+		// TODO: Nonce, SHA256 Checksum, and CSP not yet implemented. This is security theater for now.
+		@scripts.Script(nonce)
+	</body>
+}

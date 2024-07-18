@@ -10,14 +10,6 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "github.com/pynezz/pynezz_com/templates/layout"
 
-// const defBtn = "button text-white rounded px-4 py-2 transition duration-200 ease-in-out"
-// // const txt = "twtext-white"
-// const blue = "bg-blue hover:bg-blue-700"
-// const tw_btnColor = "bg-base hover:text-text"
-// const cardStyle tw = "bg-base font-normal text-text rounded-md p-4 shadow"
-
-const ()
-
 func Home() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context

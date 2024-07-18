@@ -10,9 +10,10 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"github.com/pynezz/pynezz_com/templates/layout"
+	"github.com/pynezz/pynezz_com/templates/scripts"
 )
 
-func Root(content templ.Component, path ...string) templ.Component {
+func js() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -28,6 +29,32 @@ func Root(content templ.Component, path ...string) templ.Component {
 		templ_7745c5c3_Var1 := templ.GetChildren(ctx)
 		if templ_7745c5c3_Var1 == nil {
 			templ_7745c5c3_Var1 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script type=\"text/javascript\">\n    function toggleNav() {\n        var nav = document.getElementById(\"nav-bar-list\");\n        if (nav.classList.contains(\"hidden\")) {\n            nav.classList.remove(\"hidden\");\n        } else {\n            nav.classList.add(\"hidden\");\n        }\n    }\n\n    document.addEventListener(\"DOMContentLoaded\", () => {\n        console.log(\"DOM loaded\");\n        const dropdownToggle = document.getElementById('burger-dropdown');\n\n        // const headerElement = document.querySelector('header');\n        // const footerElement = document.querySelector('footer');\n        // const mainElement = document.querySelector(\"main\");\n\n        const dropdownMenu = document.getElementById('burger-dropdown-menu');\n        // const toggleColor = document.querySelector('.theme-toggle__icon');\n        // const toggle = document.getElementById(\"dark-mode-toggle\");\n\n        if (dropdownMenu && dropdownToggle) {\n            const showDropdown = () => {\n                dropdownMenu.classList.remove('opacity-0', 'invisible', '-translate-y-2');\n                dropdownMenu.classList.add('opacity-100', 'visible', 'translate-y-0');\n            };\n            const hideDropdown = () => {\n                dropdownMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');\n                dropdownMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');\n            };\n            dropdownToggle.addEventListener('mouseenter', showDropdown);\n            dropdownMenu.addEventListener('mouseenter', showDropdown);\n            dropdownToggle.addEventListener('mouseleave', hideDropdown);\n            dropdownMenu.addEventListener('mouseleave', hideDropdown);\n        }\n\n        if (mainElement) {\n            console.log(\"mainElement\", mainElement);\n        } else {\n            console.log(\"mainElement not found\");\n        }\n\n        if (localStorage.getItem(\"darkMode\") === \"disabled\") {\n            if (mainElement) {\n                document.getElementById(\"dark-mode-toggle\").checked = true;\n                mainElement.classList.add(\"frappe\");\n                toggleColor.style.fill = 'yellow';\n            }\n        }\n\n        // if (toggle) {\n        //     toggle.addEventListener(\"change\", function () {\n        //         if (mainElement) {\n        //             const darkModeDisabled = mainElement.classList.toggle(\"frappe\");\n        //             headerElement.classList.toggle(\"frappe\");\n        //             footerElement.classList.toggle(\"frappe\");\n\n        //             if (darkModeDisabled) {\n        //                 localStorage.setItem(\"darkMode\", \"disabled\");\n        //                 toggleColor.style.fill = 'yellow';\n        //             } else {\n        //                 localStorage.removeItem(\"darkMode\");\n        //                 toggleColor.style.fill = 'blue';\n        //                 console.log(toggleColor)\n        //             }\n        //         }\n        //     });\n        // }\n    });\n  </script>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return templ_7745c5c3_Err
+	})
+}
+
+func Root(content templ.Component, nonce string, path ...string) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var2 == nil {
+			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		templ_7745c5c3_Err = layout.Links().Render(ctx, templ_7745c5c3_Buffer)
@@ -55,6 +82,14 @@ func Root(content templ.Component, path ...string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = layout.Footer().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = js().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = scripts.Script(nonce).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

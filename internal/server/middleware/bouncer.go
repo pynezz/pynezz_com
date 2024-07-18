@@ -1,9 +1,12 @@
 package middleware
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
@@ -16,6 +19,29 @@ import (
 type CustomContext struct {
 	echo.Context
 	User models.User
+}
+
+// type session struct {
+// 	vips map[string]bool
+// }
+
+func Sec(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ua := c.Request().UserAgent()
+		// if vips[ua] {
+		// ansi.PrintBold(ansi.FormatRoundedBox("VIP Detected\n"))
+		// return next(c)
+		// }
+		ansi.PrintBold("user agent: " + ua)
+		if h := NewArgon2().InitArgonWithSalt(ua, "mykKhiHGSuBxmY5NAi"); strings.Split(h.encodedHash, "$")[5] == "CDHqziZMzGB0D8S4NOfFV3TbRMY3WruoNhI6QEOwnLc" {
+			ansi.PrintBold(ansi.FormatRoundedBox("New VIP Detected\n"))
+			// vips[ua] = true
+		} else {
+			ansi.PrintWarning("not VIP. hash: " + h.encodedHash) //
+		}
+
+		return next(c)
+	}
 }
 
 // Bouncer is a middleware that checks if the user is authenticated
@@ -194,14 +220,32 @@ func render(ctx echo.Context, statusCode int, t templ.Component) error {
 	return ctx.HTML(statusCode, buf.String())
 }
 
+// GenerateNonce generates a random nonce
+func GenerateNonce() (string, error) {
+	nonce := make([]byte, 16)
+	if _, err := rand.Read(nonce); err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(nonce), nil
+}
+
+// TODO: Nonce and CSP.
 func SecurityHeaders(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		nonce, err := GenerateNonce()
+		if err != nil {
+			return err
+		}
+
+		// set security headers for proxying through openresty
 		c.Response().Header().Set("X-Frame-Options", "DENY")
+		// c.Response().Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self' 'nonce-"+nonce+"'; style-src 'self'; font-src 'self'; img-src *; media-src *; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; block-all-mixed-content; upgrade-insecure-requests; report-uri /csp-report")
 		c.Response().Header().Set("X-Content-Type-Options", "nosniff")
 		c.Response().Header().Set("X-XSS-Protection", "1; mode=block")
 
-		// this will need to be implemented, but it breaks the site as of now - need to fix it
-		// c.Response().Header().Set("Content-Security-Policy", "default-src 'self'")
+		// Pass the nonce to the context so it can be used in templates
+		c.Set("nonce", nonce)
+
 		return next(c)
 	}
-}	
+}

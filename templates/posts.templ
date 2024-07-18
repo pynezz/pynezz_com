@@ -1,8 +1,13 @@
 package templates
 
 import (
+	"strings"
+
 	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
 	"github.com/pynezz/pynezz_com/templates/layout"
+	"fmt"
+
+ "unicode/utf8"
 )
 
 templ Show(title string, body string, post models.Post) {
@@ -25,15 +30,38 @@ templ Show(title string, body string, post models.Post) {
 }
 
 templ PostsList(posts []models.PostMetadata) {
-	<h1 class={ "h1", twTitle }>Recent Posts</h1>
-	<ul>
+	<h1 class={ "h1", twTitle }>Posts</h1>
+	<ul class={"ul", postsList}>
 		if len(posts) == 0 {
 			<li>No posts found</li>
 		} else {
 			for _, p := range posts {
-				<li><strong>{ p.Title } </strong>: { p.Summary } </li>
-				<a href={ templ.URL("/posts/" + p.Slug) }>Read more</a>
+				@postCard(p)
 			}
 		}
 	</ul>
+}
+
+templ postCard(post models.PostMetadata) {
+	<div class={"div", layout.CardStyle + " border border-overlay2 hover:border hover:border-sky"}>
+		<img src={fmt.Sprintf("https://images.placeholders.dev/?width=256&height=256&text=%d&bgColor=%%2326283A&textColor=%%23f0f0f0", post.PostID)} height="256" alt="placeholder image" class="rounded-md m-2 p-2"  />
+		<article class="flex flex-col flex-wrap flex-grow bg-surface0 content-between justify-between m-2 p-p2">
+		// <div class="p-2">
+			<span class="flex flex-col mb-4 pr-10 m-2	">
+				<strong class="first-letter:text-xl text-lg text-text font-semibold ">{ post.Title }</strong>
+				<i class="date">{ post.CreatedAt.Format("02.01.2006") }</i>
+			</span>
+			<b>{ post.Summary }</b>
+			<span class="flex mb-4 pr-10 m-2 py-2">
+			<a href={ templ.URL("/posts/" + post.Slug) } class="bg-sky text-base p-2 px-4 rounded-full underline decoration-dotted">Read more</a>
+				for _, tag := range strings.Split(string(post.Tags), ", ") {
+					if utf8.RuneCountInString(tag) > 1 {
+						<a href={templ.SafeURL("/tags/" + tag[1:utf8.RuneCountInString(tag)-1])} class={"a", layout.TagBtn + " bg-crust"}>{ tag }</a>
+					}
+				}			
+			</span>
+		// </div>
+		// <img src={post.Img} />
+		</article>
+	</div>
 }

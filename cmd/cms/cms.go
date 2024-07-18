@@ -73,6 +73,7 @@ func (c *cms) CMS(args ...string) *cms {
 
 func run(c ICommand, args ...string) {
 	fmt.Println("running command: ", c.Name())
+
 	c.Run(args)
 }
 
@@ -95,6 +96,7 @@ func Execute(args ...string) {
 		ansi.PrintError("❌ Database connection failed.")
 		return
 	}
+
 	// If the command exists, run it
 	for k, v := range commands() {
 		for _, arg := range args {
@@ -109,6 +111,7 @@ func Execute(args ...string) {
 			}
 		}
 	}
+
 	// If no valid command is found, check for typos
 	for _, arg := range args {
 		if !isValidCommand(arg) {

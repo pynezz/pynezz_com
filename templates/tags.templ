@@ -4,29 +4,21 @@ import (
     "github.com/pynezz/pynezz_com/templates/layout"
 )
 
-const nth = "bg-crust w-full h-12 flex items-center justify-center text-text odd:bg-mauve"
+const nth = "bg-crust w-full h-12 flex items-center justify-center text-text odd:bg-mauve "
+const secStyle = "flex flex-col space-y-3"
 
 // TODO: Implement map[string]int for tags instead so I can sort by count
 templ Tags(tags []string) {
-    <section class={"section", section()}>
-      <h1 class={"h1", h1()}> Tags </h1>
+    <section class={"section", secStyle}>
+      <h1 class={"h1", layout.Title}>Tags</h1>
       <div class="flex flex-row flex-wrap">
         for i, tag := range tags {
           if i % 2 == 0 {
-            <a href={templ.SafeURL(tag)} class={"a", layout.Link + " p-2 bg-surface0 rounded no-underline m-2"}>{ tag }</a>
+            <a href={templ.SafeURL(tag)} class={"a", layout.TagBtn + " bg-mantle"}>{ tag }</a>
         } else {
-            <a href={templ.SafeURL(tag)} class={"a", layout.Link + " p-2 bg-surface1 rounded no-underline m-2"}>{ tag }</a>
+            <a href={templ.SafeURL(tag)} class={"a", layout.TagBtn + " outline  outline-mantle"}>{ tag }</a>
           }
         }
       </div>
     </section>
-}
-
-css section() {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 50px;
-  max-width: 800px;
 }

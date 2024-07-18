@@ -7,8 +7,14 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/pynezz/pynezz_com/templates/layout"
 	fsutil "github.com/pynezz/pynezzentials/fsutil"
 )
+
+// Constants for splitting the markdown content
+// const splLst = "## |### |#### |##### |###### |\\|"
+// const splNewLine = "\n\n"
+// const splitCond = splLst + "|" + splNewLine
 
 // MarkdownToHTML converts markdown to HTML
 func MarkdownToHTML(mdPath string) ([]byte, MarkdownDocument) {
@@ -22,12 +28,13 @@ func MarkdownToHTML(mdPath string) ([]byte, MarkdownDocument) {
 		return []byte("error: encountered an error while parsing metadata\n"), MarkdownDocument{}
 	}
 
-	document := parseContent(strings.Split(contentStr, "\n"))
+	// re := regexp.MustCompile(`|## |### |#### |##### |###### |\\||\n\n|\n-|---\n`)
+	re := regexp.MustCompile(`\n\n|\n-|---\n`)
+	contentParts := re.Split(contentStr, -1)
+
+	document := parseContent(contentParts)
 	document.Metadata = metadata
 
-	// write to database
-	// middleware.DBInstance.NewPost()
-	// slug := middleware.DBInstance.GenerateSlug(document.Metadata.Title
 	return []byte(document.String()), *document
 }
 
@@ -102,8 +109,17 @@ func parseContent(lines []string) *MarkdownDocument {
 			currentTitle = h6{heading{line[7:], "h6", H6Style}}
 		case strings.HasPrefix(line, "|"):
 			currentContent = append(currentContent, parseTable(line))
-		// case strings.Contains(line, "[") && strings.Contains(line, "]("):
-		// 	currentContent = append(currentContent, parseLink(line))
+			// case strings.Contains(line, "[") && strings.Contains(line, "]("):
+			// 	currentContent = append(currentContent, parseLink(line))
+		case strings.HasPrefix(line, "|"):
+			currentContent = append(currentContent, parseTable(line))
+		case strings.HasPrefix(line, "[") && strings.Contains(line, "]("):
+			currentContent = append(currentContent, parseLink(line))
+		case strings.HasPrefix(line, "- "):
+			currentContent = append(currentContent, parseList(line, "ul"))
+		case strings.HasPrefix(line, "1. "):
+			currentContent = append(currentContent, parseList(line, "ol"))
+
 		default:
 			line = linkPattern.ReplaceAllStringFunc(line, func(match string) string {
 				return parseLink(match).String()
@@ -124,6 +140,25 @@ func parseTable(line string) TextContent {
 	return textTable{textContent{fmt.Sprintf("<table><tr>%s</tr></table>", line)}}
 }
 
+// parseList parses a markdown list into an HTML list
+func parseList(line string, listType string) TextContent {
+	var itemTag string
+	if listType == "ul" {
+		itemTag = "ul"
+	} else {
+		itemTag = "ol"
+	}
+
+	listItems := strings.Split(line, "\n")
+	listHTML := fmt.Sprintf("<%s>", itemTag)
+	for _, item := range listItems {
+		listHTML += fmt.Sprintf("<li>%s</li>", strings.TrimSpace(item))
+	}
+	listHTML += fmt.Sprintf("</%s>", itemTag)
+
+	return textContent{content: listHTML}
+}
+
 // parseLink parses a markdown link into an HTML link
 func parseLink(line string) TextContent {
 	s := strings.Split(line, "](")
@@ -137,7 +172,7 @@ func parseLink(line string) TextContent {
 	lText := s[0]
 	lText = strings.TrimPrefix(lText, "[")
 
-	return textA{textContent{fmt.Sprintf(`<a href="%s">%s</a>`, link, lText)}}
+	return textA{textContent{fmt.Sprintf(`<a href="%s" class="%s">%s</a>`, link, layout.Link, lText)}}
 }
 
 // ParseDescription sets the description of a post if it exists, otherwise it returns the first 100 characters of the content
@@ -205,7 +240,7 @@ func (md *MarkdownDocument) String() string {
 
 	// Adding tags at the bottom
 	if len(md.Metadata.Tags) > 0 {
-		document += "<p>Tags: "
+		document += "<p class=\"p-2 m-2 rounded bg-mantle text-lavender\">Tags: "
 		for _, tag := range md.Metadata.Tags {
 			document += fmt.Sprintf(`<a class='tag' href='/tags/%s'>%s</a> `, tag, tag)
 		}

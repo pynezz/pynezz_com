@@ -179,8 +179,15 @@ func (c *ShowPage) Run(args ...interface{}) interface{} {
 }
 
 func (c *ParseAll) Run(args ...interface{}) interface{} {
-	ansi.PrintDebug("parseall function called!")
-	return parseAll()
+	var force bool
+	force = false
+
+	for _, arg := range args[0].([]string)[1:] { // Remove the command name from the arguments
+		if arg == "rebuild" {
+			force = confirmForce()
+		}
+	}
+	return parseAll(force)
 }
 
 func (c *Nop) Run(args ...interface{}) interface{} {

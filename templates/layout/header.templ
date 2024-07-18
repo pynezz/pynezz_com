@@ -5,92 +5,51 @@ import "strings"
 // const desc = "A meta blog (blog about building a blog) as well as a blog about programming, technology, and information security."
 // const baseUrl = "https://beta.pynezz.dev"
 // const img = "https://beta.pynezz.dev/static/img/t_isometric_xs.png"
-
 templ Links() {
-<head>
-  <title>pynezz.dev</title>
-  <meta charset="utf-8" />
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-
-	<!-- Primary Meta Tags -->
-  <meta property="og:title" content="pynezz.dev" />
-  <meta property="og:description" content="A meta blog (blog about building a blog) as well as a blog about programming, technology, and information security." />
-  <meta property="og:image" content="https://beta.pynezz.dev/static/img/t_isometric_xs.png" />
-  <meta property="og:url" content="https://beta.pynezz.dev" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="pynezz.dev" />
-  <meta property="og:locale" content="en_US" />
-  <meta property="og:author" content="Kevin aka. pynezz" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <link rel="stylesheet" href="/css/styles.css" />
-
-	<meta name="description" content="A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security." />
-
-	<!-- Facebook Meta Tags -->
-	<meta property="og:url" content="https://beta.pynezz.dev/" />
-	<meta property="og:type" content="website" />
-	<meta property="og:title" content="pynezz.dev tech blog" />
-	<meta property="og:description" content="A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security." />
-	<meta property="og:image" content="https://beta.pynezz.dev/static/img/t_isometric_xs.png" />
-
-	<!-- Twitter Meta Tags -->
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta property="twitter:domain" content="beta.pynezz.dev" />
-	<meta property="twitter:url" content="https://beta.pynezz.dev/" />
-	<meta name="twitter:title" content="pynezz.dev tech blog" />
-	<meta name="twitter:description" content="A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security." />
-	<meta name="twitter:image" content="https://beta.pynezz.dev/static/img/t_isometric_xs.png" />
-
-	<!-- Meta Tags Generated via https://www.opengraph.xyz -->
+	<head>
+		<title>pynezz.dev</title>
+		<meta charset="utf-8"/>
+		<link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+		<!-- Primary Meta Tags -->
+		<meta property="og:title" content="pynezz.dev"/>
+		<meta property="og:description" content="A meta blog (blog about building a blog) as well as a blog about programming, technology, and information security."/>
+		<meta property="og:image" content="https://beta.pynezz.dev/static/img/t_isometric_xs.png"/>
+		<meta property="og:url" content="https://beta.pynezz.dev"/>
+		<meta property="og:type" content="website"/>
+		<meta property="og:site_name" content="pynezz.dev"/>
+		<meta property="og:locale" content="en_US"/>
+		<meta property="og:author" content="Kevin aka. pynezz"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+		<link rel="stylesheet" href="/css/styles.css"/>
+		<meta name="description" content="A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security."/>
+		<!-- Facebook Meta Tags -->
+		<meta property="og:url" content="https://beta.pynezz.dev/"/>
+		<meta property="og:type" content="website"/>
+		<meta property="og:title" content="pynezz.dev tech blog"/>
+		<meta property="og:description" content="A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security."/>
+		<meta property="og:image" content="https://beta.pynezz.dev/static/img/t_isometric_xs.png"/>
+		<!-- Twitter Meta Tags -->
+		<meta name="twitter:card" content="summary_large_image"/>
+		<meta property="twitter:domain" content="beta.pynezz.dev"/>
+		<meta property="twitter:url" content="https://beta.pynezz.dev/"/>
+		<meta name="twitter:title" content="pynezz.dev tech blog"/>
+		<meta name="twitter:description" content="A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security."/>
+		<meta name="twitter:image" content="https://beta.pynezz.dev/static/img/t_isometric_xs.png"/>
+		<!-- Meta Tags Generated via https://www.opengraph.xyz -->
 	</head>
 }
 
-// templ Header(path string) {
-// 	@links(path)
-//   // <header class="header">
-// 		<ul class="main-nav">
-// 			<li class="nav-item">
-// 				<a href="/" class="nav-link">/</a>
-// 			</li>
-// 			<li class="nav-item">
-// 				<a href="/posts/" class="nav-link">posts</a>
-// 			</li>
-// 	  	</ul>
-//   // </header>
-// }
-
-// var genPath = func(path []string) string {
-// var res string
-// parts := strings.Split(strings.Trim(path, "/"), "/")
-// 				if len(parts) > 4 {
-// 					// Show "..." and last 4 parts
-// 					<li class={"li", navBarItem}>
-// 						<span class={"a", navBarItemLink}>...</span>
-// 					</li>
-// 					parts = parts[len(parts)-4:]
-// 				}
-// 				fullPath := ""
-// 				for i, p := range parts {
-// 					fullPath += "/" + p
-// 					if i < len(parts)-1 {
-// 						<li class={"li", navBarItem}>
-// 							<a href={templ.SafeURL(fullPath)} class={"a", navBarItemLink}>{p}</a>
-// 						</li>
-// 					} else {
-// 						<li class={"li", navBarItem}>
-// 							<span class={"a", navBarItemLink}>{p}</span>
-// 						</li>
-// 					}
-// 				}
-// }
 
 // Tailwind styles
-const headerStyle = "flex flex-row bg-crust items-center justify-between max-h-fit w-full max-w-full backdrop-blur-md"
+const headerStyle = "flex flex-row bg-crust items-center justify-between max-h-fit w-full max-w-full backdrop-blur-md ease-in-out	text-text"
 const title = "text-lg font-mono text-text m-0 px-8"
-const navBarItem = "li flex items-center justify-center h-12 px-4"
+const navBarItem = "li flex items-center justify-center h-12 px-4 text-text	"
 const navBarItemLink = "text-text font-mono text-lg font-semibold"
-const breadCrumb = "font-mono italic text-subtext1 p-sm hover:text-text transition duration-200 ease-in-out px-0 mx-0"
+const breadCrumb = "font-mono italic text-subtext1 p-sm hover:text-text px-0 mx-0"
 const navBarList = "flex flex-row"
+const burgerMenu = "lg:hidden flex items-center"
+const navBarListResponsive = "hidden lg:flex flex-col lg:flex-row transition-transform duration-200 ease-in-out"
+const navWrapper = "hidden sm:flex flex-col md:flex-row items-center justify-between sm:max-w-lg md:min-max-w mx-auto"
 
 templ Header(path ...string) {
 	<header class={ "header", headerStyle }>
@@ -99,14 +58,21 @@ templ Header(path ...string) {
 				<a href="/" class={ "a", navBarItemLink }>pynezz.dev</a>
 			</h3>
 		</div>
-		<ul class={ "ul", navBarList }>
+		<!-- Burger menu -->
+		<button class={ "burger-menu", burgerMenu } onclick="toggleNav()">
+			<!-- SVG for burger icon -->
+			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+			</svg>
+		</button>
+		<ul id="nav-bar-list" class={ "ul", navBarListResponsive }>
 			<li class={ navBarItem }>
-				<a href="posts/" class={ "a", navBarItemLink }>posts</a>
+				<a href="/posts/" class={ "a", navBarItemLink }>posts</a>
 			</li>
 			<li class={ navBarItem }>
-				<a href="tags/" class={ "a", navBarItemLink }>tags</a>
+				<a href="/	tags/" class={ "a", navBarItemLink }>tags</a>
 			</li>
-		<div class="border-r border-mauve border-opacity-50 				h-8 my-2"></div> // Separator
+			<div class="border-r border-mauve border-opacity-50 h-8 my-2"></div> <!-- Separator -->
 			if len(path) > 4 {
 				<li class={ "li", navBarItem }>
 					<span class={ "a", navBarItemLink }>...</span>
@@ -114,7 +80,7 @@ templ Header(path ...string) {
 				for i, p := range path[len(path)-4:] {
 					<li class={ navBarItem }>
 						if i < len(path)-1 {
-							<a href={ templ.SafeURL("/" + strings.Join(path[:len(path)-4+i+1], baseURL)) } class={ "a", breadCrumb }>{ p }</a>
+							<a href={ templ.SafeURL("/" + strings.Join(path[:len(path)-4+i], "/"+baseURL)) } class={ "a", breadCrumb }>{ p }</a>
 						} else {
 							<span class={ "a", navBarItemLink }>{ p }</span>
 						}
@@ -124,7 +90,7 @@ templ Header(path ...string) {
 				for i, p := range path {
 					<li class={ navBarItem }>
 						if i < len(path)-1 {
-							<a href={ templ.SafeURL("/" + strings.Join(path[:i+1], "/"+baseURL)) } class={ "a", breadCrumb }>{ p }</a>
+							<a href={ templ.SafeURL("/" + strings.Join(path[:i], "/"+baseURL)) } class={ "a", breadCrumb }>{ p }</a>
 						} else {
 							<span class={ "a", navBarItemLink }>{ p }</span>
 						}
@@ -134,75 +100,3 @@ templ Header(path ...string) {
 		</ul>
 	</header>
 }
-
-// <a href={templ.SafeURL(strings.Replace("/" + strings.Join(path[:len(path)-4+i+1], "/"),"~", "/", -1))} class={"a", navBarItemLink }>{ strings.Trim(p, "/") }</a>
-
-// for i, p := range path {
-// 	<li class={"li", navBarItem }>
-// 	p = strings.Trim(p, "/")
-// 	<a href={templ.SafeURL(strings.Trim(fmt.Sprintf("%s/", strings.Join(path[:i], "/	")), "/"))} class={"a", navBarItemLink }>{p}</a>
-// 	</li>
-// }
-
-// css header() {
-// 	display: flex;
-// 	flex-direction: row;
-// 	background-color: { crust };
-// 	align-items: center;
-// 	justify-content: space-between;
-// 	max-height: fit-content;
-// 	width: 100%;
-// 	max-width: 100%;
-// 	float: top;
-// 	z-index: 1;
-// 	backdrop-filter: blur(10px);
-// 	-webkit-backdrop-filter: blur(10px);
-// }
-
-// padding-left: 5em;
-// margin-right: 5em;
-
-// css title() {
-// 	font-size: 1.35em;
-// 	font-family: "Hack Nerd Font Mono", monospace;
-// 	color: { txt };
-// 	margin: 0;
-// 	padding: 0rem 2rem 0rem 2rem;
-// }
-// <script>
-// 		function generateBreadcrumb(path) {
-// 			const breadcrumb = document.getElementById('breadcrumb');
-// 			const parts = path.split('/').filter(part => part);
-// 			const maxParts = 4;
-
-// 			const homeLink = document.createElement('li');
-// 			homeLink.className = "{{navBarItem}}";
-// 			homeLink.innerHTML = '<a href="/" class="{{navBarItemLink}}">~</a>';
-// 			breadcrumb.appendChild(homeLink);
-
-// 			if (parts.length > maxParts) {
-// 				const ellipsis = document.createElement('li');
-// 				ellipsis.className = "{{navBarItem}}";
-// 				ellipsis.innerHTML = '<span class="{{navBarItemLink}}">...</span>';
-// 				breadcrumb.appendChild(ellipsis);
-// 				parts.splice(0, parts.length - maxParts);
-// 			}
-
-// 			let fullPath = '';
-// 			parts.forEach((part, index) => {
-// 				fullPath += '/' + part;
-// 				const item = document.createElement('li');
-// 				item.className = "{{navBarItem}}";
-
-// 				if (index < parts.length - 1) {
-// 					item.innerHTML = `<a href="${fullPath}" class="{{navBarItemLink}}">${part}</a>`;
-// 				} else {
-// 					item.innerHTML = `<span class="{{navBarItemLink}}">${part}</span>`;
-// 				}
-// 				breadcrumb.appendChild(item);
-// 			});
-// 		}
-
-// 		const path = "{{path}}";
-// 		generateBreadcrumb(path);
-// 	</script>

@@ -403,18 +403,20 @@ func GetTags() []string {
 
 func GetPostsByTag(tag string) ([]models.PostMetadata, error) {
 	var posts []models.PostMetadata
-	var tagModel []models.Tag
+	// var tagModel []models.Tag
 
-	tx := ContentsDB.Driver.Model(&posts).Where("tags IS NOT NULL").Find(&tagModel)
+	// tx := ContentsDB.Driver.Model(&posts).Where("tags IS NOT NULL").Find(&tagModel)
+	tx := ContentsDB.Driver.Where("tags LIKE ?", "%"+tag+"%").Find(&posts)
 	if tx.Error != nil {
 		ansi.PrintError(tx.Error.Error())
 		return []models.PostMetadata{}, tx.Error
 	}
-	err := ContentsDB.Driver.Model(&tagModel).Association("Posts").Find(&posts)
-	if err != nil {
-		ansi.PrintError(err.Error())
-		return []models.PostMetadata{}, err
-	}
+	fmt.Printf("found posts: %+v", posts)
+	// // err := ContentsDB.Driver.Model(&models.PostMetadata{}).Limit(25).Find(&posts)
+	// if err != nil {
+	// 	ansi.PrintError(err.Error.Error())
+	// 	return []models.PostMetadata{}, err.Error
+	// }
 
 	ansi.PrintSuccess("Posts found: " + fmt.Sprintf("%d", len(posts)))
 	return posts, nil

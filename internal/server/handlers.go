@@ -13,6 +13,8 @@ func homeHandler(c echo.Context) error {
 }
 
 func aboutHandler(c echo.Context) error {
+	// get local storage for user
+
 	return Render(c, http.StatusOK, templates.About())
 }
 

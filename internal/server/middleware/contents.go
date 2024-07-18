@@ -9,13 +9,6 @@ import (
 	"gorm.io/datatypes"
 )
 
-// func GenerateHTMLAndInsertIntoDatabase(path string) error {
-// 	p := models.Post{}
-// 	p.Path = path
-// 	p.Content = datatypes.JSON([]byte(parser.MarkdownToHTML(path)))
-// 	return d.Driver.Create(&post).Error
-// }
-
 // GetPosts retrieves all posts from the database up to a specified limit
 func (d *Database) GetPosts(limit int) ([]models.PostMetadata, error) {
 	var posts []models.PostMetadata
@@ -67,14 +60,24 @@ func (d *Database) DeletePost(post models.PostMetadata) error {
 	return result.Error
 }
 
-func (d *Database) WriteContentsToDatabase(slug string, content []byte) error {
+func (d *Database) WriteContentsToDatabase(slug string, content []byte, pMetadata models.PostMetadata) error {
 	ansi.PrintColor(ansi.Yellow, string(content))
 	post := models.Post{
 		Content: datatypes.JSON(content),
-		Slug:    slug,
+		Metadata: models.Metadata{	
+			Title:       pMetadata.Title,
+			Description: pMetadata.Summary,
+			Date:        pMetadata.CreatedAt,
+			Tags:        pMetadata.Tags,
+		},
+		Slug: slug,
 	}
 
-	return d.Driver.Where(&models.Post{Slug: post.Slug}).FirstOrCreate(&post).Error
+	result := d.Driver.Create(&post)
+	ansi.PrintInfo(fmt.Sprintf("new post created: %s\n%d affected rows", post.Metadata.Title, result.RowsAffected))
+	return result.Error
+
+	// return d.Driver.Model(&models.Post{}).Where("Slug = ?", slug).Update("Content", post.Content).Error
 }
 
 // GenerateMetadata generates metadata for a post based off the contents of a markdown file.

@@ -2,34 +2,18 @@ package templates
 
 import "github.com/pynezz/pynezz_com/templates/layout"
 
-
-// const defBtn = "button text-white rounded px-4 py-2 transition duration-200 ease-in-out"
-// // const txt = "twtext-white"
-// const blue = "bg-blue hover:bg-blue-700"
-// const tw_btnColor = "bg-base hover:text-text"
-// const cardStyle tw = "bg-base font-normal text-text rounded-md p-4 shadow"
-
-const (
-)
-
 templ Home() {
-  // <div class={"div", Style() }>
-	// @layout.Header("~")
-  // <div class={"div", layout.Wrapper}>
 		<div class={"div", layout.CardStyle}>
 			<div class="flex flex-col justify-between p-4">
 				<h1 class={"h1", layout.Title}>/</h1>
 				<h2 class={"h2", layout.SubHeading }>Blogging about cyber security,<br />development, code, and tech.</h2>
-				// <a href="/about">
 				<span class="flex row-auto items-center content-between justify-between">
 					<button class={layout.CardBtn, layout.BtnHover} onclick="window.location.href='/about';">About</button>
 					<a href="https://www.github.com/pynezz/">
 						<img src="/static/svgs/github-icon.svg" class={"img", layout.CardIcon} />
 					</a>
-				</span>// </a>
+				</span>
 			</div>
 			<img src="/static/img/t_isometric_xs.webp" alt="Isometric depiction the site content" class={"img", layout.CardImg} />
 		</div>
-  // </div>
-	// @layout.Footer()
 }

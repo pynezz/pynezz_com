@@ -108,7 +108,6 @@ func (ph *PostsHandler) GetPostsByTag(c echo.Context) error {
 		ansi.PrintError("[POSTSHANDLER] Error getting posts by tag: " + err.Error())
 		return Render(c, http.StatusNotFound, templates.Show("404", "Tag not found", models.Post{}))
 	}
-	
 	return Render(c, http.StatusOK, templates.PostsList(posts))
 }
 

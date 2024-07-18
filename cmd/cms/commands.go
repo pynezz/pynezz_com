@@ -55,8 +55,21 @@ func noop() bool {
 	return false
 }
 
-func parseAll() bool {
-	fmt.Println("ParseAll called")
+func confirmForce() bool {
+	fmt.Println("Rebuild called")
+	var a string
+	// ask user for confirmation
+	fmt.Print("Are you sure you want to rebuild all pages? [Y]/n: ")
+	fmt.Scanf("%s", &a)
+	if a == "n" {
+		fmt.Println("Rebuild aborted")
+		return false
+	}
+
+	return true
+}
+
+func parseAll(rebuild bool) bool {
 
 	// Read "content/*.md" files
 	// Parse the content
@@ -75,12 +88,13 @@ func parseAll() bool {
 		// if it is, skip it
 		// if it is not, parse it
 
-		if isParsed(file) {
+		// if the file is already parsed, and we're not forcing rebuild, skip it
+		if isParsed(file) && !rebuild {
 			ansi.PrintInfo("file already parsed: " + file)
 			continue
 		}
 
-		ansi.PrintDebug("file is not yet parsed: " + file)
+		ansi.PrintDebug("parsing and writing: " + file)
 		bytes, doc := parser.MarkdownToHTML(file)
 		if bytes == nil {
 			ansi.PrintError("error parsing file: " + file)
@@ -91,6 +105,8 @@ func parseAll() bool {
 		// the file should be in the "public" directory
 		newName := filenameConvert(file)
 		ansi.PrintDebug("newName: " + newName)
+
+		// Kind of unnecessary to create a file here, but we'll keep it until I deem it totally unnecessary
 		f, err := fsutil.CreateFile("pynezz/public/" + newName)
 		if err != nil {
 			ansi.PrintError("error writing parsed content to file: " + newName)
@@ -109,16 +125,35 @@ func parseAll() bool {
 		// post := middleware.ContentsDB.GenerateMetadata(bytes)
 		post := parser.Post{
 			Metadata: doc.Metadata,
-			// Content:  []byte(doc.String()),
 		}
-		slug := middleware.ContentsDB.GenerateSlug(post.Metadata.Title)
-		ansi.PrintDebug("generated slug: " + slug)
+
+		var p models.PostMetadata
+		var slug string = ""
+		// we want to ignore setting the slug if we're forcing a rebuild
+		if !rebuild { // might have to account a the case where the file is not in the database
+			// (calling rebuild on a file that is not in the database)
+			// for now: just don't force rebuild after adding a new file or first time running the program
+			slug = middleware.ContentsDB.GenerateSlug(post.Metadata.Title)
+			ansi.PrintDebug("generated slug: " + slug)
+			p.Slug = slug
+		} else {
+			t := middleware.ContentsDB.Driver.Model(&models.PostMetadata{}).Where(&models.PostMetadata{
+				Title: post.Metadata.Title,
+				Path:  newName,
+			}).First(&p)
+			if t.Error != nil {
+				ansi.PrintError("error fetching slug from database")
+				return false
+			}
+			ansi.PrintInfo("found slug: " + p.Slug)
+		}
+		// we can't fetch the slug from the database if we're forcing a rebuild, and we can't generate a new one
+		// but we can use the adler32 checksum of the title identify the post
 		postMetadata := models.PostMetadata{
 			Title: post.Metadata.Title,
 			Path:  newName,
-			Slug:  slug,
+			Slug:  p.Slug,
 
-			// PostID: int(crc32.ChecksumIEEE([]byte(slug))), // always unique and reproducible.
 			// Changed to Adler32 - check the hash_bench.go in root directory for explanation.
 			PostID: int(helpers.Adler32(slug)), // always unique and reproducible
 			Tags:   datatypes.JSON(strings.Join(post.Metadata.Tags, ",")),
@@ -135,8 +170,8 @@ func parseAll() bool {
 			contentBytes = append(contentBytes, []byte(b.String())...)
 		}
 
-		if err := middleware.ContentsDB.WriteContentsToDatabase(slug, contentBytes); err != nil {
-			ansi.PrintError("error writing to database")
+		if err := middleware.ContentsDB.WriteContentsToDatabase(p.Slug, contentBytes, postMetadata); err != nil {
+			ansi.PrintError("error writing to database: " + err.Error())
 			return false
 		}
 		ansi.PrintInfo("written to database")

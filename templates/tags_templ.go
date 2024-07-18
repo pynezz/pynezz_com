@@ -12,7 +12,8 @@ import (
 	"github.com/pynezz/pynezz_com/templates/layout"
 )
 
-const nth = "bg-crust w-full h-12 flex items-center justify-center text-text odd:bg-mauve"
+const nth = "bg-crust w-full h-12 flex items-center justify-center text-text odd:bg-mauve "
+const secStyle = "flex flex-col space-y-3"
 
 // TODO: Implement map[string]int for tags instead so I can sort by count
 func Tags(tags []string) templ.Component {
@@ -33,7 +34,7 @@ func Tags(tags []string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		var templ_7745c5c3_Var2 = []any{"section", section()}
+		var templ_7745c5c3_Var2 = []any{"section", secStyle}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -55,7 +56,7 @@ func Tags(tags []string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var4 = []any{"h1", h1()}
+		var templ_7745c5c3_Var4 = []any{"h1", layout.Title}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -73,13 +74,13 @@ func Tags(tags []string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Tags </h1><div class=\"flex flex-row flex-wrap\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Tags</h1><div class=\"flex flex-row flex-wrap\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for i, tag := range tags {
 			if i%2 == 0 {
-				var templ_7745c5c3_Var6 = []any{"a", layout.Link + " p-2 bg-surface0 rounded no-underline m-2"}
+				var templ_7745c5c3_Var6 = []any{"a", layout.TagBtn + " bg-mantle"}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var6...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -113,7 +114,7 @@ func Tags(tags []string) templ.Component {
 				var templ_7745c5c3_Var9 string
 				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(tag)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 16, Col: 117}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 17, Col: 88}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 				if templ_7745c5c3_Err != nil {
@@ -124,7 +125,7 @@ func Tags(tags []string) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			} else {
-				var templ_7745c5c3_Var10 = []any{"a", layout.Link + " p-2 bg-surface1 rounded no-underline m-2"}
+				var templ_7745c5c3_Var10 = []any{"a", layout.TagBtn + " outline  outline-mantle"}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var10...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -158,7 +159,7 @@ func Tags(tags []string) templ.Component {
 				var templ_7745c5c3_Var13 string
 				templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(tag)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 18, Col: 117}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 19, Col: 102}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 				if templ_7745c5c3_Err != nil {
@@ -176,19 +177,4 @@ func Tags(tags []string) templ.Component {
 		}
 		return templ_7745c5c3_Err
 	})
-}
-
-func section() templ.CSSClass {
-	templ_7745c5c3_CSSBuilder := templruntime.GetBuilder()
-	templ_7745c5c3_CSSBuilder.WriteString(`display:flex;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`flex-direction:column;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`align-items:center;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`justify-content:center;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`margin-top:50px;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`max-width:800px;`)
-	templ_7745c5c3_CSSID := templ.CSSID(`section`, templ_7745c5c3_CSSBuilder.String())
-	return templ.ComponentCSSClass{
-		ID:    templ_7745c5c3_CSSID,
-		Class: templ.SafeCSS(`.` + templ_7745c5c3_CSSID + `{` + templ_7745c5c3_CSSBuilder.String() + `}`),
-	}
 }
