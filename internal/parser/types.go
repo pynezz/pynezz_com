@@ -24,7 +24,6 @@ type b string
 type strong string
 type italic string
 
-type code string
 type codeblock string
 
 type h1 string
@@ -73,6 +72,10 @@ func (t textContent) String() string {
 	return t.content
 }
 
+// func (c code) String() string {
+// 	return c.content
+// }
+
 // Specific text content types embedding textContent
 type textP struct{ textContent }
 type textA struct{ textContent }
@@ -102,13 +105,24 @@ type heading struct {
 	style   string
 }
 
-const c = "class =\""
-const cEnd = "\""
+type code struct {
+	content string
+	tag     string
+	style   string
+}
+
+const c = ""
+const cEnd = ""
+	
+// const c = "class =\""
+// const cEnd = "\""
 const H2Style = c + "text-text font-2xl font-sans underline font-bold mb-1 pt-4" + cEnd
 const H3Style = c + "text-subtext0 font-bold font-xl font-sans mb-1 pt-4" + cEnd
 const H4Style = c + "text-peach font-lg font-sans mb-1 pt-3" + cEnd
 const H5Style = c + "text-red font-md font-sans mb-1" + cEnd
 const H6Style = c + "text-mauve font-sm font-sans mb-1" + cEnd
+
+const CodeBlockStyle = c + "text-text font-mono font-md bg-mantle p-4 rounded-md" + cEnd
 
 // Specific heading types embedding heading
 type h2 struct{ heading }
@@ -121,6 +135,12 @@ type h6 struct{ heading }
 type Heading interface {
 	isHeading()
 	String() string
+	HTMLTag() string
+	Class() string
+}
+
+type Code interface {
+	isCode()
 	HTMLTag() string
 	Class() string
 }

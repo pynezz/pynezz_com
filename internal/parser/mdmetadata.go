@@ -58,7 +58,7 @@ func ParseMetadata(md []byte) (Metadata, error) {
 	data := make(map[string]string)
 
 	for _, line := range lines {
-		if line == "" {
+	if line == "" {		
 			continue
 		}
 		parts := strings.SplitN(line, ":", 2)

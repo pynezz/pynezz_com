@@ -1,6 +1,10 @@
 package parser
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/pynezz/pynezzentials/ansi"
+)
 
 /*
 DECLARATION OF HEADING ELEMENTS
@@ -86,7 +90,7 @@ func (t italic) String() string {
 
 func (t code) isTextContent() {}
 func (t code) String() string {
-	return string(t)
+	return t.String()
 }
 
 func (t codeblock) isTextContent() {}
@@ -152,7 +156,23 @@ func (t li) String() string {
 func (s Section) String() string {
 	content := ""
 	for _, c := range s.TextContent {
-		content += fmt.Sprintf("<p>%s</p>\n", c.String())
+		switch c.(type) {
+		case textCodeblock, textTable, textUl, textOl:
+			content += fmt.Sprintf("%s%s\n", CodeBlockStyle, c.String())
+			ansi.PrintDebug("added content: " + c.String())	
+		default:
+			content += fmt.Sprintf("<p>%s</p>\n", c.String())
+		}
 	}
-	return fmt.Sprintf("<section class=\"flex flex-col align-start\"><%s %s>%s</%s>\n%s</section>\n", s.Title.HTMLTag(), s.Title.Class(), s.Title.String(), s.Title.HTMLTag(), content)
+	return fmt.Sprintf("<section class=\"flex flex-col align-start\"><%s class=\"%s\">%s</%s>\n%s</section>\n", s.Title.HTMLTag(), s.Title.Class(), s.Title.String(), s.Title.HTMLTag(), content)
 }
+
+// func (s Section) String() string {
+// 	content := ""
+// 	for _, c := range s.TextContent {
+// 		// find code content
+
+// 		content += fmt.Sprintf("<p>%s</p>\n", c.String())
+// 	}
+// 	return fmt.Sprintf("<section class=\"flex flex-col align-start\"><%s %s>%s</%s>\n%s</section>\n", s.Title.HTMLTag(), s.Title.Class(), s.Title.String(), s.Title.HTMLTag(), content)
+// }

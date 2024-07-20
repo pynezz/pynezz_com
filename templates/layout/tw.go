@@ -39,7 +39,7 @@ const (
 	BtnHover   = "hover:text-text hover:bg-surface1 hover:stroke-lavender stroke-2 "
 	SubHeading = "text-lg font-bold bg-clip-text text-transparent bg-gradient-to-br from-lavender to-mauve text-wrap first-letter:text-xl px-2 pr-8	"
 	CardIcon   = "w-10 transform hover:scale-105 transition-transform duration-200 ease-in-out"
-	CardImg    = "rounded-md w-auto h-auto p-4 m-2	"
+	CardImg    = "rounded-md w-auto h-auto p-4 m-2 "
 )
 
 const baseURL = "https://pynezz.dev"

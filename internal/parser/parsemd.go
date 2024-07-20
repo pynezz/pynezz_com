@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/pynezz/pynezz_com/templates/layout"
+	"github.com/pynezz/pynezzentials/ansi"
 	fsutil "github.com/pynezz/pynezzentials/fsutil"
 )
 
@@ -29,9 +30,15 @@ func MarkdownToHTML(mdPath string) ([]byte, MarkdownDocument) {
 	}
 
 	// re := regexp.MustCompile(`|## |### |#### |##### |###### |\\||\n\n|\n-|---\n`)
-	re := regexp.MustCompile(`\n\n|\n-|---\n`)
+	re := regexp.MustCompile("\n\n|\n-|---\n")
+
+	// contentParts := splitMarkdownContent(contentStr)
+	// for _, part := range contentParts {
+	// 	ansi.PrintInfo("part: " + part)
+	// }
 	contentParts := re.Split(contentStr, -1)
 
+	ansi.PrintInfo("parsing content...")
 	document := parseContent(contentParts)
 	document.Metadata = metadata
 
@@ -61,14 +68,64 @@ func parseMarkdownFile(mdPath string) (string, string, error) {
 	return metadata, content, nil
 }
 
+// splitMarkdownContent splits markdown content by multiple delimiters
+func splitMarkdownContent(content string) []string {
+	re := regexp.MustCompile("```(\\w*)\n([\\s\\S]*?)\n```")
+	for _, match := range re.FindAllString(content, -1) {
+		ansi.PrintColorUnderline(ansi.Cyan, "match: "+match)
+	}
+
+	return re.FindAllString(content, -1)
+}
+
+func extractCodeBlocks(content string) []string {
+	ansi.PrintDebug("extracting code blocks from: " + content)
+	var backticks int
+	codeblocks := []string{}
+	startLoc := 0
+
+	for i, r := range content {
+		if content[r] == '`' {
+			backticks++
+		}
+		if backticks == 3 {
+			// code block found
+			// find the next 3 backticks
+			startLoc = i
+			// add the content between the backticks to the code blocks slice
+			// reset backticks to 0
+		}
+		if backticks == 6 {
+			// code block found
+			// find the next 3 backticks
+			codeblocks = append(codeblocks, content[startLoc:i-3])
+		}
+		return codeblocks
+	}
+
+	return codeblocks
+}
+
 // parseContent parses the content into a MarkdownDocument struct
 func parseContent(lines []string) *MarkdownDocument {
 	md := &MarkdownDocument{}
 	var currentTitle Heading
 	var currentContent []TextContent
 
+	ansi.PrintDebug("checking content: " + strings.Join(lines, "\n"))
+
 	// Find links in the form [text](url)
 	linkPattern := regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
+
+	codes := regexp.MustCompile("```(\\w*)\n([\\s\\S]*?)\n```")
+	// Find code blocks in the form ```lang\ncontent\n```
+	codePattern := regexp.MustCompile("```(\\w*)\n")
+	if codePattern == nil {
+		ansi.PrintError("error: could not compile code pattern")
+	}
+
+	// Find inline code in the form `content`
+	inlineCode := regexp.MustCompile("`([^`]+)`")
 
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
@@ -77,6 +134,14 @@ func parseContent(lines []string) *MarkdownDocument {
 		}
 
 		switch {
+		case codePattern.MatchString(line):
+			ansi.PrintColor(ansi.Cyan, "code block!")
+			codeBlocks := extractCodeBlocks(strings.Join(lines, "\n"))
+			for _, block := range codeBlocks {
+				currentContent = append(currentContent, textCodeblock{textContent{parseCodeBlock(block, "lang")}})
+			}			
+			// matches := codePattern.FindStringSubmatch(line)
+			// currentContent = append(currentContent, textCodeblock{textContent{parseCodeBlock(matches[2], matches[1])}})
 		case strings.HasPrefix(line, "## "):
 			if currentTitle != nil {
 				md.AddSection(currentTitle, currentContent)
@@ -120,6 +185,9 @@ func parseContent(lines []string) *MarkdownDocument {
 		case strings.HasPrefix(line, "1. "):
 			currentContent = append(currentContent, parseList(line, "ol"))
 
+		case inlineCode.MatchString(line):
+			currentContent = append(currentContent, textCode{textContent{parseInlineCode(line)}})
+
 		default:
 			line = linkPattern.ReplaceAllStringFunc(line, func(match string) string {
 				return parseLink(match).String()
@@ -158,6 +226,49 @@ func parseList(line string, listType string) TextContent {
 
 	return textContent{content: listHTML}
 }
+
+func parseInlineCode(line string) string {
+	ansi.PrintBold("inline code: " + line)
+	re := regexp.MustCompile("`([^`]+)`")
+
+	return re.ReplaceAllString(line, "<code class=\"bg-gray-200 text-gray-800 px-1 py-0.5 rounded\">$1</code>")
+}
+
+func parseCodeBlock(content, lang string) string {
+	ansi.PrintColor(ansi.Cyan, "parseCodeBlock!")
+	// Escape HTML special characters
+	content = strings.ReplaceAll(content, "&", "&amp;")
+	content = strings.ReplaceAll(content, "<", "&lt;")
+	content = strings.ReplaceAll(content, ">", "&gt;")
+	content = strings.ReplaceAll(content, "\n", "<br>\n")
+
+	ansi.PrintColor(ansi.Cyan, "lang: "+lang)
+	ansi.PrintColor(ansi.Yellow, "content: "+content)
+	return fmt.Sprintf(`<pre class="bg-gray-900 text-text p-4 rounded-lg overflow-x-auto"><code class="language-%s">%s</code></pre>`, lang, content)
+}
+
+// func parseCodeBlock(block string) string {
+// 	re := regexp.MustCompile("(?s)```(\\w*)\\n(.*?)\\n```")
+// 	match := re.FindStringSubmatch(block)
+// 	ansi.PrintBold("code block: " + block)
+// 	if len(match) != 3 {
+// 		ansi.PrintError("error: could not parse code block")
+// 		return ""
+// 	}
+
+// 	lang := match[1]
+// 	content := match[2]
+
+// 	// Escape HTML special characters
+// 	content = strings.ReplaceAll(content, "&", "&amp;")
+// 	content = strings.ReplaceAll(content, "<", "&lt;")
+// 	content = strings.ReplaceAll(content, ">", "&gt;")
+// 	content = strings.ReplaceAll(content, "\n", "<br>\n")
+
+// 	ansi.PrintColor(ansi.Cyan, "lang: "+lang)
+// 	ansi.PrintColor(ansi.Yellow, "content: "+content)
+// 	return fmt.Sprintf(`<pre class="bg-gray-900 text-text p-4 rounded-lg overflow-x-auto"><code class="language-%s">%s</code></pre>`, lang, content)
+// }
 
 // parseLink parses a markdown link into an HTML link
 func parseLink(line string) TextContent {
@@ -233,14 +344,14 @@ func (md *MarkdownDocument) AddSection(title Heading, content []TextContent) {
 
 func (md *MarkdownDocument) String() string {
 	// Add creation date and title
-	document := fmt.Sprintf("<article class=\"content\"><h1>%s</h1>\n<p class=\"date\">%s</p>\n", md.Metadata.Title, md.Metadata.Date.Format("02.01.2006"))
+	document := fmt.Sprintf("<article class=\"content\"><h1 class=\"font-sans\">%s</h1>\n<p class=\"date\">%s</p>\n", md.Metadata.Title, md.Metadata.Date.Format("02.01.2006"))
 	for _, section := range md.Sections {
 		document += section.String()
 	}
 
 	// Adding tags at the bottom
 	if len(md.Metadata.Tags) > 0 {
-		document += "<p class=\"p-2 m-2 rounded bg-mantle text-lavender\">Tags: "
+		document += "<p class=\"p-2 m-2 rounded bg-mantle text-green\">Tags: "
 		for _, tag := range md.Metadata.Tags {
 			document += fmt.Sprintf(`<a class='tag' href='/tags/%s'>%s</a> `, tag, tag)
 		}
@@ -254,6 +365,12 @@ func (md *MarkdownDocument) String() string {
 	document = prepend + nav() + document + append
 
 	return document
+}
+
+func genCode() {
+	// codeBlock := regexp.MustCompile("```")
+	// codeInline := regexp.MustCompile("`")
+
 }
 
 func cssRel() string {

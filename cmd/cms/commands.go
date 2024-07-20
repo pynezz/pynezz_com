@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/pynezz/pynezz_com/internal/helpers"
 	"github.com/pynezz/pynezz_com/internal/parser"
@@ -93,7 +94,7 @@ func parseAll(rebuild bool) bool {
 			ansi.PrintInfo("file already parsed: " + file)
 			continue
 		}
-
+			
 		ansi.PrintDebug("parsing and writing: " + file)
 		bytes, doc := parser.MarkdownToHTML(file)
 		if bytes == nil {
@@ -155,8 +156,9 @@ func parseAll(rebuild bool) bool {
 			Slug:  p.Slug,
 
 			// Changed to Adler32 - check the hash_bench.go in root directory for explanation.
-			PostID: int(helpers.Adler32(slug)), // always unique and reproducible
-			Tags:   datatypes.JSON(strings.Join(post.Metadata.Tags, ",")),
+			PostID:       int(helpers.Adler32(slug)), // always unique and reproducible
+			Tags:         datatypes.JSON(strings.Join(post.Metadata.Tags, ",")),
+			LastModified: time.Now(),
 		}
 
 		// write to database
@@ -174,7 +176,7 @@ func parseAll(rebuild bool) bool {
 			ansi.PrintError("error writing to database: " + err.Error())
 			return false
 		}
-		ansi.PrintInfo("written to database")
+		ansi.PrintInfo("written to database: " + p.Slug)
 
 		// ! IMPORTANT: parser and models have different ways of handling the same data
 
