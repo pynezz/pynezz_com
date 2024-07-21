@@ -2,11 +2,15 @@ package templates
 
 import (
 	"github.com/pynezz/pynezz_com/templates/layout"
-	"github.com/pynezz/pynezz_com/templates/scripts"
 )
 
-templ js() {
-	<script type="text/javascript">
+script js() {
+    document.addEventListener("DOMContentLoaded", ready);
+
+    function ready() {
+        var burger = document.getElementById("burger-dropdown");
+        burger.onclick = toggleNav;
+    }
     function toggleNav() {
         var nav = document.getElementById("nav-bar-list");
         if (nav.classList.contains("hidden")) {
@@ -15,10 +19,7 @@ templ js() {
             nav.classList.add("hidden");
         }
     }
-  </script>
-}
-
-
+}   
     // document.addEventListener("DOMContentLoaded", () => {
     //     console.log("DOM loaded");
     //     const dropdownToggle = document.getElementById('burger-dropdown');
@@ -80,16 +81,19 @@ templ js() {
         // }
     // });
 
-templ Root(content templ.Component, nonce string, path ...string) {
-	@layout.Links()
-	<body class="min-h-screen flex flex-col items-center">
-		@layout.Header(path...)
-		<main class="flex-grow p-4">
-			@content
-		</main>
-		@layout.Footer()
-		@js()
-		// TODO: Nonce, SHA256 Checksum, and CSP not yet implemented. This is security theater for now.
-		@scripts.Script(nonce)
-	</body>
+templ Root(content templ.Component, path ...string) {
+    <!DOCTYPE html>
+    <html lang="en">
+        @layout.Links()
+        <body class="min-h-screen flex flex-col items-center">
+            @layout.Header(path...)
+            <main class="flex-grow p-4">
+                @content
+            </main>
+            @layout.Footer()
+            @js()
+            // TODO: Nonce, SHA256 Checksum, and CSP not yet implemented. This is security theater for now.
+            // @scripts.OnLoad()
+        </body>
+    </html>
 }

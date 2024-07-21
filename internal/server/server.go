@@ -30,11 +30,11 @@ func setup(app *echo.Echo) {
 		}
 	})
 
-	// vips := make(map[string]bool)
+	// set common headers
+	app.Use(middleware.CommonHeaders)
 
-	// set security headers
+	// set security headers and add nonce to the context
 	app.Use(middleware.SecurityHeaders)
-	// app.Use(middleware.Sec)
 
 	// static
 	app.Static("/static", "pynezz/public/")
@@ -87,12 +87,18 @@ func Render(ctx echo.Context, statusCode int, t templ.Component) error {
 	buf := templ.GetBuffer()
 	defer templ.ReleaseBuffer(buf)
 	nonce, err := middleware.GenerateNonce()
+	templCtx := templ.WithNonce(ctx.Request().Context(), nonce)
 	if err != nil {
 		ansi.PrintError("Error generating nonce: " + nonce)
 	}
-	if err := templates.Root(t, nonce, ctx.Path()).Render(ctx.Request().Context(), buf); err != nil {
+	if err := templates.Root(t, ctx.Path()).Render(templCtx, buf); err != nil {
 		return err
 	}
+	// if err := templates.Root(t, nonce, ctx.Path()).Render(ctx.Request().Context(), buf); err != nil {
+	// 	return err
+	// }
+
+	ctx.Set("nonce", nonce)
 
 	return ctx.HTML(statusCode, buf.String())
 }

@@ -16,7 +16,7 @@ templ Tags(tags []string) {
           if i % 2 == 0 {
             <a href={templ.SafeURL(tag)} class={"a", layout.TagBtn + " bg-mantle"}>{ tag }</a>
         } else {
-            <a href={templ.SafeURL(tag)} class={"a", layout.TagBtn + " outline  outline-mantle"}>{ tag }</a>
+            <a href={templ.SafeURL(tag)} class={"a", layout.TagBtn + " outline outline-mantle"}>{ tag }</a>
           }
         }
       </div>

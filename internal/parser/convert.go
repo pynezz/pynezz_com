@@ -162,6 +162,5 @@ func (s Section) String() string {
 			content += fmt.Sprintf("<p>%s</p>\n", c.String())
 		}
 	}
-	return fmt.Sprintf("<section class=\"flex flex-col align-start overflow-x-auto\"><%s class=\"%s\">%s</%s>\n%s</section>\n", s.Title.HTMLTag(), s.Title.Class(), s.Title.String(), s.Title.HTMLTag(), content)
+	return fmt.Sprintf("<section class=\"flex flex-col flex-wrap overflow-x-hidden align-start\"><%s class=\"%s\">%s</%s>\n%s</section>\n", s.Title.HTMLTag(), s.Title.Class(), s.Title.String(), s.Title.HTMLTag(), content)
 }
-		

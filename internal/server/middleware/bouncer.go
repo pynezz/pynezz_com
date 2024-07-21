@@ -229,22 +229,39 @@ func GenerateNonce() (string, error) {
 	return base64.StdEncoding.EncodeToString(nonce), nil
 }
 
+// getFileHash returns the hash of a file for cache busting
+func getFileHash(file string) string {
+	return ""
+}
+
+// CommonHeaders sets common headers for all requests
+func CommonHeaders(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// set cache control headers and common headers (cache static files for 1 week)
+		c.Response().Header().Set("Cache-Control", "public, max-age=604800")
+
+		return next(c)
+	}
+}
+
 // TODO: Nonce and CSP.
 func SecurityHeaders(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		nonce, err := GenerateNonce()
-		if err != nil {
-			return err
-		}
+
+		// // nonce, err := GenerateNonce()
+		// if err != nil {
+		// 	return err
+		// }
+		// ctx := templ.WithNonce(c.Request().Context(), nonce)
+		// c.SetRequest(c.Request().WithContext(ctx))
 
 		// set security headers for proxying through openresty
 		c.Response().Header().Set("X-Frame-Options", "DENY")
-		// c.Response().Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self' 'nonce-"+nonce+"'; style-src 'self'; font-src 'self'; img-src *; media-src *; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; block-all-mixed-content; upgrade-insecure-requests; report-uri /csp-report")
 		c.Response().Header().Set("X-Content-Type-Options", "nosniff")
 		c.Response().Header().Set("X-XSS-Protection", "1; mode=block")
 
 		// Pass the nonce to the context so it can be used in templates
-		c.Set("nonce", nonce)
+		// c.Set("nonce", nonce)
 
 		return next(c)
 	}

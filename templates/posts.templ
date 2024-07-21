@@ -30,7 +30,9 @@ templ Show(title string, body string, post models.Post) {
 				}
 			}
 			</div>
-			@templ.Raw(post.Content.String())
+		<span class="flex break-words text-wrap flex-wrap px-4">
+					@templ.Raw(post.Content.String())
+			</span>
 		</article>
 	}
 }
@@ -51,20 +53,22 @@ templ PostsList(posts []models.PostMetadata) {
 templ postCard(post models.PostMetadata) {
 	<div class={"div", layout.CardStyle + " border border-overlay2 hover:border hover:border-sky"}>
 		<img src={fmt.Sprintf("https://images.placeholders.dev/?width=128&height=128&text=%d&bgColor=%%2326283A&textColor=%%23f0f0f0", post.PostID)} height="128px" width="128px" alt="placeholder image" class="rounded-md m-2 p-2 shrink"  />
-		<article class="flex flex-col flex-wrap flex-grow bg-surface0 content-between justify-between m-2 p-p2">
+		<article class="flex flex-col flex-wrap text-wrap bg-surface0 content-between justify-between m-2 p-p2">
 		// <div class="p-2">
-			<span class="flex flex-col mb-4 pr-10 m-2	">
+			<span class="flex flex-col flex-wrap mb-4 pr-10 m-2	">
 				<strong class="first-letter:text-xl text-lg text-text font-semibold ">{ post.Title }</strong>
 				<i class="date">{ post.CreatedAt.Format("02.01.2006") }</i>
 			</span>
 			<b>{ post.Summary }</b>
-			<span class="flex mb-4 pr-10 m-2 py-2">
-			<a href={ templ.URL("/posts/" + post.Slug) } class={"a", layout.CardBtn+layout.BtnHover} aria-role="tab">Read more</a>
-				for _, tag := range strings.Split(string(post.Tags), ", ") {
-					if utf8.RuneCountInString(tag) > 1 {
-						<a href={templ.SafeURL("/tags/" + tag[1:utf8.RuneCountInString(tag)-1])} class={"a", layout.TagBtn + " bg-crust"}>{ tag }</a>
+			<span class="flex flex-col flex-wrap mb-4 m-2 py-2">
+				<a href={ templ.URL("/posts/" + post.Slug) } class={"a", layout.CardBtn+layout.BtnHover + " "} aria-role="tab">Read more</a>
+				<span class="flex flex-row flex-wrap">
+					for _, tag := range strings.Split(string(post.Tags), ", ") {
+						if utf8.RuneCountInString(tag) > 1 {
+							<a href={templ.SafeURL("/tags/" + tag[1:utf8.RuneCountInString(tag)-1])} class={"a", layout.TagBtn + " bg-crust"}>{ tag }</a>
+						}
 					}
-				}
+				</span>
 			</span>
 		// </div>
 		// <img src={post.Img} />

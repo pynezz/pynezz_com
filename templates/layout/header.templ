@@ -20,7 +20,7 @@ templ Links() {
 		<meta property="og:locale" content="en_US"/>
 		<meta property="og:author" content="Kevin aka. pynezz"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-		<link rel="stylesheet" href="/css/styles.css"/>
+		<link rel="stylesheet" href="/css/styles.css" 	/>
 		<meta name="description" content="A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security."/>
 		<!-- Facebook Meta Tags -->
 		<meta property="og:url" content="https://beta.pynezz.dev/"/>
@@ -59,7 +59,7 @@ templ Header(path ...string) {
 			</h3>
 		</div>
 		<!-- Burger menu -->
-		<button class={ "burger-menu", burgerMenu } onclick="toggleNav()">
+		<button id="burger-dropdown" class={ "burger-menu", burgerMenu }>
 			<!-- SVG for burger icon -->
 			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>

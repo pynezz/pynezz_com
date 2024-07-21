@@ -10,33 +10,29 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"github.com/pynezz/pynezz_com/templates/layout"
-	"github.com/pynezz/pynezz_com/templates/scripts"
 )
 
-func js() templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var1 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var1 == nil {
-			templ_7745c5c3_Var1 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script type=\"text/javascript\">\n    function toggleNav() {\n        var nav = document.getElementById(\"nav-bar-list\");\n        if (nav.classList.contains(\"hidden\")) {\n            nav.classList.remove(\"hidden\");\n        } else {\n            nav.classList.add(\"hidden\");\n        }\n    }\n  </script>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		return templ_7745c5c3_Err
-	})
+func js() templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_js_7ba8`,
+		Function: `function __templ_js_7ba8(){document.addEventListener("DOMContentLoaded", ready);
+
+    function ready() {
+        var burger = document.getElementById("burger-dropdown");
+        burger.onclick = toggleNav;
+    }
+    function toggleNav() {
+        var nav = document.getElementById("nav-bar-list");
+        if (nav.classList.contains("hidden")) {
+            nav.classList.remove("hidden");
+        } else {
+            nav.classList.add("hidden");
+        }
+    }
+}`,
+		Call:       templ.SafeScript(`__templ_js_7ba8`),
+		CallInline: templ.SafeScriptInline(`__templ_js_7ba8`),
+	}
 }
 
 // document.addEventListener("DOMContentLoaded", () => {
@@ -100,7 +96,7 @@ func js() templ.Component {
 // }
 // });
 
-func Root(content templ.Component, nonce string, path ...string) templ.Component {
+func Root(content templ.Component, path ...string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -113,11 +109,15 @@ func Root(content templ.Component, nonce string, path ...string) templ.Component
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var2 == nil {
-			templ_7745c5c3_Var2 = templ.NopComponent
+		templ_7745c5c3_Var1 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var1 == nil {
+			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		templ_7745c5c3_Err = layout.Links().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -150,11 +150,7 @@ func Root(content templ.Component, nonce string, path ...string) templ.Component
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = scripts.Script(nonce).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
