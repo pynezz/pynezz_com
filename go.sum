@@ -47,6 +47,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pynezz/pynezzentials v0.0.0-20240605222431-700a36e65e72 h1:PTJXUr18CuS6ZTHMBlE6/nCzJwO0Vg+fAbS6AJI2hR0=
 github.com/pynezz/pynezzentials v0.0.0-20240605222431-700a36e65e72/go.mod h1:8oOF7+RdwsExIUt9mtwvKhKz8J7QwvujVZquvKPIPiQ=
+github.com/pynezz/pynezzentials v0.0.0-20240718084424-d57692f5ce23 h1:oPGr0WfVj5Sig4s4LxIGpjWqERFY/uOf4Xi7+Xaw+7U=
+github.com/pynezz/pynezzentials v0.0.0-20240718084424-d57692f5ce23/go.mod h1:pGfzy1WHlqnHKmvQ+LmfsqL3ui5r9UfteSZmlvTbMWY=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=

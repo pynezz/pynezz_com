@@ -3,7 +3,7 @@ module github.com/pynezz/pynezz_com
 go 1.22.4
 
 require (
-	github.com/pynezz/pynezzentials v0.0.0-20240605222431-700a36e65e72
+	github.com/pynezz/pynezzentials v0.0.0-20240718084424-d57692f5ce23
 	gorm.io/driver/sqlite v1.5.6
 	gorm.io/gorm v1.25.11
 )
