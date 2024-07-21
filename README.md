@@ -17,12 +17,12 @@ Everything will be living on the server.
 - [ ] cms cli [partially done]
     - [x] read and parse markdown files from directory
     - [ ] unpuplish posts
-    - [ ] edit post (metadata, content)
-- [x] serve 
+    - [ ] edit post (metadata, [x] content)
+- [x] serve
 
 ### CMS
 
-The `cms` module is able to read markdown files from a directory, parse them, generate a slug based on the title, insert tailwind styles, and insert them into the SQLite database. The `serve` module will then display the contents on the website. 
+The `cms` module is able to read markdown files from a directory, parse them, generate a slug based on the title, insert tailwind styles, and insert them into the SQLite database. The `serve` module will then display the contents on the website.
 
 **metadata**
 
@@ -32,17 +32,18 @@ The metadata fields will be used to define certain properties of the content, li
 
 - [x] Read and parse markdown files from a directory
 - [x] Push the content to the frontend, with correct paths, and metadata
-- [ ] Display and fetch posts by tag
+- [x] Display and fetch posts by tag
 - [ ] Compress images for faster loading times
 - [ ] Configuration file
 
 #### Known issues
 
-- [ ] Filter by tags not working [error 404 due to incorrect database query, wrong model]
+- [ ] Syntax highlighting not working properly
+- [ ] Parsing code blocks still not working properly in some cases
 
 ### Frontend
 
-The frontend will be built with (?).
+The frontend is templated with [go-templ](https://github.com/a-h/templ) and styled with [Tailwind CSS](https://tailwindcss.com/).
 The goal is to create a 'blazingly' fast website, where the focus will be on performance, readability, and responsiveness.
 
 Inspiration will certainly be taken from [Hugo](https://gohugo.io/) in terms of its incredible speed and simplicity.
@@ -53,8 +54,13 @@ The backend is written in pure Go.
 
 #### Known issues
 
-- [ ] Routing not working properly [relative path issue]
-- [ ] Tags should contain a field containing the count of posts with the tag [need refactoring] 
+- [ ] Tags should contain a field containing the count of posts with the tag [need refactoring]
+
+#### Fixes
+
+##### [64eabb2](/commit/64eabb2)
+
+- [x] Routing not working properly [relative path issue]
 
 ---
 
@@ -63,10 +69,12 @@ The backend is written in pure Go.
 ### Requirements
 
 - Go
-- Make
-- nodejs and npm
+- nodejs and npm (for building tailwindcss)
 
-### 
+### Optional
+
+- Make  (for building the project)
+- Zig compiler (for building to compatible version of glibc, as declared in the Makefile)
 
 ### Installation
 
@@ -83,6 +91,22 @@ go get github.com/pynezz/pynezz_com
 ```bash
 make linux
 ```
+
+##### Without Make
+
+NB: *cgo is required for sqlite driver.*
+
+```bash
+go get -u ./... # get all dependencies
+npm install # install tailwindcss and dependencies
+
+GOOS=linux GOARCH=amd64 CGO_ENABLED=1
+CC="zig cc -target x86_64-linux-gnu.2.31.0" CXX="zig c++ -target x86_64-linux-gnu.2.31.0"
+
+templ generate && npm build:css && go build -o pynezz_com_linux_amd64
+```
+
+NB: *Not tested. Just a rough idea of how to build the project without Make.*
 
 #### Windows
 
