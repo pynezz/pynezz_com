@@ -35,7 +35,7 @@ func setup(app *echo.Echo) {
 	// set security headers
 	app.Use(middleware.SecurityHeaders)
 	// app.Use(middleware.Sec)
-		
+
 	// static
 	app.Static("/static", "pynezz/public/")
 	app.Static("/css", "pynezz/public/css/")

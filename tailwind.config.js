@@ -2,7 +2,8 @@
 module.exports = {
   content: [
     "./templates/**/*.templ",
-    "./templates/**/*.go"
+    "./templates/**/*.go",
+    "./internal/parser/*.go"
   ],
   theme: {
     extend: {},

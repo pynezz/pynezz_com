@@ -22,8 +22,14 @@ templ Show(title string, body string, post models.Post) {
 		// Else, display the post
 		<article class={ "article", layout.Article }>
 			<h1 class={ "h1", layout.Title }>{ title }</h1>
-			<p class="date">{ post.Metadata.Date.Format("02.01.2006") } </p>
-			<p class="tags">{ post.Metadata.Tags.String() } </p>
+			<p class="date text-surface2 italic font-mono px-2">{ post.Metadata.Date.Format("02.01.2006") } </p>
+			<div class="flex flex-row border-b border-b-surface0 border-dotted text-sm flex-wrap">
+			for _, tag := range strings.Split(string(post.Metadata.Tags), ", ") {
+				if utf8.RuneCountInString(tag) > 1 {
+					<a href={templ.SafeURL("/tags/" + tag[1:utf8.RuneCountInString(tag)-1])} class={"a", layout.TagBtn + " bg-crust"}>{ tag }</a>
+				}
+			}
+			</div>
 			@templ.Raw(post.Content.String())
 		</article>
 	}

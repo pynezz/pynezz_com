@@ -116,11 +116,11 @@ const cEnd = ""
 
 // const c = "class =\""
 // const cEnd = "\""
-const H2Style = c + "h2 text-xl text-peach underline mb-0.5 pt-4 "
-const H3Style = c + "h3 text-subtext0 font-bold text-xl font-sans mb-1 pt-4" + cEnd
-const H4Style = c + "h4 text-peach font-lg font-sans mb-1 pt-3" + cEnd
-const H5Style = c + "h5 text-red font-md font-sans mb-1" + cEnd
-const H6Style = c + "h6 text-mauve font-sm font-sans mb-1" + cEnd
+const H2Style = c + "text-xl text-subtext1 underline mb-0.5 pt-4 "
+const H3Style = c + "text-subtext0 font-bold text-xl font-sans mb-1 pt-4" + cEnd
+const H4Style = c + "text-maroon font-lg font-sans mb-1 pt-3" + cEnd
+const H5Style = c + "text-sky font-md font-sans mb-1" + cEnd
+const H6Style = c + "text-mauve font-sm font-sans mb-1" + cEnd
 
 // const CodeBlockStyle = c + "text-text font-mono font-md bg-mantle p-4 rounded-md" + cEnd
 

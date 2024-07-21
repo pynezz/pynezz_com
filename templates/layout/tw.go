@@ -31,7 +31,7 @@ const (
 	Icon      = "w-8 h-8 px-2 transform hover:scale-105 transition-transform duration-200 ease-in-out"
 	Article   = "flex flex-col text-left max-w-[960px] p-4 shadow-lg overflow-auto bg-mantle rounded-md text-sans text-text space-y-2"
 	Wrapper   = "flex flex-col justify-center items-center h-screen w-full"
-
+// Nav		
 	// Card
 	CardStyle  = "flex flex-row content-between max-w-fit font-normal text-text rounded-md shadow-lg bg-mantle flex-wrap p-4 m-4 "
 	CardBtn    = "button bg-sky text-base p-2 px-4 rounded-full underline decoration-dotted	transition-colors duration-200 ease-in-out "

@@ -186,7 +186,7 @@ func parseContent(lines []string) *MarkdownDocument {
 							break linesCheck
 						}
 					}
-					codeParser.content = append(codeParser.content, substr)
+					codeParser.content = append(codeParser.content, syntaxHighlight(substr))
 				}
 			}
 
@@ -296,17 +296,29 @@ func parseInlineCode(line string) string {
 	return re.ReplaceAllString(line, "<code class=\"bg-surface0 text-subtext1 p-1 rounded-md\">$1</code>")
 }
 
+func syntaxHighlight(code string) string {
+	t := GetGoTypes()
+	line := strings.Split(code, " ")
+	for _, word := range line {
+		if t.GetType(word) != "" {
+			code = strings.ReplaceAll(code, word, fmt.Sprintf(`<span class="%s">%s</span>`, t.GetType(word), word))
+		}
+	}
+
+	return code
+}
+
 func parseCodeBlock(content, lang string) string {
 	ansi.PrintColor(ansi.Cyan, "parseCodeBlock!")
 	// Escape HTML special characters
-	// content = strings.ReplaceAll(content, "&", "&amp;")
+	content = strings.ReplaceAll(content, "&", "&amp;")
 	// content = strings.ReplaceAll(content, "<", "&lt;")
 	// content = strings.ReplaceAll(content, ">", "&gt;")
 	content = strings.ReplaceAll(content, "\n", "<br>")
 
 	ansi.PrintColor(ansi.Cyan, "lang: "+lang)
 	ansi.PrintColor(ansi.Yellow, "content: "+content)
-	return fmt.Sprintf(`<pre class="bg-crust overflow-auto p-2 rounded-md"><code id="language-%s" class="text-xs text-subtext1">%s</code></pre>`, lang, content)
+	return fmt.Sprintf(`<pre class="bg-crust overflow-auto p-2 rounded-md"><code id="language-%s" class="text-sm">%s</code></pre>`, lang, content)
 }
 
 // parseLink parses a markdown link into an HTML link
