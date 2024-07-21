@@ -22,7 +22,7 @@ templ Show(title string, body string, post models.Post) {
 		// Else, display the post
 		<article class={ "article", layout.Article }>
 			<h1 class={ "h1", layout.Title }>{ title }</h1>
-			<p class="date">{ post.Metadata.Date.Format("02-01-2006" ) } </p>
+			<p class="date">{ post.Metadata.Date.Format("02.01.2006") } </p>
 			<p class="tags">{ post.Metadata.Tags.String() } </p>
 			@templ.Raw(post.Content.String())
 		</article>
@@ -44,7 +44,7 @@ templ PostsList(posts []models.PostMetadata) {
 
 templ postCard(post models.PostMetadata) {
 	<div class={"div", layout.CardStyle + " border border-overlay2 hover:border hover:border-sky"}>
-		<img src={fmt.Sprintf("https://images.placeholders.dev/?width=256&height=256&text=%d&bgColor=%%2326283A&textColor=%%23f0f0f0", post.PostID)} height="256" alt="placeholder image" class="rounded-md m-2 p-2"  />
+		<img src={fmt.Sprintf("https://images.placeholders.dev/?width=128&height=128&text=%d&bgColor=%%2326283A&textColor=%%23f0f0f0", post.PostID)} height="128px" width="128px" alt="placeholder image" class="rounded-md m-2 p-2 shrink"  />
 		<article class="flex flex-col flex-wrap flex-grow bg-surface0 content-between justify-between m-2 p-p2">
 		// <div class="p-2">
 			<span class="flex flex-col mb-4 pr-10 m-2	">

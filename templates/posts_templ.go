@@ -183,9 +183,9 @@ func Show(title string, body string, post models.Post) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var14 string
-			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(post.Metadata.Date.Format("02-01-2006"))
+			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(post.Metadata.Date.Format("02.01.2006"))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 25, Col: 61}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 25, Col: 60}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {
@@ -345,7 +345,7 @@ func postCard(post models.PostMetadata) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var24 string
-		templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("https://images.placeholders.dev/?width=256&height=256&text=%d&bgColor=%%2326283A&textColor=%%23f0f0f0", post.PostID))
+		templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("https://images.placeholders.dev/?width=128&height=128&text=%d&bgColor=%%2326283A&textColor=%%23f0f0f0", post.PostID))
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 47, Col: 141}
 		}
@@ -353,7 +353,7 @@ func postCard(post models.PostMetadata) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" height=\"256\" alt=\"placeholder image\" class=\"rounded-md m-2 p-2\"><article class=\"flex flex-col flex-wrap flex-grow bg-surface0 content-between justify-between m-2 p-p2\"><span class=\"flex flex-col mb-4 pr-10 m-2\t\"><strong class=\"first-letter:text-xl text-lg text-text font-semibold \">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" height=\"128px\" width=\"128px\" alt=\"placeholder image\" class=\"rounded-md m-2 p-2 shrink\"><article class=\"flex flex-col flex-wrap flex-grow bg-surface0 content-between justify-between m-2 p-p2\"><span class=\"flex flex-col mb-4 pr-10 m-2\t\"><strong class=\"first-letter:text-xl text-lg text-text font-semibold \">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

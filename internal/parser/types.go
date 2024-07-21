@@ -113,7 +113,7 @@ type code struct {
 
 const c = ""
 const cEnd = ""
-	
+
 // const c = "class =\""
 // const cEnd = "\""
 const H2Style = c + "text-text font-2xl font-sans underline font-bold mb-1 pt-4" + cEnd
@@ -199,4 +199,12 @@ type MarkdownDocument struct {
 
 type Class struct {
 	Tailwind string
+}
+
+// CodeblockParser struct to parse codeblocks in markdown
+type CodeblockParser struct {
+	inCodeBlock   bool     // whether the parser is currently in a codeblock
+	blockCount    int      // the amount of codeblocks in the document
+	content       []string // the content of the codeblock
+	codeBlockLang string   // the language of the codeblock
 }

@@ -159,7 +159,7 @@ func (s Section) String() string {
 		switch c.(type) {
 		case textCodeblock, textTable, textUl, textOl:
 			content += fmt.Sprintf("%s%s\n", CodeBlockStyle, c.String())
-			ansi.PrintDebug("added content: " + c.String())	
+			ansi.PrintDebug("added content: " + c.String())
 		default:
 			content += fmt.Sprintf("<p>%s</p>\n", c.String())
 		}

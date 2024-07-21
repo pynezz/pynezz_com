@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/pynezz/pynezz_com/templates/layout"
@@ -117,7 +118,7 @@ func parseContent(lines []string) *MarkdownDocument {
 	// Find links in the form [text](url)
 	linkPattern := regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
 
-	codes := regexp.MustCompile("```(\\w*)\n([\\s\\S]*?)\n```")
+	// codes := regexp.MustCompile("```(\\w*)\n([\\s\\S]*?)\n```")
 	// Find code blocks in the form ```lang\ncontent\n```
 	codePattern := regexp.MustCompile("```(\\w*)\n")
 	if codePattern == nil {
@@ -127,21 +128,62 @@ func parseContent(lines []string) *MarkdownDocument {
 	// Find inline code in the form `content`
 	inlineCode := regexp.MustCompile("`([^`]+)`")
 
-	for _, line := range lines {
+	codeParser := &CodeblockParser{
+		inCodeBlock: false,
+		blockCount:  0,
+	}
+
+	for i, line := range lines {
 		line = strings.TrimSpace(line)
 		if len(line) == 0 {
 			continue
 		}
 
 		switch {
-		case codePattern.MatchString(line):
-			ansi.PrintColor(ansi.Cyan, "code block!")
-			codeBlocks := extractCodeBlocks(strings.Join(lines, "\n"))
-			for _, block := range codeBlocks {
-				currentContent = append(currentContent, textCodeblock{textContent{parseCodeBlock(block, "lang")}})
-			}			
-			// matches := codePattern.FindStringSubmatch(line)
-			// currentContent = append(currentContent, textCodeblock{textContent{parseCodeBlock(matches[2], matches[1])}})
+		case codeParser.inCodeBlock || strings.HasPrefix(line, "```"):
+			// check if we're at the end of a code block
+			if codeParser.inCodeBlock && strings.HasPrefix(line, "```") { // end of code block
+				ansi.PrintColorBold(ansi.Yellow, "end of code block: "+strings.Join(codeParser.content, "\n"))
+				codeParser.inCodeBlock = false
+				currentContent = append(
+					currentContent,
+					textCodeblock{
+						textContent{
+							parseCodeBlock(strings.Join(codeParser.content, "\n"),
+								codeParser.codeBlockLang),
+						},
+					},
+				)
+				codeParser.blockCount++
+				continue
+			}
+
+			// parse current code block
+			if codeParser.inCodeBlock {
+				ansi.PrintColorBold(ansi.Yellow, "in code block at line "+strconv.FormatInt(int64(i), 10))
+				codeParser.content = append(codeParser.content, line)
+				continue // skip to next line
+			}
+
+			// start of code block
+			codeParser.codeBlockLang = strings.TrimPrefix(line, "```") // add the language of the code block
+			if codeParser.codeBlockLang == "" {                        // if no language is provided, set it to "txt"
+				codeParser.codeBlockLang = "txt"
+			}
+
+			codeParser.inCodeBlock = true
+			codeParser.content = []string{} // reset content
+			ansi.PrintColorBold(ansi.Green, "start of code block: "+codeParser.codeBlockLang)
+			continue
+
+		// case codePattern.MatchString(line):
+		// 	ansi.PrintColor(ansi.Cyan, "code block!")
+		// 	codeBlocks := extractCodeBlocks(strings.Join(lines, "\n"))
+		// 	for _, block := range codeBlocks {
+		// 		currentContent = append(currentContent, textCodeblock{textContent{parseCodeBlock(block, "lang")}})
+		// 	}
+		// matches := codePattern.FindStringSubmatch(line)
+		// currentContent = append(currentContent, textCodeblock{textContent{parseCodeBlock(matches[2], matches[1])}})
 		case strings.HasPrefix(line, "## "):
 			if currentTitle != nil {
 				md.AddSection(currentTitle, currentContent)
@@ -197,6 +239,7 @@ func parseContent(lines []string) *MarkdownDocument {
 	}
 
 	if currentTitle != nil {
+		ansi.PrintColorBold(ansi.Cyan, "adding section: "+currentTitle.String())
 		md.AddSection(currentTitle, currentContent)
 	}
 
