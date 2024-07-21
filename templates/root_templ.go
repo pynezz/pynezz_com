@@ -31,13 +31,74 @@ func js() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script type=\"text/javascript\">\n    function toggleNav() {\n        var nav = document.getElementById(\"nav-bar-list\");\n        if (nav.classList.contains(\"hidden\")) {\n            nav.classList.remove(\"hidden\");\n        } else {\n            nav.classList.add(\"hidden\");\n        }\n    }\n\n    document.addEventListener(\"DOMContentLoaded\", () => {\n        console.log(\"DOM loaded\");\n        const dropdownToggle = document.getElementById('burger-dropdown');\n\n        // const headerElement = document.querySelector('header');\n        // const footerElement = document.querySelector('footer');\n        // const mainElement = document.querySelector(\"main\");\n\n        const dropdownMenu = document.getElementById('burger-dropdown-menu');\n        // const toggleColor = document.querySelector('.theme-toggle__icon');\n        // const toggle = document.getElementById(\"dark-mode-toggle\");\n\n        if (dropdownMenu && dropdownToggle) {\n            const showDropdown = () => {\n                dropdownMenu.classList.remove('opacity-0', 'invisible', '-translate-y-2');\n                dropdownMenu.classList.add('opacity-100', 'visible', 'translate-y-0');\n            };\n            const hideDropdown = () => {\n                dropdownMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');\n                dropdownMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');\n            };\n            dropdownToggle.addEventListener('mouseenter', showDropdown);\n            dropdownMenu.addEventListener('mouseenter', showDropdown);\n            dropdownToggle.addEventListener('mouseleave', hideDropdown);\n            dropdownMenu.addEventListener('mouseleave', hideDropdown);\n        }\n\n        if (mainElement) {\n            console.log(\"mainElement\", mainElement);\n        } else {\n            console.log(\"mainElement not found\");\n        }\n\n        if (localStorage.getItem(\"darkMode\") === \"disabled\") {\n            if (mainElement) {\n                document.getElementById(\"dark-mode-toggle\").checked = true;\n                mainElement.classList.add(\"frappe\");\n                toggleColor.style.fill = 'yellow';\n            }\n        }\n\n        // if (toggle) {\n        //     toggle.addEventListener(\"change\", function () {\n        //         if (mainElement) {\n        //             const darkModeDisabled = mainElement.classList.toggle(\"frappe\");\n        //             headerElement.classList.toggle(\"frappe\");\n        //             footerElement.classList.toggle(\"frappe\");\n\n        //             if (darkModeDisabled) {\n        //                 localStorage.setItem(\"darkMode\", \"disabled\");\n        //                 toggleColor.style.fill = 'yellow';\n        //             } else {\n        //                 localStorage.removeItem(\"darkMode\");\n        //                 toggleColor.style.fill = 'blue';\n        //                 console.log(toggleColor)\n        //             }\n        //         }\n        //     });\n        // }\n    });\n  </script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script type=\"text/javascript\">\n    function toggleNav() {\n        var nav = document.getElementById(\"nav-bar-list\");\n        if (nav.classList.contains(\"hidden\")) {\n            nav.classList.remove(\"hidden\");\n        } else {\n            nav.classList.add(\"hidden\");\n        }\n    }\n  </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		return templ_7745c5c3_Err
 	})
 }
+
+// document.addEventListener("DOMContentLoaded", () => {
+//     console.log("DOM loaded");
+//     const dropdownToggle = document.getElementById('burger-dropdown');
+
+//     // const headerElement = document.querySelector('header');
+//     // const footerElement = document.querySelector('footer');
+//     // const mainElement = document.querySelector("main");
+
+//     const dropdownMenu = document.getElementById('burger-dropdown-menu');
+//     // const toggleColor = document.querySelector('.theme-toggle__icon');
+//     // const toggle = document.getElementById("dark-mode-toggle");
+
+//     if (dropdownMenu && dropdownToggle) {
+//         const showDropdown = () => {
+//             dropdownMenu.classList.remove('opacity-0', 'invisible', '-translate-y-2');
+//             dropdownMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+//         };
+//         const hideDropdown = () => {
+//             dropdownMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+//             dropdownMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
+//         };
+//         dropdownToggle.addEventListener('mouseenter', showDropdown);
+//         dropdownMenu.addEventListener('mouseenter', showDropdown);
+//         dropdownToggle.addEventListener('mouseleave', hideDropdown);
+//         dropdownMenu.addEventListener('mouseleave', hideDropdown);
+//     }
+
+//     if (mainElement) {
+//         console.log("mainElement", mainElement);
+//     } else {
+//         console.log("mainElement not found");
+//     }
+
+//     if (localStorage.getItem("darkMode") === "disabled") {
+//         if (mainElement) {
+//             document.getElementById("dark-mode-toggle").checked = true;
+//             mainElement.classList.add("frappe");
+//             toggleColor.style.fill = 'yellow';
+//         }
+//     }
+
+// if (toggle) {
+//     toggle.addEventListener("change", function () {
+//         if (mainElement) {
+//             const darkModeDisabled = mainElement.classList.toggle("frappe");
+//             headerElement.classList.toggle("frappe");
+//             footerElement.classList.toggle("frappe");
+
+//             if (darkModeDisabled) {
+//                 localStorage.setItem("darkMode", "disabled");
+//                 toggleColor.style.fill = 'yellow';
+//             } else {
+//                 localStorage.removeItem("darkMode");
+//                 toggleColor.style.fill = 'blue';
+//                 console.log(toggleColor)
+//             }
+//         }
+//     });
+// }
+// });
 
 func Root(content templ.Component, nonce string, path ...string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {

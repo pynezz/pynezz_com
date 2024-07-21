@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"crypto/sha256"
 	"fmt"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -31,13 +32,16 @@ func MarkdownToHTML(mdPath string) ([]byte, MarkdownDocument) {
 	}
 
 	// re := regexp.MustCompile(`|## |### |#### |##### |###### |\\||\n\n|\n-|---\n`)
-	re := regexp.MustCompile("\n\n|\n-|---\n")
-
+	// codeRe := regexp.MustCompile("```(\\w*)\n([\\s\\S]*?)\n```")
 	// contentParts := splitMarkdownContent(contentStr)
 	// for _, part := range contentParts {
 	// 	ansi.PrintInfo("part: " + part)
 	// }
+	re := regexp.MustCompile("\n\n|\n-|---\n")
 	contentParts := re.Split(contentStr, -1)
+	// for _, part := range contentParts {
+	// 	contentParts = append(contentParts, codeRe.FindAllString(part, -1)...)
+	// }
 
 	ansi.PrintInfo("parsing content...")
 	document := parseContent(contentParts)
@@ -107,23 +111,29 @@ func extractCodeBlocks(content string) []string {
 	return codeblocks
 }
 
+func log(content string) {
+	fileName := "parser_log.log"
+	if !fsutil.FileExists(fileName) {
+		fsutil.CreateFile(fileName)
+	}
+	f, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY, 0600)
+	if err != nil {
+		ansi.PrintError("error opening log file")
+	}
+	defer f.Close()
+	if _, err := f.WriteString(content); err != nil {
+		ansi.PrintError("error writing to log file")
+	}
+}
+
 // parseContent parses the content into a MarkdownDocument struct
 func parseContent(lines []string) *MarkdownDocument {
 	md := &MarkdownDocument{}
 	var currentTitle Heading
 	var currentContent []TextContent
 
-	ansi.PrintDebug("checking content: " + strings.Join(lines, "\n"))
-
 	// Find links in the form [text](url)
 	linkPattern := regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
-
-	// codes := regexp.MustCompile("```(\\w*)\n([\\s\\S]*?)\n```")
-	// Find code blocks in the form ```lang\ncontent\n```
-	codePattern := regexp.MustCompile("```(\\w*)\n")
-	if codePattern == nil {
-		ansi.PrintError("error: could not compile code pattern")
-	}
 
 	// Find inline code in the form `content`
 	inlineCode := regexp.MustCompile("`([^`]+)`")
@@ -133,57 +143,66 @@ func parseContent(lines []string) *MarkdownDocument {
 		blockCount:  0,
 	}
 
+	skipLines := 0
+
 	for i, line := range lines {
-		line = strings.TrimSpace(line)
+		// line = strings.TrimSpace(line)
+
+		log(fmt.Sprintf("line %d: %s\n", i, line))
+
 		if len(line) == 0 {
 			continue
 		}
 
-		switch {
-		case codeParser.inCodeBlock || strings.HasPrefix(line, "```"):
-			// check if we're at the end of a code block
-			if codeParser.inCodeBlock && strings.HasPrefix(line, "```") { // end of code block
-				ansi.PrintColorBold(ansi.Yellow, "end of code block: "+strings.Join(codeParser.content, "\n"))
-				codeParser.inCodeBlock = false
-				currentContent = append(
-					currentContent,
-					textCodeblock{
-						textContent{
-							parseCodeBlock(strings.Join(codeParser.content, "\n"),
-								codeParser.codeBlockLang),
-						},
-					},
-				)
-				codeParser.blockCount++
-				continue
-			}
-
-			// parse current code block
-			if codeParser.inCodeBlock {
-				ansi.PrintColorBold(ansi.Yellow, "in code block at line "+strconv.FormatInt(int64(i), 10))
-				codeParser.content = append(codeParser.content, line)
-				continue // skip to next line
-			}
-
-			// start of code block
-			codeParser.codeBlockLang = strings.TrimPrefix(line, "```") // add the language of the code block
-			if codeParser.codeBlockLang == "" {                        // if no language is provided, set it to "txt"
-				codeParser.codeBlockLang = "txt"
-			}
-
-			codeParser.inCodeBlock = true
-			codeParser.content = []string{} // reset content
-			ansi.PrintColorBold(ansi.Green, "start of code block: "+codeParser.codeBlockLang)
+		//  choose to skip lines if a set amount of lines will be processed elsewhere
+		if skipLines > 0 {
+			ansi.PrintDebug("skipping lines: " + strconv.FormatInt(int64(skipLines), 10))
+			skipLines--
 			continue
+		}
 
-		// case codePattern.MatchString(line):
-		// 	ansi.PrintColor(ansi.Cyan, "code block!")
-		// 	codeBlocks := extractCodeBlocks(strings.Join(lines, "\n"))
-		// 	for _, block := range codeBlocks {
-		// 		currentContent = append(currentContent, textCodeblock{textContent{parseCodeBlock(block, "lang")}})
-		// 	}
-		// matches := codePattern.FindStringSubmatch(line)
-		// currentContent = append(currentContent, textCodeblock{textContent{parseCodeBlock(matches[2], matches[1])}})
+		switch {
+		case strings.HasPrefix(line, "```"):
+			firstLine := strings.Split(strings.TrimSpace(strings.TrimPrefix(line, "```")), "\n")
+			codeParser.codeBlockLang = firstLine[0] // Capture the language of the code block
+
+			ansi.PrintColor(ansi.Cyan, fmt.Sprintf("code block first line: %s", strings.Join(firstLine[1:], "\n")))
+			firstContentLine := strings.Join(firstLine[1:], "\n")
+			firstContentLine = strings.TrimSpace(firstContentLine) + "\n"
+
+			codeParser.content = append(codeParser.content, strings.Split(firstContentLine, "\n")...)
+			if codeParser.codeBlockLang == "" {
+				codeParser.codeBlockLang = "plaintext"
+			}
+
+		linesCheck:
+			for _, l := range lines[i+1:] {
+				skipLines++
+				for _, substr := range strings.Split(l, "\n") {
+					if len(substr) >= 3 {
+						if substr[0:3] == "```" {
+							ansi.PrintInfo("end of code block found")
+							codeParser.content = append(codeParser.content, strings.Trim(substr, "`"))
+							break linesCheck
+						}
+					}
+					codeParser.content = append(codeParser.content, substr)
+				}
+			}
+
+			currentContent = append(
+				currentContent,
+				textCodeblock{
+					textContent{
+						parseCodeBlock(strings.Join(codeParser.content, "\n"),
+							codeParser.codeBlockLang) + "\n",
+					},
+				},
+			)
+			n := &CodeblockParser{
+				blockCount: codeParser.blockCount + 1,
+			}
+			codeParser = n
 		case strings.HasPrefix(line, "## "):
 			if currentTitle != nil {
 				md.AddSection(currentTitle, currentContent)
@@ -274,44 +293,21 @@ func parseInlineCode(line string) string {
 	ansi.PrintBold("inline code: " + line)
 	re := regexp.MustCompile("`([^`]+)`")
 
-	return re.ReplaceAllString(line, "<code class=\"bg-gray-200 text-gray-800 px-1 py-0.5 rounded\">$1</code>")
+	return re.ReplaceAllString(line, "<code class=\"bg-surface0 text-subtext1 p-1 rounded-md\">$1</code>")
 }
 
 func parseCodeBlock(content, lang string) string {
 	ansi.PrintColor(ansi.Cyan, "parseCodeBlock!")
 	// Escape HTML special characters
-	content = strings.ReplaceAll(content, "&", "&amp;")
-	content = strings.ReplaceAll(content, "<", "&lt;")
-	content = strings.ReplaceAll(content, ">", "&gt;")
-	content = strings.ReplaceAll(content, "\n", "<br>\n")
+	// content = strings.ReplaceAll(content, "&", "&amp;")
+	// content = strings.ReplaceAll(content, "<", "&lt;")
+	// content = strings.ReplaceAll(content, ">", "&gt;")
+	content = strings.ReplaceAll(content, "\n", "<br>")
 
 	ansi.PrintColor(ansi.Cyan, "lang: "+lang)
 	ansi.PrintColor(ansi.Yellow, "content: "+content)
-	return fmt.Sprintf(`<pre class="bg-gray-900 text-text p-4 rounded-lg overflow-x-auto"><code class="language-%s">%s</code></pre>`, lang, content)
+	return fmt.Sprintf(`<pre class="bg-crust overflow-auto p-2 rounded-md"><code id="language-%s" class="text-xs text-subtext1">%s</code></pre>`, lang, content)
 }
-
-// func parseCodeBlock(block string) string {
-// 	re := regexp.MustCompile("(?s)```(\\w*)\\n(.*?)\\n```")
-// 	match := re.FindStringSubmatch(block)
-// 	ansi.PrintBold("code block: " + block)
-// 	if len(match) != 3 {
-// 		ansi.PrintError("error: could not parse code block")
-// 		return ""
-// 	}
-
-// 	lang := match[1]
-// 	content := match[2]
-
-// 	// Escape HTML special characters
-// 	content = strings.ReplaceAll(content, "&", "&amp;")
-// 	content = strings.ReplaceAll(content, "<", "&lt;")
-// 	content = strings.ReplaceAll(content, ">", "&gt;")
-// 	content = strings.ReplaceAll(content, "\n", "<br>\n")
-
-// 	ansi.PrintColor(ansi.Cyan, "lang: "+lang)
-// 	ansi.PrintColor(ansi.Yellow, "content: "+content)
-// 	return fmt.Sprintf(`<pre class="bg-gray-900 text-text p-4 rounded-lg overflow-x-auto"><code class="language-%s">%s</code></pre>`, lang, content)
-// }
 
 // parseLink parses a markdown link into an HTML link
 func parseLink(line string) TextContent {
@@ -410,81 +406,17 @@ func (md *MarkdownDocument) String() string {
 	return document
 }
 
-func genCode() {
-	// codeBlock := regexp.MustCompile("```")
-	// codeInline := regexp.MustCompile("`")
-
-}
-
 func cssRel() string {
 	return `<link rel="stylesheet" type="text/css" href="/css/post.css">`
 }
 
 func nav() string {
-	return fmt.Sprintf(` <ul class="main-nav">
+	return `<ul class="main-nav">
 		<li class="nav-item">
 			<a href="/" class="nav-link">/</a>
 		</li>
     <li class="nav-item">
       <a href="/posts/" class="nav-link">posts</a>
     </li>
-</ul>`)
-}
-
-func css() string {
-	return `
-<style>
-	.date {
-		font-size: 0.8em;
-		color: #666;
-	}
-	.tag {
-		font-size: 0.8em;
-		color: #666;
-	}
-	table {
-		width: 100%;
-		border-collapse: collapse;
-	}
-	th, td {
-		border: 1px solid #ddd;
-		padding: 8px;
-	}
-	th {
-		background-color: #f2f2f2;
-	}
-	body {
-		font-family: Inter, sans-serif;
-	}
-	h1 {
-		font-size: 2em;
-		color: #333;
-	}
-	code {
-		background-color: #f2f2f2;
-		padding: 2px;
-	  width: 100%;
-		box-sizing: border-box;
-		border-radius: 1rem;
-	}
-	code.inline {
-		background-color: #f2f2f2;
-		padding: 2px;
-		border-radius: .25rem;
-	}
-	html {
-		font-size: 16px;
-		background-color: #f9f9f9;
-		display: flex;
-		justify-content: center;
-	}
-	article {
-		width: 100%;
-		max-width: 800px;
-		padding: 1rem;
-	}
-	section {
-		margin: 1rem 0;
-	}
-</style>`
+</ul>`
 }

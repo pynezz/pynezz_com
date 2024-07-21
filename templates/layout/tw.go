@@ -29,7 +29,7 @@ const (
 	Container = "flex flex-1 justify-normal	mx-auto px-4 bg-overlay0 h-fit w-max"
 	Title     = "text-4xl font-bold text-text font-mono text-left pr-10 border-b border-surface1 mb-2 mt-4"
 	Icon      = "w-8 h-8 px-2 transform hover:scale-105 transition-transform duration-200 ease-in-out"
-	Article   = "flex flex-col text-left max-w-[960px] p-4 shadow-lg bg-mantle rounded-md text-sans text-text space-y-2"
+	Article   = "flex flex-col text-left max-w-[960px] p-4 shadow-lg overflow-auto bg-mantle rounded-md text-sans text-text space-y-2"
 	Wrapper   = "flex flex-col justify-center items-center h-screen w-full"
 
 	// Card
@@ -45,4 +45,4 @@ const (
 const baseURL = "https://pynezz.dev"
 const Link = "text-lavender underline hover:text-overlay1"
 
-const TagBtn = "text-text px-2 m-2 rounded no-underline"
+const TagBtn = "text-green px-2 m-2 rounded no-underline"

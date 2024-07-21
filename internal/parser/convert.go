@@ -2,8 +2,6 @@ package parser
 
 import (
 	"fmt"
-
-	"github.com/pynezz/pynezzentials/ansi"
 )
 
 /*
@@ -158,21 +156,12 @@ func (s Section) String() string {
 	for _, c := range s.TextContent {
 		switch c.(type) {
 		case textCodeblock, textTable, textUl, textOl:
-			content += fmt.Sprintf("%s%s\n", CodeBlockStyle, c.String())
-			ansi.PrintDebug("added content: " + c.String())
+			// content += fmt.Sprintf("%s", c.String())
+			content += c.String()
 		default:
 			content += fmt.Sprintf("<p>%s</p>\n", c.String())
 		}
 	}
-	return fmt.Sprintf("<section class=\"flex flex-col align-start\"><%s class=\"%s\">%s</%s>\n%s</section>\n", s.Title.HTMLTag(), s.Title.Class(), s.Title.String(), s.Title.HTMLTag(), content)
+	return fmt.Sprintf("<section class=\"flex flex-col align-start overflow-x-auto\"><%s class=\"%s\">%s</%s>\n%s</section>\n", s.Title.HTMLTag(), s.Title.Class(), s.Title.String(), s.Title.HTMLTag(), content)
 }
-
-// func (s Section) String() string {
-// 	content := ""
-// 	for _, c := range s.TextContent {
-// 		// find code content
-
-// 		content += fmt.Sprintf("<p>%s</p>\n", c.String())
-// 	}
-// 	return fmt.Sprintf("<section class=\"flex flex-col align-start\"><%s %s>%s</%s>\n%s</section>\n", s.Title.HTMLTag(), s.Title.Class(), s.Title.String(), s.Title.HTMLTag(), content)
-// }
+		
