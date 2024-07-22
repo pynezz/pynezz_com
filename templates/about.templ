@@ -5,12 +5,33 @@ import (
   "github.com/pynezz/pynezz_com/templates/layout"
 )
 
+const aboutStyle = "flex flex-col items-start max-w-prose mx-auto p-4 bg-mantle rounded-md my-2 py-2"
+
 templ About() {
     <div class={"div", twAboutMe}>
       <h1 class={"h1", twTitle}>About</h1>
-      <article class={"article", layout.Article}>
-      <p class="text-text py-2">Hi, I'm Kevin, a 28 year old guy with a Bachelor's in Cyber Security, and a passion for software development.</p>
-      <p class="text-text py-2">This site is a project where I've built a blogging platform from scratch, using Go with Echo, Go-Templ, and SQLite.</p>
+      <article class={"article", aboutStyle}>
+        <p class="text-text py-2">Hi, I'm Kevin, a 28 year old guy with a Bachelor's in Cyber Security, and a passion for software development.</p>
+        <p class="text-text py-2">This site is a side project where I've built a blogging platform/static site generator from scratch, using Go with Echo, Go-Templ, and SQLite.</p>
+        <h2 class="text-xl font-semibold text-subtext1 text-left py-2 pt-6 font-sans ">Why?</h2>
+        <p class="text-text py-2">I wanted to learn more about the nitty gritty of building a static site generator, as well as having the need to have a place to write about things I find interesting.</p>
       </article>
-    </div>
+  </div>
+
+      <article class={"article", layout.Article + " my-4 py-4   "}>
+        <h2 class="text-left text-subtext1 italic">Interesting resources</h2>
+        <ul class={"ul", postsList}>
+          <li>
+          <a href="https://motherfuckingwebsite.com" class={"a", layout.Link}>The one starting my journey: motherfuckingwebsite.com</a>
+          </li>
+          <li>
+          <a href="https://thebestmotherfucking.website" class={"a", layout.Link}>thebestmotherfucking.website</a>
+          </li>
+          <li><a href="https://250kb.club/" class={"a", layout.Link}>250kb.club</a></li>
+          <li><a href="https://512kb.club/" class={"a", layout.Link}>512kb.club</a></li>
+          <li class={"li", postCard}>
+          <a href="https://erikjohannes.no/posts/20210129-building-and-maintaining-a-minimalistic-website/" class={"a", layout.Link}>erikjohannes.no</a>
+          </li>
+        </ul>
+    </article>
 }

@@ -90,11 +90,11 @@ func Home() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Blogging about cyber security,<br>development, code, and tech.</h2><span class=\"flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 mt-auto\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Blogging about cyber security,<br>development, code, and tech.</h2><span class=\"flex flex-col sm:flex-row items-center sm:justify-center space-y-12 sm:space-y-2 sm:space-x-2 mt-auto\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var8 = []any{layout.CardBtn, layout.BtnHover}
+		var templ_7745c5c3_Var8 = []any{layout.CardBtn + " mt-4", layout.BtnHover}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var8...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

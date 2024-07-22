@@ -72,10 +72,10 @@ func setup(app *echo.Echo) {
 	// Todo - consider doing this, or just managing it via the CLI in the backend
 	// app.GET("/posts/:slug/edit", postsHandler.EditPost)
 
-	app.POST("csp-report", func(c echo.Context) error {
-		cpsReport(c.FormValue("csp-report"))
-		return c.String(200, "CSP Report Received")
-	})
+	// app.POST("csp-report", func(c echo.Context) error {
+	// 	cpsReport(c.FormValue("csp-report"))
+	// 	return c.String(200, "CSP Report Received")
+	// })
 }
 
 func cpsReport(report string) {
@@ -88,7 +88,7 @@ func Render(ctx echo.Context, statusCode int, t templ.Component) error {
 	defer templ.ReleaseBuffer(buf)
 	nonce, err := middleware.GenerateNonce()
 	templCtx := templ.WithNonce(ctx.Request().Context(), nonce)
-	ctx.Response().Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self' 'nonce-"+nonce+"'; style-src 'self'; img-src 'self' *.github.com; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; block-all-mixed-content; upgrade-insecure-requests;")
+	ctx.Response().Header().Set("Content-Security-Policy", "default-src 'none'; script-src 'self' 'nonce-"+nonce+"'; style-src 'self'; img-src 'self' *.github.com; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; block-all-mixed-content; upgrade-insecure-requests;")
 
 	if err != nil {
 		ansi.PrintError("Error generating nonce: " + nonce)
