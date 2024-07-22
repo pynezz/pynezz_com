@@ -94,7 +94,7 @@ func Home() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var8 = []any{layout.CardBtn + " mt-4", layout.BtnHover}
+		var templ_7745c5c3_Var8 = []any{layout.CardBtn + " mt-4	", layout.BtnHover}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var8...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
