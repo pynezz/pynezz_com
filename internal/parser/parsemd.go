@@ -318,7 +318,7 @@ func parseCodeBlock(content, lang string) string {
 
 	ansi.PrintColor(ansi.Cyan, "lang: "+lang)
 	ansi.PrintColor(ansi.Yellow, "content: "+content)
-	return fmt.Sprintf(`<pre class="bg-crust overflow-x-auto rounded-md"><code id="language-%s" class="text-sm w-max">%s</code></pre>`, lang, content)
+	return fmt.Sprintf(`<pre class="bg-crust overflow-x-auto rounded-md p-2 w-full	"><code id="language-%s" class="text-sm whitespace-pre">%s</code></pre>`, lang, content)
 }
 
 // parseLink parses a markdown link into an HTML link

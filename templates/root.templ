@@ -19,7 +19,7 @@ script js() {
             nav.classList.add("hidden");
         }
     }
-}   
+}
     // document.addEventListener("DOMContentLoaded", () => {
     //     console.log("DOM loaded");
     //     const dropdownToggle = document.getElementById('burger-dropdown');
@@ -85,9 +85,9 @@ templ Root(content templ.Component, path ...string) {
     <!DOCTYPE html>
     <html lang="en">
         @layout.Links()
-        <body class="min-h-screen flex flex-col items-center">
+        <body class="min-h-screen flex flex-col">
             @layout.Header(path...)
-            <main class="flex-grow p-4">
+            <main class="flex-grow container mx-auto">
                 @content
             </main>
             @layout.Footer()

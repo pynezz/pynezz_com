@@ -7,7 +7,7 @@ const (
 	twTitle     = string(layout.Title)
 	twIcon      = string(layout.Icon)
 	twArticle   = string(layout.Article)
-	postsList   = "flex flex-col space-y-2 text-left max-w-[960px] p-4 shadow-lg bg-mantle rounded-md text-sans text-text"
+	postsList   = "flex flex-col gap-5 text-left max-w-[960px] p-4 shadow-lg bg-mantle rounded-md text-sans text-text"
 )
 
 const BaseURL = "https://pynezz.dev"
