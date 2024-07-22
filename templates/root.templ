@@ -7,9 +7,18 @@ import (
 script js() {
     document.addEventListener("DOMContentLoaded", ready);
 
+    function visit(url) {
+        window.location.href = url;
+    }
+
     function ready() {
         var burger = document.getElementById("burger-dropdown");
         burger.onclick = toggleNav;
+
+        var aboutBtn = document.getElementById("about-btn");
+        if (aboutBtn) {
+            aboutBtn.onclick = () => { visit("/about"); };
+        }
     }
     function toggleNav() {
         var nav = document.getElementById("nav-bar-list");

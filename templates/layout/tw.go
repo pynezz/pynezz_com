@@ -39,7 +39,7 @@ const (
 	// CardStyle  = "flex flex-row content-between font-normal text-text rounded-md shadow-lg bg-mantle flex-wrap my-4 items-center mx-auto "
 	// CardStyle  = "flex flex-col sm:flex-row content-between font-normal text-text rounded-md shadow-lg bg-mantle my-4 items-center mx-auto max-w-screen-md"
 	CardStyle  = "flex flex-col sm:flex-row items-start sm:items-center content-between font-normal text-text rounded-md shadow-lg bg-mantle my-4 mx-auto max-w-screen-md"
-		CardBtn    = "button max-w-fit bg-sky text-base mx-1 p-2 px-4 rounded-full underline decoration-dotted transition-colors duration-200 ease-in-out "
+	CardBtn    = "button max-w-fit bg-sky text-base mx-1 p-2 px-4 rounded-full underline decoration-dotted transition-colors duration-200 ease-in-out "
 	BtnBlue    = "bg-blue hover:bg-blue-700 "
 	BtnHover   = "hover:text-text hover:bg-surface1 hover:stroke-lavender stroke-2 "
 	SubHeading = "text-lg font-bold bg-clip-text text-transparent bg-gradient-to-br from-lavender to-mauve text-wrap first-letter:text-xl px-2 pr-8	"

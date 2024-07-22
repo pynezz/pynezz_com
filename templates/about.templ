@@ -6,24 +6,11 @@ import (
 )
 
 templ About() {
-  // <div class={"div", layout.Style()}>
-    // @layout.Header( "/", "about" )
-    <div class={"div", aboutMe}>
+    <div class={"div", twAboutMe}>
       <h1 class={"h1", twTitle}>About</h1>
       <article class={"article", layout.Article}>
-      <p class="text-text">Hi, I'm Kevin, a 28 year old guy with a Bachelor's in Cyber Security, and a passion for software development.</p>
-      <p class="text-text">This site is a project where I've built a blogging platform from scratch, using Go with Echo, Go-Templ, and SQLite.</p>
+      <p class="text-text py-2">Hi, I'm Kevin, a 28 year old guy with a Bachelor's in Cyber Security, and a passion for software development.</p>
+      <p class="text-text py-2">This site is a project where I've built a blogging platform from scratch, using Go with Echo, Go-Templ, and SQLite.</p>
       </article>
     </div>
-    // @layout.Footer()
-// </div>
-}
-
-css aboutMe() {
-  margin-top: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
-  flex-direction: column;
-  align-items: center;
-  font-family: 'Hack Nerd Font', 'Fira Mono', 'Fira Code', monospace;
 }

@@ -14,12 +14,21 @@ import (
 
 func js() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_js_7ba8`,
-		Function: `function __templ_js_7ba8(){document.addEventListener("DOMContentLoaded", ready);
+		Name: `__templ_js_f58c`,
+		Function: `function __templ_js_f58c(){document.addEventListener("DOMContentLoaded", ready);
+
+    function visit(url) {
+        window.location.href = url;
+    }
 
     function ready() {
         var burger = document.getElementById("burger-dropdown");
         burger.onclick = toggleNav;
+
+        var aboutBtn = document.getElementById("about-btn");
+        if (aboutBtn) {
+            aboutBtn.onclick = () => { visit("/about"); };
+        }
     }
     function toggleNav() {
         var nav = document.getElementById("nav-bar-list");
@@ -30,8 +39,8 @@ func js() templ.ComponentScript {
         }
     }
 }`,
-		Call:       templ.SafeScript(`__templ_js_7ba8`),
-		CallInline: templ.SafeScriptInline(`__templ_js_7ba8`),
+		Call:       templ.SafeScript(`__templ_js_f58c`),
+		CallInline: templ.SafeScriptInline(`__templ_js_f58c`),
 	}
 }
 

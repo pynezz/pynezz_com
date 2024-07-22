@@ -88,6 +88,8 @@ func Render(ctx echo.Context, statusCode int, t templ.Component) error {
 	defer templ.ReleaseBuffer(buf)
 	nonce, err := middleware.GenerateNonce()
 	templCtx := templ.WithNonce(ctx.Request().Context(), nonce)
+	ctx.Response().Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self' 'nonce-"+nonce+"'; style-src 'self'; img-src 'self' *.github.com; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; block-all-mixed-content; upgrade-insecure-requests;")
+
 	if err != nil {
 		ansi.PrintError("Error generating nonce: " + nonce)
 	}

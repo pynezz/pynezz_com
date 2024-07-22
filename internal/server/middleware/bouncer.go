@@ -240,6 +240,9 @@ func CommonHeaders(next echo.HandlerFunc) echo.HandlerFunc {
 		// set cache control headers and common headers (cache static files for 1 week)
 		c.Response().Header().Set("Cache-Control", "public, max-age=604800")
 
+		// pragma and expires are deprecated
+		c.Response().Header().Set("Pragma", "cache")
+
 		return next(c)
 	}
 }

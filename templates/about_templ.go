@@ -30,7 +30,11 @@ func About() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		var templ_7745c5c3_Var2 = []any{"div", aboutMe}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"m-2\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 = []any{"div", twAboutMe}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -92,25 +96,10 @@ func About() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><p class=\"text-text\">Hi, I'm Kevin, a 28 year old guy with a Bachelor's in Cyber Security, and a passion for software development.</p><p class=\"text-text\">This site is a project where I've built a blogging platform from scratch, using Go with Echo, Go-Templ, and SQLite.</p></article></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><p class=\"text-text py-2\">Hi, I'm Kevin, a 28 year old guy with a Bachelor's in Cyber Security, and a passion for software development.</p><p class=\"text-text py-2\">This site is a project where I've built a blogging platform from scratch, using Go with Echo, Go-Templ, and SQLite.</p></article></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		return templ_7745c5c3_Err
 	})
-}
-
-func aboutMe() templ.CSSClass {
-	templ_7745c5c3_CSSBuilder := templruntime.GetBuilder()
-	templ_7745c5c3_CSSBuilder.WriteString(`margin-top:20px;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`margin-left:20px;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`margin-right:20px;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`flex-direction:column;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`align-items:center;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`font-family:'Hack Nerd Font', 'Fira Mono', 'Fira Code', monospace;`)
-	templ_7745c5c3_CSSID := templ.CSSID(`aboutMe`, templ_7745c5c3_CSSBuilder.String())
-	return templ.ComponentCSSClass{
-		ID:    templ_7745c5c3_CSSID,
-		Class: templ.SafeCSS(`.` + templ_7745c5c3_CSSID + `{` + templ_7745c5c3_CSSBuilder.String() + `}`),
-	}
 }
