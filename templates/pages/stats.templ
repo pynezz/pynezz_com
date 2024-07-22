@@ -1,0 +1,55 @@
+package pages
+
+import (
+  "github.com/pynezz/pynezz_com/templates/layout"
+)
+
+const secStyle = "flex flex-col space-y-3 bg-crust text-teal flex-grow w-full h-full"
+
+templ Stats() {
+  <section class={"section", secStyle}>
+    <h1 class={"h1", layout.Title}>Stats</h1>
+    <container class="flex flex-col space-y-3">
+      <p class="font-mono font-light italic">This page (as with every page) is a work in progress. I plan to add more stats in the future.</p>
+      <div class="flex flex-col flex-wrap w-max">
+        <div class="flex flex-row justify-between">
+          <p class="font-mono">Total Posts:</p>
+          <p id="stats-post" class="font-semibold"></p>
+        </div>
+        <div class="flex flex-row justify-between">
+          <p class="font-mono whitespace-pre">Total Tags:       </p>
+          <p id="stats-tags" class="font-semibold"></p>
+        </div>
+      </div>
+    </container>
+  </section>
+  @stats()
+}
+
+script stats() {
+  let stats = {};
+
+  document.addEventListener("DOMContentLoaded", ready);
+
+  const statsPost = document.getElementById("stats-post");
+  const statsTags = document.getElementById("stats-tags");
+
+  const body = document.querySelector("body");
+
+  async function ready() {
+    stats = await getStats();
+    statsPost.innerText = stats.Posts;
+    statsTags.innerText = stats.Tags;
+    body.classList.add("bg-crust");
+  }
+
+  const getStats = async () => {
+    await fetch("/api/stats")
+      .then(response => response.json())
+      .then(data => {
+        stats = data;
+      });
+
+    return stats;
+  }
+}

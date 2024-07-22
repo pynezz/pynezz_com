@@ -1,12 +1,14 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/pynezz/pynezz_com/internal/server/middleware"
 	"github.com/pynezz/pynezz_com/templates"
+	"github.com/pynezz/pynezz_com/templates/pages"
 	"github.com/pynezz/pynezzentials/ansi"
 )
 
@@ -68,6 +70,19 @@ func setup(app *echo.Echo) {
 	// BUG! This does not fetch the tags (only one)
 	app.GET("/tags/", postsHandler.GetTags)
 	app.GET("/tags", postsHandler.GetTags)
+
+	app.GET("/stats", func(c echo.Context) error {
+		return Render(c, 200, pages.Stats())
+	})
+
+	app.GET("/api/stats", func(c echo.Context) error {
+		res, err := json.Marshal(getStats())
+		if err != nil {
+			return err
+		}
+
+		return c.JSONBlob(200, res)
+	})
 
 	// Todo - consider doing this, or just managing it via the CLI in the backend
 	// app.GET("/posts/:slug/edit", postsHandler.EditPost)

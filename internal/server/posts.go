@@ -16,6 +16,23 @@ import (
 
 type Metadata parser.Metadata
 
+type Stats struct {
+	Views    int
+	Posts    int
+	Tags     int
+	Visitors int
+}
+
+func getStats() Stats {
+	views := 0
+	posts, _ := middleware.DBInstance.GetPosts(-1)
+	ansi.PrintBold(fmt.Sprintf("posts: %v", posts))
+	visitors := 0
+	tags := len(middleware.GetTags())
+
+	return Stats{views, len(posts), tags, visitors}
+}
+
 type PostsHandler struct{}
 
 func (p PostsHandler) handleShowPosts(c echo.Context) error {

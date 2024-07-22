@@ -12,7 +12,6 @@ import (
 	"github.com/pynezz/pynezz_com/templates/layout"
 )
 
-const nth = "bg-crust w-full h-12 flex items-center justify-center text-text odd:bg-mauve "
 const secStyle = "flex flex-col space-y-3"
 
 // TODO: Implement map[string]int for tags instead so I can sort by count
@@ -114,7 +113,7 @@ func Tags(tags []string) templ.Component {
 				var templ_7745c5c3_Var9 string
 				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(tag)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 17, Col: 88}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 16, Col: 88}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 				if templ_7745c5c3_Err != nil {
@@ -159,7 +158,7 @@ func Tags(tags []string) templ.Component {
 				var templ_7745c5c3_Var13 string
 				templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(tag)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 19, Col: 101}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 18, Col: 101}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 				if templ_7745c5c3_Err != nil {

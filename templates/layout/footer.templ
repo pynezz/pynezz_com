@@ -1,12 +1,19 @@
 package layout
 
-const f = "bg-crust w-full h-12 flex items-center justify-center text-text"
+const f = "bg-crust w-full min-h-12 flex items-center justify-center text-text flex-wrap"
+
+const footerLink = "border-l border-surface2 px-2 text-text font-mono text-sm font-light underline"
 
 templ Footer() {
   <footer class={"footer", f}>
-    <p>© 2024 pynezz.dev</p>
+    <a href="/">© 2024 pynezz.dev</a>
     <a href="https://www.github.com/pynezz/" class={navBarItemLink}>
       <img src="/static/svgs/github-icon.svg" class={"img", Icon} />
     </a>
+
+    <a href="/posts" class={"a", footerLink}>posts</a>
+    <a href="/tags" class={"a", footerLink}>tags</a>
+    <a href="/stats" class={"a", footerLink}>stats</a>
+    <a href="/.well-known/security.txt" class={"a", footerLink}>security</a>
   </footer>
 }

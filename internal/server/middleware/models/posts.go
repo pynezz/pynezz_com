@@ -39,7 +39,7 @@ type PostMetadata struct {
 	LastModified time.Time      `json:"last_modified"`
 	Tags         datatypes.JSON `json:"tags" gorm:"type:json"`
 	Summary      string         `json:"summary"` // A short summary of the post
-}
+}	
 
 type Tags interface {
 	GetTags() []string

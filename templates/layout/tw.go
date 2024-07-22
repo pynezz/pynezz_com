@@ -27,17 +27,21 @@ func (t TwCSS) Article() string {
 
 const (
 	Container = "flex flex-1 justify-normal	mx-auto px-4 bg-overlay0 h-fit w-max"
-	Title     = "text-4xl font-bold text-text font-mono text-left pr-10 border-b border-surface1 mb-2 mt-4"
+	Title     = "text-4xl font-bold text-text font-mono text-left 	border-b border-surface1 mb-2 mt-4"
 	Icon      = "w-8 h-8 px-2 transform hover:scale-105 transition-transform duration-200 ease-in-out"
-	// Article   = "flex flex-col flex-wrap text-left max-w-[960px] p-4 shadow-lg bg-mantle rounded-md text-sans text-text px-4 mt-2 sm:mx-0"
-	Article = "flex flex-col items-center max-w-prose mx-auto p-4 bg-mantle rounded-md my-2 py-2"
+	Article   = "flex flex-col items-center max-w-prose mx-auto p-4 bg-mantle rounded-md my-2 py-2"
 
-	Wrapper = "flex flex-col justify-center items-center h-screen w-full"
 	// Nav
-	// Card
+	Wrapper = "flex flex-col justify-center items-center h-screen w-full"
 
-	// CardStyle  = "flex flex-row content-between font-normal text-text rounded-md shadow-lg bg-mantle flex-wrap my-4 items-center mx-auto "
-	// CardStyle  = "flex flex-col sm:flex-row content-between font-normal text-text rounded-md shadow-lg bg-mantle my-4 items-center mx-auto max-w-screen-md"
+	// About
+	AboutLinks = "flex flex-col lg:flex-row items-start sm:items-center content-between font-normal text-text rounded-md shadow-lg bg-mantle mx-auto max-w-screen-md px-2"
+
+	// Link Cards
+	LinkCard      = "flex flex-col sm:flex-row items-start sm:items-center content-between font-normal text-text rounded-md shadow-lg bg-mantle mx-auto max-w-screen-md px-2	"
+	LinkCardTitle = "text-4xl font-bold text-text px-2 border-b border-surface1 mb-2 mt-4 font-mono"
+
+	// Card
 	CardStyle  = "flex flex-col sm:flex-row items-start sm:items-center content-between font-normal text-text rounded-md shadow-lg bg-mantle my-4 mx-auto max-w-screen-md"
 	CardBtn    = "button max-w-fit bg-sky text-base mx-1 p-2 px-4 rounded-full underline decoration-dotted transition-colors duration-200 ease-in-out "
 	BtnBlue    = "bg-blue hover:bg-blue-700 "
@@ -48,6 +52,7 @@ const (
 )
 
 const baseURL = "https://pynezz.dev"
-const Link = "text-lavender underline hover:text-overlay1"
+const Link = "text-lavender hover:text-text hover:border-b hover:border-b-green visited:text-mauve "
 
-const TagBtn = "text-green px-2 m-2 rounded no-underline"
+const TagBtnHover = "hover:border-b-green"
+const TagBtn = "text-green px-2 m-1 rounded no-underline border border-crust " + TagBtnHover
