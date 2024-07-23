@@ -47,4 +47,3 @@ type Tag struct {
 }
 
 type Posts []Post
-	

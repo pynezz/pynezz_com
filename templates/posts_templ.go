@@ -35,7 +35,7 @@ func Show(title string, body string, post models.Post) templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		if title[:3] == "404" {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <article class=\"flex flex-col items-center justify-center text-center h-full py-10\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<article class=\"flex flex-col items-center justify-center text-center h-full py-10\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -64,7 +64,7 @@ func Show(title string, body string, post models.Post) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 18, Col: 52}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 17, Col: 52}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -77,7 +77,7 @@ func Show(title string, body string, post models.Post) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(body)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 19, Col: 26}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 18, Col: 26}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -119,10 +119,6 @@ func Show(title string, body string, post models.Post) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("  ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
 			var templ_7745c5c3_Var9 = []any{"article", layout.Article}
 			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var9...)
 			if templ_7745c5c3_Err != nil {
@@ -170,7 +166,7 @@ func Show(title string, body string, post models.Post) templ.Component {
 			var templ_7745c5c3_Var13 string
 			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 26, Col: 43}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 23, Col: 43}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 			if templ_7745c5c3_Err != nil {
@@ -183,7 +179,7 @@ func Show(title string, body string, post models.Post) templ.Component {
 			var templ_7745c5c3_Var14 string
 			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(post.Metadata.Date.Format("02. Jan 2006"))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 27, Col: 98}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 24, Col: 98}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {
@@ -229,7 +225,7 @@ func Show(title string, body string, post models.Post) templ.Component {
 					var templ_7745c5c3_Var18 string
 					templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(strings.Trim(tag, "\""))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 31, Col: 135}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 28, Col: 135}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 					if templ_7745c5c3_Err != nil {
@@ -241,7 +237,7 @@ func Show(title string, body string, post models.Post) templ.Component {
 					}
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></article>  <div class=\"bg-mantle max-w-prose w-full mb-2 mx-auto p-4 rounded-md\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></article><div class=\"bg-mantle max-w-prose w-full mb-2 mx-auto p-4 rounded-md\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -249,7 +245,7 @@ func Show(title string, body string, post models.Post) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>   ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -397,7 +393,7 @@ func postCard(post models.PostMetadata) templ.Component {
 		var templ_7745c5c3_Var28 string
 		templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(post.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 67, Col: 164}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 58, Col: 164}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 		if templ_7745c5c3_Err != nil {
@@ -410,7 +406,7 @@ func postCard(post models.PostMetadata) templ.Component {
 		var templ_7745c5c3_Var29 string
 		templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(post.CreatedAt.Format("02.01.2006"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 68, Col: 57}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 59, Col: 57}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
 		if templ_7745c5c3_Err != nil {
@@ -428,7 +424,7 @@ func postCard(post models.PostMetadata) templ.Component {
 			var templ_7745c5c3_Var30 string
 			templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(post.Summary)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 70, Col: 21}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 61, Col: 21}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 			if templ_7745c5c3_Err != nil {
@@ -484,7 +480,7 @@ func postCard(post models.PostMetadata) templ.Component {
 				var templ_7745c5c3_Var34 string
 				templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinStringErrs(strings.Trim(tag, "\""))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 79, Col: 34}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/posts.templ`, Line: 70, Col: 34}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
 				if templ_7745c5c3_Err != nil {
