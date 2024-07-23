@@ -137,14 +137,6 @@ func InitDB(database string, conf gorm.Config, tables ...interface{}) (*gorm.DB,
 		return nil, err
 	}
 
-	// if DBInstance == nil {
-	// 	DBInstance = initDatabaseDriver(db)
-	// }
-
-	// for _, table := range tables {
-	// 	DBInstance.Tables[database] = table
-	// }
-
 	return db, nil
 }
 
@@ -382,41 +374,44 @@ func writeUser(u *models.User) error {
 
 // GetTags query the database for all tags in the PostMetadata table,
 // trims whitesspace and quotation marks, and returns them as a slice of strings.
-func GetTags() []string {
-	var tags models.Tag
-	var strTags []string
+func GetTags() map[string]int {
+	tagRes := make(map[string]int) // map to store the tags and their frequency
+	query := `
+		SELECT tag, COUNT(*) as frequency FROM (
+			SELECT json_each.value AS tag
+			FROM posts, json_each(posts.metadata_tags)
+			WHERE json_valid(posts.metadata_tags)
+			UNION ALL
+			SELECT json_each.value AS tag
+			FROM post_metadata, json_each(post_metadata.tags)
+			WHERE json_valid(post_metadata.tags)
+		) GROUP BY tag`
 
-	tx := ContentsDB.Driver.Model(&models.PostMetadata{}).Where("tags LIKE ?", "%").First(&tags)
-	if tx.Error != nil {
-		ansi.PrintError(tx.Error.Error())
+	rows, err := ContentsDB.Driver.Raw(query).Rows()
+	if err != nil {
+		ansi.PrintError(err.Error())
 		return nil
 	}
+	defer rows.Close()
 
-	for _, tag := range strings.Split(tags.Tags.String(), ",") {
-		fmt.Printf("Tag: %s\n", tag)
-		tag = strings.Trim(tag, "\"' ")
-		strTags = append(strTags, tag)
+	for rows.Next() {
+		var tag string
+		var freq int
+		rows.Scan(&tag, &freq)
+		tagRes[strings.Trim(tag, "\"[]")] = freq
 	}
 
-	return strTags
+	return tagRes
 }
 
 func GetPostsByTag(tag string) ([]models.PostMetadata, error) {
 	var posts []models.PostMetadata
-	// var tagModel []models.Tag
 
-	// tx := ContentsDB.Driver.Model(&posts).Where("tags IS NOT NULL").Find(&tagModel)
 	tx := ContentsDB.Driver.Where("tags LIKE ?", "%"+tag+"%").Find(&posts)
 	if tx.Error != nil {
 		ansi.PrintError(tx.Error.Error())
 		return []models.PostMetadata{}, tx.Error
 	}
-	fmt.Printf("found posts: %+v", posts)
-	// // err := ContentsDB.Driver.Model(&models.PostMetadata{}).Limit(25).Find(&posts)
-	// if err != nil {
-	// 	ansi.PrintError(err.Error.Error())
-	// 	return []models.PostMetadata{}, err.Error
-	// }
 
 	ansi.PrintSuccess("Posts found: " + fmt.Sprintf("%d", len(posts)))
 	return posts, nil

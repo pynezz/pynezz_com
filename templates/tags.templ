@@ -2,21 +2,19 @@ package templates
 
 import (
     "github.com/pynezz/pynezz_com/templates/layout"
+	"fmt"
+	"strings"
 )
 
 const secStyle = "flex flex-col space-y-3"
 
 // TODO: Implement map[string]int for tags instead so I can sort by count
-templ Tags(tags []string) {
+templ Tags(tags map[string]int) {
     <section class={"section", secStyle}>
       <h1 class={"h1", layout.Title}>Tags</h1>
       <div class="flex flex-row flex-wrap">
-        for i, tag := range tags {
-          if i % 2 == 0 {
-            <a href={templ.SafeURL(tag)} class={"a", layout.TagBtn + " bg-mantle"}>{ tag }</a>
-        } else {
-            <a href={templ.SafeURL(tag)} class={"a", layout.TagBtn + " outline outline-mantle"}>{ tag }</a>
-          }
+        for tag, freq := range tags {
+          <a href={templ.SafeURL("/tags/"+strings.Trim(tag, "'"))} class={"a", layout.TagBtn + " bg-mantle"}>{ tag }<span class="text-subtext0 font-mono text-sm">{ fmt.Sprintf(" | %d",freq) }</span></a>
         }
       </div>
     </section>

@@ -34,15 +34,11 @@ type PostMetadata struct {
 	gorm.Model
 	Path         string         `json:"path"` // Location of the post, either relative to the executable or an absolute path
 	Title        string         `json:"title"`
-	Slug         string         `json:"slug"`    // A short title for the post, used in the URL
-	PostID       int            `json:"post_id"` // Todo: Need to add format 'slug (shorturl_ddmmyy)' to the post ID
+	Slug         string         `json:"slug"` // A short title for the post, used in the URL
+	PostID       int            `json:"post_id"`
 	LastModified time.Time      `json:"last_modified"`
 	Tags         datatypes.JSON `json:"tags" gorm:"type:json"`
 	Summary      string         `json:"summary"` // A short summary of the post
-}	
-
-type Tags interface {
-	GetTags() []string
 }
 
 type Tag struct {
@@ -51,7 +47,4 @@ type Tag struct {
 }
 
 type Posts []Post
-
-/*
-PostsMetadata
-*/
+	

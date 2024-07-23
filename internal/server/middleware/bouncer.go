@@ -250,22 +250,10 @@ func CommonHeaders(next echo.HandlerFunc) echo.HandlerFunc {
 // TODO: Nonce and CSP.
 func SecurityHeaders(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-
-		// // nonce, err := GenerateNonce()
-		// if err != nil {
-		// 	return err
-		// }
-		// ctx := templ.WithNonce(c.Request().Context(), nonce)
-		// c.SetRequest(c.Request().WithContext(ctx))
-
 		// set security headers for proxying through openresty
 		c.Response().Header().Set("X-Frame-Options", "DENY")
 		c.Response().Header().Set("X-Content-Type-Options", "nosniff")
 		c.Response().Header().Set("X-XSS-Protection", "1; mode=block")
-
-		// Pass the nonce to the context so it can be used in templates
-		// c.Set("nonce", nonce)
-
 		return next(c)
 	}
 }

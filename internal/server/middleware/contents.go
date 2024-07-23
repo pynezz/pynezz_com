@@ -64,11 +64,11 @@ func (d *Database) WriteContentsToDatabase(slug string, content []byte, pMetadat
 	ansi.PrintColor(ansi.Yellow, string(content))
 	post := models.Post{
 		Content: datatypes.JSON(content),
-		Metadata: models.Metadata{	
+		Metadata: models.Metadata{
 			Title:       pMetadata.Title,
 			Description: pMetadata.Summary,
 			Date:        pMetadata.CreatedAt,
-			Tags:        pMetadata.Tags,
+			Tags:        datatypes.JSON(pMetadata.Tags),
 		},
 		Slug: slug,
 	}

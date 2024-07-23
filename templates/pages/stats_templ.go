@@ -72,7 +72,7 @@ func Stats() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Stats</h1><container class=\"flex flex-col space-y-3\"><p class=\"font-mono font-light italic\">This page (as with every page) is a work in progress. I plan to add more stats in the future.</p><div class=\"flex flex-col flex-wrap w-max\"><div class=\"flex flex-row justify-between\"><p class=\"font-mono\">Total Posts:</p><p id=\"stats-post\" class=\"font-semibold\"></p></div><div class=\"flex flex-row justify-between\"><p class=\"font-mono whitespace-pre\">Total Tags:       </p><p id=\"stats-tags\" class=\"font-semibold\"></p></div></div></container></section>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Stats</h1><container class=\"flex flex-col space-y-3\"><p class=\"font-mono font-light italic\">This page (as with every page) is a work in progress. I plan to add more stats in the future.</p><div class=\"flex flex-col flex-wrap w-max\"><div class=\"flex flex-row justify-between\"><p class=\"font-mono\">Total Posts:</p><p id=\"stats-post\" class=\"font-semibold\"></p></div><div class=\"flex flex-row justify-between\"><p class=\"font-mono whitespace-pre\">Total Tags:</p><p id=\"stats-tags\" class=\"font-semibold\"></p></div></div></container></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
