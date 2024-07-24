@@ -3,6 +3,7 @@ module github.com/pynezz/pynezz_com
 go 1.22.4
 
 require (
+	github.com/go-webauthn/webauthn v0.10.2
 	github.com/pynezz/pynezzentials v0.0.0-20240718084424-d57692f5ce23
 	gorm.io/driver/sqlite v1.5.6
 	gorm.io/gorm v1.25.11
@@ -10,10 +11,16 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
+	github.com/fxamacker/cbor/v2 v2.6.0 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
+	github.com/go-webauthn/x v0.1.9 // indirect
+	github.com/google/go-tpm v0.9.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/mattn/go-sqlite3 v1.14.22 // indirect
+	github.com/mitchellh/mapstructure v1.5.0 // indirect
+	github.com/x448/float16 v0.8.4 // indirect
 	gorm.io/driver/mysql v1.5.7 // indirect
 )
 

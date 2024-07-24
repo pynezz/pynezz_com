@@ -1,6 +1,9 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"github.com/go-webauthn/webauthn/webauthn"
+	"gorm.io/gorm"
+)
 
 // User defines the structure of the user model
 type User struct {
@@ -11,4 +14,12 @@ type User struct {
 	Password string `gorm:"not null"`
 
 	Role string `gorm:"not null"`
+}
+
+// Separate the user and admin models
+type Admin struct {
+	User // Embed the `User` struct, which contains fields `UserID`, `Username`, `Password`, `Role`
+
+	AdminID uint `gorm:"primaryKey; unique;"`
+	webauthn.Credential
 }

@@ -310,15 +310,20 @@ func syntaxHighlight(code string) string {
 
 func parseCodeBlock(content, lang string) string {
 	ansi.PrintColor(ansi.Cyan, "parseCodeBlock!")
+
 	// Escape HTML special characters
 	content = strings.ReplaceAll(content, "&", "&amp;")
-	// content = strings.ReplaceAll(content, "<", "&lt;")
-	// content = strings.ReplaceAll(content, ">", "&gt;")
+	content = strings.ReplaceAll(content, "<", "&lt;")
+	content = strings.ReplaceAll(content, ">", "&gt;")
+	content = strings.ReplaceAll(content, "\"", "&quot;")
+	content = strings.ReplaceAll(content, "'", "&#039;")
+	content = strings.ReplaceAll(content, "`", "&#96;")
+
 	content = strings.ReplaceAll(content, "\n", "<br>")
 
 	ansi.PrintColor(ansi.Cyan, "lang: "+lang)
 	ansi.PrintColor(ansi.Yellow, "content: "+content)
-	return fmt.Sprintf(`<pre class="bg-crust overflow-x-auto rounded-md p-2 w-full	"><code id="language-%s" class="text-sm whitespace-pre">%s</code></pre>`, lang, content)
+	return fmt.Sprintf(`<pre class="bg-crust overflow-x-auto rounded-md p-2 w-full"><code id="language-%s" class="text-sm whitespace-pre">%s</code></pre>`, lang, content)
 }
 
 // parseLink parses a markdown link into an HTML link

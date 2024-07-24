@@ -54,7 +54,7 @@ func Execute(args ...string) {
 			}
 
 			port := args[i+1]
-
+			
 			server.Serve(port)
 
 			ansi.PrintInfo("Listening on port: " + port)
