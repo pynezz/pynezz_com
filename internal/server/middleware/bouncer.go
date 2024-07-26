@@ -24,11 +24,7 @@ type CustomContext struct {
 	echo.Context
 	User models.User
 }
-
-// type session struct {
-// 	vips map[string]bool
-// }
-
+	
 func Sec(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ua := c.Request().UserAgent()
@@ -480,25 +476,6 @@ func HandleFirstTimeAdminRegister(c echo.Context) error {
 			"statusText": "Unable to process form data",
 		})
 	}
-
-	// var jsonData models.JSONSessionData
-	// sData, err := json.Marshal(sessionData)
-	// if err != nil {
-	// 	return c.JSON(http.StatusInternalServerError, echo.Map{
-	// 		"message":    "Failed to marshal session data",
-	// 		"status":     "error",
-	// 		"statusText": "Unable to process form data",
-	// 	})
-	// }
-
-	// err = json.Unmarshal(sData, &jsonData)
-	// if err != nil {
-	// 	return c.JSON(http.StatusInternalServerError, echo.Map{
-	// 		"message":    "Failed to unmarshal session data",
-	// 		"status":     "error",
-	// 		"statusText": "Unable to process form data",
-	// 	})
-	// }
 
 	sess := models.Session{
 		SessionID:   string(sessionData.UserID),

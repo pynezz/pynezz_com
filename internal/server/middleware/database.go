@@ -192,7 +192,7 @@ func isAuthorized(requestedUsername, token string) (valid bool, sameUser bool) {
 
 		return false, false
 	}
-
+			
 	return true, t.Claims.(jwt.MapClaims)["sub"] == requestedUsername
 }
 
