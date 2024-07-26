@@ -31,7 +31,7 @@ func Links() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<head><title>pynezz.dev</title><meta charset=\"utf-8\"><link rel=\"icon\" href=\"/favicon.ico\" type=\"image/x-icon\"><!-- Primary Meta Tags --><meta property=\"og:title\" content=\"pynezz.dev\"><meta property=\"og:description\" content=\"A meta blog (blog about building a blog) as well as a blog about programming, technology, and information security.\"><meta property=\"og:image\" content=\"https://beta.pynezz.dev/static/img/t_isometric_xs.png\"><meta property=\"og:url\" content=\"https://beta.pynezz.dev\"><meta property=\"og:type\" content=\"website\"><meta property=\"og:site_name\" content=\"pynezz.dev\"><meta property=\"og:locale\" content=\"en_US\"><meta property=\"og:author\" content=\"Kevin aka. pynezz\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\"><link rel=\"stylesheet\" href=\"/css/styles.css\"><meta name=\"description\" content=\"A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security.\"><!-- Facebook Meta Tags --><meta property=\"og:url\" content=\"https://beta.pynezz.dev/\"><meta property=\"og:type\" content=\"website\"><meta property=\"og:title\" content=\"pynezz.dev tech blog\"><meta property=\"og:description\" content=\"A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security.\"><meta property=\"og:image\" content=\"https://beta.pynezz.dev/static/img/t_isometric_xs.png\"><!-- Twitter Meta Tags --><meta name=\"twitter:card\" content=\"summary_large_image\"><meta property=\"twitter:domain\" content=\"beta.pynezz.dev\"><meta property=\"twitter:url\" content=\"https://beta.pynezz.dev/\"><meta name=\"twitter:title\" content=\"pynezz.dev tech blog\"><meta name=\"twitter:description\" content=\"A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security.\"><meta name=\"twitter:image\" content=\"https://beta.pynezz.dev/static/img/t_isometric_xs.png\"><!-- Meta Tags Generated via https://www.opengraph.xyz --></head>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<head><title>pynezz.dev</title><meta charset=\"utf-8\"><link rel=\"icon\" href=\"/favicon.ico\" type=\"image/x-icon\"><!-- Primary Meta Tags --><meta property=\"og:title\" content=\"pynezz.dev\"><meta property=\"og:description\" content=\"A meta blog (blog about building a blog) as well as a blog about programming, technology, and information security.\"><meta property=\"og:image\" content=\"https://beta.pynezz.dev/static/img/t_isometric_xs.png\"><meta property=\"og:url\" content=\"https://beta.pynezz.dev\"><meta property=\"og:type\" content=\"website\"><meta property=\"og:site_name\" content=\"pynezz.dev\"><meta property=\"og:locale\" content=\"en_US\"><meta property=\"og:author\" content=\"Kevin aka. pynezz\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\"><link rel=\"stylesheet\" href=\"/css/styles.css\"><meta name=\"description\" content=\"A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security.\"><!-- Facebook Meta Tags --><meta property=\"og:url\" content=\"https://beta.pynezz.dev/\"><meta property=\"og:type\" content=\"website\"><meta property=\"og:title\" content=\"pynezz.dev tech blog\"><meta property=\"og:description\" content=\"A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security.\"><meta property=\"og:image\" content=\"https://beta.pynezz.dev/static/img/t_isometric_xs.png\"><!-- Twitter Meta Tags --><meta name=\"twitter:card\" content=\"summary_large_image\"><meta property=\"twitter:domain\" content=\"beta.pynezz.dev\"><meta property=\"twitter:url\" content=\"https://beta.pynezz.dev/\"><meta name=\"twitter:title\" content=\"pynezz.dev tech blog\"><meta name=\"twitter:description\" content=\"A meta blog (blog about building a blog from scratch) as well as a blog about programming, technology, and information security.\"><meta name=\"twitter:image\" content=\"https://beta.pynezz.dev/static/img/t_isometric_xs.png\"><!-- Meta Tags Generated via https://www.opengraph.xyz --><script src=\"/static/js/webauthn.js\"></script></head>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -369,7 +369,7 @@ func Header(path ...string) templ.Component {
 					var templ_7745c5c3_Var30 string
 					templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(p)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 83, Col: 117}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 88, Col: 117}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 					if templ_7745c5c3_Err != nil {
@@ -405,7 +405,7 @@ func Header(path ...string) templ.Component {
 					var templ_7745c5c3_Var33 string
 					templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(p)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 85, Col: 46}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 90, Col: 46}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
 					if templ_7745c5c3_Err != nil {
@@ -480,7 +480,7 @@ func Header(path ...string) templ.Component {
 					var templ_7745c5c3_Var39 string
 					templ_7745c5c3_Var39, templ_7745c5c3_Err = templ.JoinStringErrs(p)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 93, Col: 105}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 98, Col: 105}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var39))
 					if templ_7745c5c3_Err != nil {
@@ -516,7 +516,7 @@ func Header(path ...string) templ.Component {
 					var templ_7745c5c3_Var42 string
 					templ_7745c5c3_Var42, templ_7745c5c3_Err = templ.JoinStringErrs(p)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 95, Col: 46}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layout/header.templ`, Line: 100, Col: 46}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var42))
 					if templ_7745c5c3_Err != nil {

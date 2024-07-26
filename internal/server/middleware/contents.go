@@ -108,30 +108,68 @@ func (d *Database) WriteContentsToDatabase(slug string, content []byte, pMetadat
 // 	return md
 // }
 
-func commonStopWord(word string) bool {
+/* https://www.grammarly.com/blog/conjunctions/ */
+// Coordinating conjunctions
+func coordinating(word string) bool {
+	// FANBOYS
 	m := map[string]bool{
-		"the":  true,
-		"a":    true,
-		"an":   true,
-		"and":  true,
-		"but":  true,
-		"or":   true,
-		"for":  true,
-		"nor":  true,
-		"so":   true,
-		"yet":  true,
-		"with": true,
-		"in":   true,
-		"on":   true,
-		"at":   true,
-		"by":   true,
-		"to":   true,
-		"of":   true,
-		"as":   true,
-		"from": true,
-		"into": true,
+		"for": true,
+		"and": true,
+		"nor": true,
+		"but": true,
+		"or":  true,
+		"yet": true,
+		"so":  true,
 	}
+
 	return m[word]
+}
+
+func correlative(word string) bool {
+	m := map[string]bool{
+		"both":    true,
+		"either":  true,
+		"neither": true,
+		"only":    true, /* (not) only */
+		"not":     true,
+		"whether": true,
+	}
+
+	return m[word]
+}
+
+func subordinating(word string) bool {
+	m := map[string]bool{
+		"after":     true,
+		"although":  true,
+		"as":        true,
+		"if":        true,
+		"though":    true,
+		"because":   true,
+		"before":    true,
+		"even":      true,
+		"that":      true,
+		"lest":      true,
+		"once":      true, /* once only */
+		"since":     true,
+		"than":      true,
+		"unless":    true,
+		"supposing": true,
+		"until":     true,
+		"when":      true,
+		"whenever":  true,
+		"where":     true,
+		"wherever":  true,
+		"while":     true,
+		"whereas":   true,
+		"whether":   true,
+	}
+
+	return m[word]
+}
+
+func isConjunction(word string) bool {
+	return coordinating(word) || correlative(word) || subordinating(word)
 }
 
 // GenerateSlug generates a slug from the title of a post.
@@ -161,18 +199,18 @@ func (d *Database) GenerateSlug(title string) string {
 
 		// Find the number of common descriptor words in the first "maxWordLength" words (default to four)
 		for i, word := range words {
-			if i > maxWordLength && !commonStopWord(word) {
+			if i > maxWordLength && !isConjunction(word) {
 				maxWordLength = i - 1 // We've found the ideal number of words
 				break
 			}
-			if i < maxWordLength && commonStopWord(word) {
+			if i < maxWordLength && isConjunction(word) {
 				fmt.Printf("%s is a common word\n", word)
 				maxWordLength++
 			}
 		}
 
 		for {
-			if !commonStopWord(words[maxWordLength-1]) {
+			if !isConjunction(words[maxWordLength-1]) {
 				break
 			}
 			maxWordLength++
@@ -190,7 +228,7 @@ func (d *Database) GenerateSlug(title string) string {
 			return -1
 		}, word)
 	}
-
+	
 	// Join the words with a hyphen
 	slug := strings.Join(words, "-")
 

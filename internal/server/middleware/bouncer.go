@@ -3,12 +3,16 @@ package middleware
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/a-h/templ"
+	"github.com/go-webauthn/webauthn/webauthn"
+	"github.com/google/uuid"
+
 	"github.com/labstack/echo/v4"
 	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
 	"github.com/pynezz/pynezz_com/templates"
@@ -256,4 +260,363 @@ func SecurityHeaders(next echo.HandlerFunc) echo.HandlerFunc {
 		c.Response().Header().Set("X-XSS-Protection", "1; mode=block")
 		return next(c)
 	}
+}
+
+func FIDO2Auth(next echo.HandlerFunc) echo.HandlerFunc {
+	// handleFido2Register( )
+
+	// wAuth.BeginLogin()
+	return func(c echo.Context) error {
+		return next(c)
+	}
+}
+
+// UserWrap is a wrapper for user data, used for registration, making sure parameters are correct
+type UserWrap struct {
+	Username    string
+	Displayname string
+	Credentials webauthn.Credential
+}
+
+func newAdmin(u UserWrap) (models.Admin, error) {
+	if u.Username == "" || u.Displayname == "" {
+		return models.Admin{}, fmt.Errorf("missing required fields")
+	}
+
+	return models.Admin{
+		Name:          u.Username,
+		DisplayName:   u.Displayname,
+		Authenticated: false,
+		AdminID:       Uuid(u.Username).AsUint(),
+		Credentials:   models.JSONSlice{u.Credentials},
+	}, nil
+}
+
+// Fido and Brutus are both dog names. Brutus is the guard dog.
+// Brutus is a middleware that checks if the user is FIDO authenticated.
+func Brutus(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		sessionID := c.Request().Header.Get("Session-ID")
+		session, exists := sessions[sessionID]
+		if !exists {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+		}
+
+		uid := uint(binary.BigEndian.Uint64(session.SessionData.UserID))
+		user, err := getAdminByID(uid)
+		if err != nil || !user.Authenticated {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+		}
+
+		return next(c)
+	}
+}
+
+func handleLogout(c echo.Context) error {
+	cookie, _ := c.Cookie("Authorization")
+	if cookie != nil {
+		cookie.MaxAge = -1
+		c.SetCookie(cookie)
+	}
+
+	return c.Redirect(http.StatusMovedPermanently, "/login")
+}
+
+func HandleFido2LoginFinish(c echo.Context) error {
+	return finishFido2Login(c)
+}
+
+func HandleFido2Login(c echo.Context) error {
+
+	body := c.Request().Body
+	defer body.Close()
+
+	username := c.FormValue("username")
+
+	a, err := getAdminByUsername(username)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{
+			"message": "Failed to login",
+			"status":  "error",
+		})
+	}
+
+	options, sessionData, err := DefaultWAuth().BeginLogin(a)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{
+			"message": "Failed to login",
+			"status":  "error",
+		})
+	}
+
+	t := Uuid(username).Identifier
+
+	datastore.SaveSession(t, *sessionData)
+
+	fmt.Printf("Got a POST request to /fido2/register: %+v\n", body)
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": sessionData.UserID,
+		"status":  "ok",
+		"options": options,
+	})
+}
+
+func finishFido2Login(c echo.Context) error {
+	body := c.Request().Body
+	defer body.Close()
+
+	username := c.FormValue("username")
+	t := c.Request().Header.Get("Session-Key")
+
+	gottenKey := datastore.GetSession(t)
+	ansi.PrintInfo("Got session key: " + string(gottenKey.UserID))
+
+	a, err := getAdminByUsername(username)
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	session := sessions[string(gottenKey.UserID)].SessionData
+
+	credential, err := DefaultWAuth().FinishLogin(a, webauthn.SessionData(session), c.Echo().AcquireContext().Request())
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	a.AddCredential(credential)
+
+	if err = writeAdminToDatabae(&a); err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	c.Response().Header().Set("Content-Type", "application/json")
+	c.Response().Header().Set("Session-Key", string(session.UserVerification))
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": "Login successful",
+		"status":  "ok",
+	})
+}
+
+func HandleFirstTimeAdminRegister(c echo.Context) error {
+
+	r := json.NewDecoder(c.Request().Body)
+	ansi.PrintDebug("Got a POST request to /passkey/registerStart: " + fmt.Sprintf("%+v", r))
+
+	// if adminIsInitialized() {
+	// 	return c.JSON(http.StatusBadRequest, echo.Map{
+	// 		"message":    "No funny business!",
+	// 		"status":     "error",
+	// 		"statusText": "Admin already initialized",
+	// 	})
+	// }
+	req := c.Request()
+	if req.Method != http.MethodPost {
+		return c.JSON(http.StatusMethodNotAllowed, echo.Map{
+			"message": "Method not allowed",
+			"status":  "error",
+		})
+	}
+
+	body := req.Body
+	defer body.Close()
+
+	var bodyContent []byte
+	_, err := body.Read(bodyContent)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{
+			"message":    "Missing form parameter: " + err.Error(),
+			"status":     "error",
+			"statusText": "Unable to process form data",
+		})
+	}
+
+	username, displayname, err := getUsername(req)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{
+			"message":    "Missing form parameter: " + err.Error(),
+			"status":     "error",
+			"statusText": "Unable to process form data",
+		})
+	}
+
+	if username == "" || displayname == "" {
+		return c.JSON(http.StatusBadRequest, echo.Map{
+			"message":    "Missing form parameter",
+			"status":     "error",
+			"statusText": "Username and display name are required",
+		})
+	}
+
+	ansi.PrintBold("Got a POST request to /passkey/registerStart. Payload:\n" + "{" + username + ", " + displayname + "}")
+
+	a, err := newAdmin(UserWrap{
+		Username:    username,
+		Displayname: displayname,
+	})
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{
+			"message":    "Missing form parameter: " + err.Error(),
+			"status":     "error",
+			"statusText": "Unable to process form data",
+		})
+	}
+
+	options, sessionData, err := DefaultWAuth().BeginRegistration(a)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{
+			"message":    "Failed to begin registration",
+			"status":     "error",
+			"statusText": "Unable to process form data",
+		})
+	}
+
+	if err = writeAdminToDatabae(&a); err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{
+			"message":    "Failed to write admin to database",
+			"status":     "error",
+			"statusText": "Unable to process form data",
+		})
+	}
+
+	// var jsonData models.JSONSessionData
+	// sData, err := json.Marshal(sessionData)
+	// if err != nil {
+	// 	return c.JSON(http.StatusInternalServerError, echo.Map{
+	// 		"message":    "Failed to marshal session data",
+	// 		"status":     "error",
+	// 		"statusText": "Unable to process form data",
+	// 	})
+	// }
+
+	// err = json.Unmarshal(sData, &jsonData)
+	// if err != nil {
+	// 	return c.JSON(http.StatusInternalServerError, echo.Map{
+	// 		"message":    "Failed to unmarshal session data",
+	// 		"status":     "error",
+	// 		"statusText": "Unable to process form data",
+	// 	})
+	// }
+
+	sess := models.Session{
+		SessionID:   string(sessionData.UserID),
+		SessionData: models.JSONSessionData(*sessionData),
+	}
+
+	// Make a session key and store the sessionData values
+	t := uuid.New().String()
+	datastore.SaveSession(t, *sessionData)
+
+	// TODO: switch out with proper handling in the future
+	sessions[t] = sess
+
+	writeWASessionData(&sess)
+
+	// return c.JSON(http.StatusOK, echo.Map{
+	// 	"options":     options,
+	// 	"sessionData": sessionData,
+	// })'
+	return JSONResponse(c.Response().Writer, t, options, http.StatusOK)
+}
+
+func HandleFido2RegisterFinish(c echo.Context) error {
+	return finishFido2Registration(c)
+}
+
+func finishFido2Registration(c echo.Context) error {
+	body := c.Request().Body
+	defer body.Close()
+
+	// t := c.Request().Header.Get("Session-Key")
+
+	username := c.Request().FormValue("username")
+
+	a, err := getAdminByUsername(username)
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	// TODO: This will fail. The user id is used as the session key to fetch the session data, not the username
+	// Kinda vulnerable due to a fake request with a valid username? I know FIDO2 is supposed to be secure,
+	session := sessions[string(a.WebAuthnID())].SessionData
+
+	ansi.PrintSuccess("Set session data: " + string(session.UserID))
+
+	credential, err := DefaultWAuth().FinishRegistration(a, webauthn.SessionData(session), c.Echo().AcquireContext().Request())
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	a.Credentials = append(a.Credentials, *credential)
+
+	if err = writeAdminToDatabae(&a); err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": "Registration successful",
+		"status":  "ok",
+	})
+}
+
+func getUsername(r *http.Request) (username string, displayname string, err error) {
+	type user struct {
+		Username    string `json:"username"`
+		DisplayName string `json:"displayname"`
+	}
+	var u user
+	if err := json.NewDecoder(r.Body).Decode(&u); err != nil {
+		return "", "", err
+	}
+
+	return u.Username, u.DisplayName, nil
+}
+
+func JSONResponse(w http.ResponseWriter, sessionKey string, data interface{}, status int) error {
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Session-Key", sessionKey)
+	w.WriteHeader(status)
+	err := json.NewEncoder(w).Encode(data)
+
+	return err
+}
+
+func GenerateRegistrationOptions(c echo.Context) error {
+	return generateRegistrationOptions(c)
+}
+
+func generateRegistrationOptions(c echo.Context) error {
+	body := c.Request().Body
+	defer body.Close()
+
+	username := c.FormValue("username")
+
+	a, err := getAdminByUsername(username)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{
+			"message": "Failed to get admin by username",
+			"status":  "error",
+		})
+	}
+
+	options, sessionData, err := DefaultWAuth().BeginRegistration(a)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{
+			"message": "Failed to begin registration",
+			"status":  "error",
+		})
+	}
+
+	t := Uuid(username).Identifier
+
+	datastore.SaveSession(t, *sessionData)
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": sessionData.UserID,
+		"status":  "ok",
+		"options": options,
+	})
 }

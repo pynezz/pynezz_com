@@ -24,6 +24,9 @@ func setup(app *echo.Echo) {
 	ctx := app.AcquireContext()
 	defer app.ReleaseContext(ctx)
 
+	// webauthn
+	// webAuthn := middleware.DefaultWAuth()
+
 	// set server header
 	app.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
@@ -50,6 +53,10 @@ func setup(app *echo.Echo) {
 
 	app.GET("/", homeHandler)
 
+	app.GET("/404", func(c echo.Context) error {
+		return Render(c, 404, pages.NotFound())
+	})
+
 	// Use Bouncer middleware
 	app.GET("/login", middleware.Bouncer(handleLogin))
 	app.POST("/login", middleware.Login(middleware.Bouncer(gotoDashboard)))
@@ -64,11 +71,8 @@ func setup(app *echo.Echo) {
 	app.GET("/posts/", postsHandler.handleShowLastPosts)
 	app.GET("/posts/:slug", postsHandler.GetPostBySlug)
 
-	// BUG! This does not fetch the posts
 	app.GET("/tags/:tag", postsHandler.GetPostsByTag)
-
-	// BUG! This does not fetch the tags (only one)
-	app.GET("/tags/", postsHandler.GetTags)
+	app.GET("/tags/", postsHandler.GetTags) // not sure if I have to do this?
 	app.GET("/tags", postsHandler.GetTags)
 
 	app.GET("/stats", func(c echo.Context) error {
@@ -84,7 +88,21 @@ func setup(app *echo.Echo) {
 		return c.JSONBlob(200, res)
 	})
 
-	// Todo - consider doing this, or just managing it via the CLI in the backend
+	app.GET("/passkey", func(c echo.Context) error {
+		return Render(c, 200, pages.Passkey())
+	})
+
+	app.GET("/api/passkey/generate-registration-options", middleware.GenerateRegistrationOptions)
+
+	// webauthn register
+	app.POST("/api/passkey/registerStart", middleware.HandleFirstTimeAdminRegister)
+	app.POST("/api/passkey/registerFinish", middleware.HandleFido2RegisterFinish)
+
+	// webauthn login
+	app.POST("/api/passkey/loginStart", middleware.HandleFido2Login)
+	app.POST("/api/passkey/loginFinish", middleware.HandleFido2LoginFinish)
+
+	// Todo - Next step after webauthn works
 	// app.GET("/posts/:slug/edit", postsHandler.EditPost)
 
 	// app.POST("csp-report", func(c echo.Context) error {

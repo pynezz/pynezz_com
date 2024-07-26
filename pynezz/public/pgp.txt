@@ -1,19 +1,26 @@
 -----BEGIN PGP PUBLIC KEY BLOCK-----
-Comment: User-ID:       Pynezz - email aliased pgp key for use with pynezz.com and pynezz.
-Comment: Valid until:   18.06.2027 23:03
-Comment: Usage:         Signing, Encryption, Certifying User-IDs
-Comment: Fingerprint:   D29A6F2AEE3F90C41F0FF5AB7D56A8217DC34413
+Comment: User-ID:	pynezz.dev <lent-urban-bats@duck.com>
+Comment: a.k.a.:	Pynezz (email aliased pgp key for use with pynezz.com and pynezz.dev) <elxn50rt@duck.com>
+Comment: Valid from:	18.06.2024 23:03
+Comment: Valid until:	18.06.2027 23:03
+Comment: Type:	255-bit EdDSA (secret key available)
+Comment: Usage:	Signing, Encryption, Certifying User-IDs
+Comment: Fingerprint:	D29A6F2AEE3F90C41F0FF5AB7D56A8217DC34413
 
 mDMEZnH2NhYJKwYBBAHaRw8BAQdAmVg5egmR1uMurxREhLZdhk2QVX/FeF3hblok
-0HJykOa0WVB5bmV6eiAoZW1haWwgYWxpYXNlZCBwZ3Aga2V5IGZvciB1c2Ugd2l0
-aCBweW5lenouY29tIGFuZCBweW5lenouZGV2KSA8ZWx4bjUwcnRAZHVjay5jb20+
-iJkEExYKAEEWIQTSmm8q7j+QxB8P9at9VqghfcNEEwUCZnH2NgIbAwUJBaOagAUL
-CQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAKCRB9VqghfcNEE2qxAQCfeIUdPrT6
-1TZEyDo3SaEonwBmaGSXvXDboWzyXRW2rQEA6hyTfeTEhes78Dj02Q0338u5uSwt
-6gm+vzyuKnsNhg+4OARmcfY2EgorBgEEAZdVAQUBAQdAhPDyGmqe2kHaGikWYGW4
-uAWo/cOxnqPEvAKeqwml4hYDAQgHiH4EGBYKACYWIQTSmm8q7j+QxB8P9at9Vqgh
-fcNEEwUCZnH2NgIbDAUJBaOagAAKCRB9VqghfcNEE9FNAP41MxjqHKZRPoJQ0PQZ
-WV8EYcA9rmw7BMHEVuZSVfm8+QEAvhf3+6W1SQC+a6uhlcL4X0IAzC3RzVg5068Y
-ZTTMyAU=
-=Ia2u
+0HJykOa0JXB5bmV6ei5kZXYgPGxlbnQtdXJiYW4tYmF0c0BkdWNrLmNvbT6ImQQT
+FgoAQRYhBNKabyruP5DEHw/1q31WqCF9w0QTBQJmohU+AhsDBQkFo5qABQsJCAcC
+AiICBhUKCQgLAgQWAgMBAh4HAheAAAoJEH1WqCF9w0QTdjMBAJ8xN7hdXA4ljaiX
+60QxCgudwCyjWzqy5dXjJFs0tt/HAP0Raa0HhOsneYfH1GWj2Z4z5eQTKnUYjv1t
+JKNxIiupBrRZUHluZXp6IChlbWFpbCBhbGlhc2VkIHBncCBrZXkgZm9yIHVzZSB3
+aXRoIHB5bmV6ei5jb20gYW5kIHB5bmV6ei5kZXYpIDxlbHhuNTBydEBkdWNrLmNv
+bT6ImQQTFgoAQRYhBNKabyruP5DEHw/1q31WqCF9w0QTBQJmcfY2AhsDBQkFo5qA
+BQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheAAAoJEH1WqCF9w0QTarEBAJ94hR0+
+tPrVNkTIOjdJoSifAGZoZJe9cNuhbPJdFbatAQDqHJN95MSF6zvwOPTZDTffy7m5
+LC3qCb6/PK4qew2GD7g4BGZx9jYSCisGAQQBl1UBBQEBB0CE8PIaap7aQdoaKRZg
+Zbi4Baj9w7Geo8S8Ap6rCaXiFgMBCAeIfgQYFgoAJhYhBNKabyruP5DEHw/1q31W
+qCF9w0QTBQJmcfY2AhsMBQkFo5qAAAoJEH1WqCF9w0QT0U0A/jUzGOocplE+glDQ
+9BlZXwRhwD2ubDsEwcRW5lJV+bz5AQC+F/f7pbVJAL5rq6GVwvhfQgDMLdHNWDnT
+rxhlNMzIBQ==
+=QO8t
 -----END PGP PUBLIC KEY BLOCK-----

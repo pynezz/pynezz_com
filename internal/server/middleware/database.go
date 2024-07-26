@@ -77,12 +77,12 @@ func initContentsDB(conf gorm.Config) {
 }
 
 func initMainDB(conf gorm.Config) {
-	mainBase, err := InitDB(dbNames[Main], conf, models.User{}, models.Admin{})
+	mainBase, err := InitDB(dbNames[Main], conf, models.User{}, &models.Admin{}, &models.Session{})
 	if err != nil {
 		ansi.PrintError(err.Error())
 	}
 
-	if err := mainBase.AutoMigrate(&models.User{}, &models.Admin{}); err != nil {
+	if err := mainBase.AutoMigrate(&models.User{}, &models.Admin{}, &models.Session{}); err != nil {
 		ansi.PrintError("Error migrating the main database")
 		ansi.PrintError(err.Error())
 	}
@@ -95,6 +95,7 @@ func initMainDB(conf gorm.Config) {
 	DBInstance.SetDriver(mainBase)
 	DBInstance.AddTable(models.User{}, "users")
 	DBInstance.AddTable(models.Admin{}, "admins")
+	DBInstance.AddTable(models.Session{}, "session_data")
 
 	ansi.PrintSuccess("Main database initialized")
 }
@@ -292,6 +293,30 @@ func getUserHash(username string) (string, uint) {
 	return user.Password, http.StatusOK // Only the hash is returned (password = hash)
 }
 
+func getAdminByUsername(username string) (models.Admin, error) {
+	var admin models.Admin
+	DBInstance.Driver.Where("username = ?", username).First(&admin)
+	return admin, nil
+}
+
+func getAdminByID(id uint) (models.Admin, error) {
+	var admin models.Admin
+	DBInstance.Driver.Where("id = ?", id).First(&admin)
+	return admin, nil
+}
+
+func adminIsInitialized() bool {
+	var admin *models.Admin
+	DBInstance.Driver.First(&admin)
+
+	if admin.Name == "" { // if the admin is not initialized
+		ansi.PrintInfo("Admin is not initialized")
+		return false
+	}
+
+	return true
+}
+
 // getUser is a helper function that returns a user from the database
 // Users are able to fetch all username, but are only able to fetch more information, unless they're an admin.
 // The JWT token is used to verify the user's role.
@@ -415,4 +440,38 @@ func GetPostsByTag(tag string) ([]models.PostMetadata, error) {
 
 	ansi.PrintSuccess("Posts found: " + fmt.Sprintf("%d", len(posts)))
 	return posts, nil
+}
+
+func writeAdminToDatabae(a *models.Admin) error {
+	if DBInstance == nil {
+		ansi.PrintError("Database driver is nil")
+		return fmt.Errorf("database driver is nil")
+	}
+
+	tx := DBInstance.Driver.Create(&a)
+	if tx.Error != nil {
+		ansi.PrintError(tx.Error.Error())
+		return tx.Error
+	}
+
+	ansi.PrintSuccess("Admin " + a.DisplayName + " created successfully!")
+
+	return nil
+}
+
+func writeWASessionData(d *models.Session) error {
+	if DBInstance == nil {
+		ansi.PrintError("Database driver is nil")
+		return fmt.Errorf("database driver is nil")
+	}
+
+	tx := DBInstance.Driver.Create(&d)
+	if tx.Error != nil {
+		ansi.PrintError(tx.Error.Error())
+		return tx.Error
+	}
+
+	ansi.PrintSuccess("Session data for " + d.SessionID + "written to the database")
+
+	return nil
 }

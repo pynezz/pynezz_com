@@ -1,8 +1,8 @@
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
-Contact: mailto:elxn50rt@duck.com
-Expires: 2024-09-04T22:00:00.000Z
+Contact: lent-urban-bats@duck.com
+Expires: 2024-10-25T22:00:00.000Z
 Encryption: https://pynezz.com/pgp.txt
 Encryption: https://pynezz.dev/pgp.txt
 Preferred-Languages: en, no
@@ -10,11 +10,10 @@ Canonical: https://pynezz.com/.well-known/security.txt
 Canonical: https://pynezz.dev/.well-known/security.txt
 Policy: https://pynezz.com/security-policy.html
 Policy: https://pynezz.dev/security-policy.html
-Policy: http://pynezz.com/security-policy.html
 -----BEGIN PGP SIGNATURE-----
 
-iHUEARYKAB0WIQTSmm8q7j+QxB8P9at9VqghfcNEEwUCZnLRegAKCRB9VqghfcNE
-EwgAAP9Ecq/m3AukvJw6IFW7gkaRO3fEupZnCssnAUDKiNp8kgD/dvlTpcsulwau
-4I2jOWAbxK4s19ttAzeh68YuzkKumgo=
-=y2K6
+iHUEARYKAB0WIQTSmm8q7j+QxB8P9at9VqghfcNEEwUCZqIWkAAKCRB9VqghfcNE
+E9IZAQCR1sufffJZu+Sg/qQYjcrhE5tSuS6+UeaX2VYskL0RawD/cXI2yZsu26uv
+M8y1f5j/8Fc/j1p2hgBC1rcErIOV2gw=
+=Ug9+
 -----END PGP SIGNATURE-----
