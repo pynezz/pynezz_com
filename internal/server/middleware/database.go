@@ -108,17 +108,7 @@ func (d *Database) SetDriver(db *gorm.DB) {
 	d.Driver = db
 }
 
-// https://gosamples.dev/sqlite-intro/
-
-// NewDatabase creates a new database. It returns a pointer to the database.
-// func initDatabaseDriver(db *gorm.DB) *Database {
-// 	ansi.PrintInfo("Initializing new database driver...")
-// 	DBInstance = &Database{
-// 		Driver: db,
-// 		Tables: make(map[string]interface{}),
-// 	}
-// 	return DBInstance
-// }
+// https://gosamples.dev/sqlite-intro/ - useful resource
 
 // Initialize the database with the given name and configuration, and automigrate the given tables
 func InitDB(database string, conf gorm.Config, tables ...interface{}) (*gorm.DB, error) {
@@ -192,7 +182,7 @@ func isAuthorized(requestedUsername, token string) (valid bool, sameUser bool) {
 
 		return false, false
 	}
-			
+
 	return true, t.Claims.(jwt.MapClaims)["sub"] == requestedUsername
 }
 
@@ -235,8 +225,6 @@ func GetPostBySlug(slug string) (models.Post, error) {
 		},
 		Content: post.Content,
 	}
-	// TODO: Fix this - it's supposed to work with post straight from the database, but it doesn't
-	// because it's never written to the database - check the parser for implementing this
 	ansi.PrintBold("Post found: " + post.Metadata.Title)
 	return post, nil
 }

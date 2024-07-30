@@ -3,7 +3,7 @@ module github.com/pynezz/pynezz_com
 go 1.22.4
 
 require (
-	github.com/go-webauthn/webauthn v0.10.2
+	github.com/go-webauthn/webauthn v0.11.0
 	github.com/google/uuid v1.6.0
 	github.com/pynezz/pynezzentials v0.0.0-20240718084424-d57692f5ce23
 	gorm.io/driver/sqlite v1.5.6

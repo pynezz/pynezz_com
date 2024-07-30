@@ -41,8 +41,6 @@ templ Root(content templ.Component, path ...string) {
             </main>
             @layout.Footer()
             @js()
-            // TODO: Nonce, SHA256 Checksum, and CSP not yet implemented. This is security theater for now.
-            // @scripts.OnLoad()
         </body>
     </html>
 }

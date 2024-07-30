@@ -2,43 +2,18 @@ package middleware
 
 import (
 	"fmt"
-	"os"
-	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
 	"github.com/pynezz/pynezzentials/ansi"
-	"github.com/pynezz/pynezzentials/fsutil"
 )
 
 const (
 	exp = 9            // Expires in 9 hours
 	iss = "pynezz.dev" // Issuer
 )
-
-func getSecretKey() string {
-	if exists := fsutil.FileExists(".env"); !exists {
-		ansi.PrintError("No .env file found")
-		os.Exit(1)
-	}
-
-	// Read the secret key from the .env file
-	envFile, err := fsutil.GetFileContent(".env")
-	if err != nil {
-		ansi.PrintError(err.Error())
-		os.Exit(1)
-	}
-
-	for _, line := range strings.Split(envFile, "\n") {
-		if strings.Contains(line, "JWT_SECRET") {
-			return strings.Split(line, "=")[1]
-		}
-	}
-
-	return "" // Whatever value is after the '=' sign
-}
 
 func VerifyJWTToken(tokenString string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -64,7 +39,7 @@ func VerifyJWTToken(tokenString string) (*jwt.Token, error) {
 		}
 
 		// Return the secret key to the jwt.Parse function
-		return []byte(getSecretKey()), nil
+		return []byte(getEnv("JWT_SECRET")), nil
 	})
 
 	if err != nil {
@@ -92,7 +67,6 @@ func VerifyJWTToken(tokenString string) (*jwt.Token, error) {
 }
 
 func GenerateJWTToken(user models.User) string {
-	// curTime := time.Now().Unix()
 	loginTime := time.Now()
 	// Create a new token object, specifying signing method and the claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -103,7 +77,7 @@ func GenerateJWTToken(user models.User) string {
 	})
 
 	// Sign and get the complete encoded token as a string
-	tokenString, err := token.SignedString([]byte(getSecretKey()))
+	tokenString, err := token.SignedString([]byte(getEnv("JWT_SECRET")))
 	if err != nil {
 		fmt.Println(err)
 	}

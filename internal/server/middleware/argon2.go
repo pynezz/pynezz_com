@@ -180,7 +180,7 @@ func (a *Argon2) GetPrintableKeyWithSalt(salt []byte) string {
 
 	// Base64 encode the salt and hashed password.
 	b64Salt := base64.RawStdEncoding.EncodeToString(a.Salt)
-	b64Hash := base64.RawStdEncoding.EncodeToString(a.hash) // TODO: Need to remove - we don't store the hash now
+	b64Hash := base64.RawStdEncoding.EncodeToString(a.hash)
 
 	// Return a string using the standard encoded hash representation.
 	encodedHash := fmt.Sprintf("$argon2id$v=%d$m=%d,t=%d,p=%d$%s$%s", argon2.Version, p.memory, p.iterations, p.parallelism, b64Salt, b64Hash)

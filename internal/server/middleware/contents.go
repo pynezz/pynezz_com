@@ -99,7 +99,7 @@ func (d *Database) WriteContentsToDatabase(slug string, content []byte, pMetadat
 // 	md := models.PostMetadata{
 // 		Title: parsedMetadata.Title,
 // 		Slug:  d.GenerateSlug(parsedMetadata.Title),
-// 		Tags:  datatypes.JSON(strings.Join(parsedMetadata.Tags, ",")), // Convert the tags to a JSON array ( // TODO: is this valid?)
+// 		Tags:  datatypes.JSON(strings.Join(parsedMetadata.Tags, ",")), // Convert the tags to a JSON array (
 // 	}
 
 // 	// Write post to database
@@ -228,7 +228,7 @@ func (d *Database) GenerateSlug(title string) string {
 			return -1
 		}, word)
 	}
-	
+
 	// Join the words with a hyphen
 	slug := strings.Join(words, "-")
 

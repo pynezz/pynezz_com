@@ -16,7 +16,6 @@ import (
 
 const secStyle = "flex flex-col space-y-3"
 
-// TODO: Implement map[string]int for tags instead so I can sort by count
 func Tags(tags map[string]int) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -114,7 +113,7 @@ func Tags(tags map[string]int) templ.Component {
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(tag)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 17, Col: 114}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 16, Col: 114}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -127,7 +126,7 @@ func Tags(tags map[string]int) templ.Component {
 			var templ_7745c5c3_Var10 string
 			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(" | %d", freq))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 17, Col: 189}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/tags.templ`, Line: 16, Col: 189}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {
