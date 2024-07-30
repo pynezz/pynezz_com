@@ -236,7 +236,7 @@ func HandleFirstTimeAdminRegister(c echo.Context) error {
 
 	// TODO: switch out with proper handling in the future
 	sessions[t] = sess
-						
+
 	writeWASessionData(&sess)
 
 	// return c.JSON(http.StatusOK, echo.Map{

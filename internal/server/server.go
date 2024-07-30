@@ -92,6 +92,11 @@ func setup(app *echo.Echo) {
 		return Render(c, 200, pages.Passkey())
 	})
 
+	/* // TODO Endpoints:
+	- /api/verify-registration
+	- /api/passkey/generate-authentication-options
+	- /api/passkey/verifyAuthentication
+	*/
 	app.GET("/api/passkey/generate-registration-options", middleware.GenerateRegistrationOptions)
 
 	// webauthn register

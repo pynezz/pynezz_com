@@ -70,7 +70,7 @@ func Passkey() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Passkey</h1><div class=\"container flex justify-center items-center vh-100\"><div class=\"bg-base p-5 rounded-lg border-crust border-2 w-50 h-max\"><h1 class=\"mb-4 text-center\">🔑 Passkey</h1><div class=\"text-left text-wrap\" id=\"message\"><span id=\"elem-error\"></span> <span id=\"elem-success\"></span></div><div class=\"mb-3 flex flex-col w-full gap-2\"><input type=\"text\" class=\"focus:outline-none bg-crust rounded-md p-2\" id=\"username\" placeholder=\"username\"> <input type=\"text\" class=\"focus:outline-none bg-crust rounded-md p-2\" id=\"displayname\" placeholder=\"display name\"></div><div class=\"flex flex-col w-full\"><div class=\"rounded border-mantle gap-2\"><button class=\"p-2 py-4 bg-surface2 w-full h-fit shadow-md focus:outline-none after:bg-mantle text-text active:bg-surface0 rounded-sm hover:bg-sky hover:text-surface2  \" id=\"registerButton\">Register</button> <button class=\"p-2 bg-surface2 w-full h-fit shadow-sm focus:outline-none aria-pressed:bg-mauve text-text active:bg-surface0 rounded-sm hover:bg-sky hover:text-surface2\" id=\"loginButton\">Login</button></div></div></div></div></section>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Passkey</h1><div class=\"container flex justify-center items-center vh-100\"><div class=\"bg-base p-5 rounded-lg border-crust border-2 w-50 h-max\"><h1 class=\"mb-4 text-center\">🔑 Passkey</h1><div class=\"text-left text-wrap\" id=\"message\"><span id=\"elem-error\"></span> <span id=\"elem-success\"></span></div><div class=\"mb-3 flex flex-col w-full gap-2\"><input type=\"text\" class=\"focus:outline-none bg-crust rounded-md p-2\" id=\"username\" placeholder=\"username\"> <input type=\"text\" class=\"focus:outline-none bg-crust rounded-md p-2\" id=\"displayname\" placeholder=\"display name\"></div><div class=\"flex flex-col w-full\"><div class=\"rounded border-mantle gap-2\"><button class=\"p-2 py-4 bg-surface2 w-full h-fit shadow-md focus:outline-none after:bg-mantle text-text active:bg-surface0 rounded-sm hover:bg-sky hover:text-surface2  \" id=\"registerButton\">Register</button> <button class=\"p-2 bg-surface2 w-full h-fit shadow-sm focus:outline-none aria-pressed:bg-mauve text-text active:bg-surface0 rounded-sm hover:bg-sky hover:text-surface2\" id=\"loginButton\">Login</button></div></div></div></div></section><script src=\"/static/js/webauthn.js\"></script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -84,14 +84,20 @@ func Passkey() templ.Component {
 
 func pkScript() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_pkScript_da18`,
-		Function: `function __templ_pkScript_da18(){const { startRegistration } = SimpleWebAuthnBrowser;
+		Name: `__templ_pkScript_9f5d`,
+		Function: `function __templ_pkScript_9f5d(){const { startRegistration, startAuthentication } = SimpleWebAuthnBrowser;
+
 
     document.addEventListener("DOMContentLoaded", ready);
 
+    let elemSuccess = null
+    let elemError = null
+
     function ready() {
+        elemSuccess = document.getElementById('elem-success');
+        elemError = document.getElementById('elem-error');
         document.getElementById('registerButton').addEventListener('click', begin);
-        document.getElementById('loginButton').addEventListener('click', login);
+        document.getElementById('loginButton').addEventListener('click', authenticate);
     }
 
     function showMessage(message, isError = false) {
@@ -129,7 +135,7 @@ func pkScript() templ.ComponentScript {
 
         // POST the response to the endpoint that calls
         // @simplewebauthn/server -> verifyRegistrationResponse()
-        const verificationResp = await fetch('/verify-registration', {
+        const verificationResp = await fetch('/api/verify-registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -147,55 +153,60 @@ func pkScript() templ.ComponentScript {
             elemError.innerHTML = ` + "`" + `Oh no, something went wrong! Response: <pre>${JSON.stringify(
                 verificationJSON,
             )}</pre>` + "`" + `;
+
         }
+    }
 
-//   });
-//         try {
-//             if (!username) {
-//                 throw new Error('Please enter a username.');
-//             }
+    const authenticate = async () => {
+        // <button>
+        const elemBegin = document.getElementById('btnBegin');
+        // <span>/<p>/etc...
+        const elemSuccess = document.getElementById('elem-success');
+        // <span>/<p>/etc...
+        const elemError = document.getElementById('elem-error');
 
-//             if (!displayname) {
-//                 throw new Error('Please enter a display name.');
-//             }
+        // Start authentication when the user clicks a button
+        elemBegin.addEventListener('click', async () => {
+            // Reset success/error messages
+            elemSuccess.innerHTML = '';
+            elemError.innerHTML = '';
 
-//             // Get login options from your server. Here, we also receive the challenge.
-//             const response = await fetch('/api/passkey/loginStart', {
-//                 method: 'POST', headers: {'Content-Type': 'application/json'},
-//                 body: JSON.stringify({username: username, displayname: displayname})
-//             });
-//             // Check if the login options are ok.
-//             if (!response.ok) {
-//                 const msg = await response.json();
-//                 throw new Error('Failed to get login options from server: ' + msg);
-//             }
-//             // Convert the login options to JSON.
-//             const options = await response.json();
-//             console.log(options)
+            // GET authentication options from the endpoint that calls
+            // @simplewebauthn/server -> generateAuthenticationOptions()
+            const resp = await fetch('/api/passkey/generate-authentication-options');
 
-//             // This triggers the browser to display the passkey / WebAuthn modal (e.g. Face ID, Touch ID, Windows Hello).
-//             // A new assertionResponse is created. This also means that the challenge has been signed.
-//             const assertionResponse = await navigator.credentials.get(options.publicKey);
+            let asseResp;
+            try {
+            // Pass the options to the authenticator and wait for a response
+            asseResp = await startAuthentication(await resp.json());
+            } catch (error) {
+            // Some basic error handling
+            elemError.innerText = error;
+            throw error;
+            }
 
-//             // Send assertionResponse back to server for verification.
-//             const verificationResponse = await fetch('/api/passkey/loginFinish', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     'Session-Key': response.headers.get('Session-Key'),
-//                 },
-//                 body: JSON.stringify(assertionResponse)
-//             });
+            // POST the response to the endpoint that calls
+            // @simplewebauthn/server -> verifyAuthenticationResponse()
+            const verificationResp = await fetch('/verify-authentication', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(asseResp),
+            });
 
-//             const msg = await verificationResponse.json();
-//             if (verificationResponse.ok) {
-//                 showMessage(msg, false);
-//             } else {
-//                 showMessage(msg, true);
-//             }
-//         } catch (error) {
-//             showMessage('Error: ' + error.message, true);
-//         }
+            // Wait for the results of verification
+            const verificationJSON = await verificationResp.json();
+
+            // Show UI appropriate for the ` + "`" + `verified` + "`" + ` status
+            if (verificationJSON && verificationJSON.verified) {
+            elemSuccess.innerHTML = 'Success!';
+            } else {
+            elemError.innerHTML = ` + "`" + `Oh no, something went wrong! Response: <pre>${JSON.stringify(
+                verificationJSON,
+            )}</pre>` + "`" + `;
+            }
+        });
     }
 
     const register = async () => {
@@ -267,7 +278,7 @@ func pkScript() templ.ComponentScript {
         }
     }
 }`,
-		Call:       templ.SafeScript(`__templ_pkScript_da18`),
-		CallInline: templ.SafeScriptInline(`__templ_pkScript_da18`),
+		Call:       templ.SafeScript(`__templ_pkScript_9f5d`),
+		CallInline: templ.SafeScriptInline(`__templ_pkScript_9f5d`),
 	}
 }
