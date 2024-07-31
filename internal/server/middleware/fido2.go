@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
 	"github.com/pynezz/pynezzentials/ansi"
+	"gorm.io/gorm"
 )
 
 var (
@@ -283,17 +284,33 @@ func finishFido2Registration(c echo.Context) error {
 }
 
 func generateRegistrationOptions(c echo.Context) error {
-	body := c.Request().Body
-	defer body.Close()
 
-	username := c.FormValue("username")
+	// read the request body
 
-	a, err := getAdminByUsername(username)
+	// TODO: RESUME HERE - This is where the error is, and it's due to the input field values not being read correctly
+	userName, displayName, err := getUsername(c.Request())
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, echo.Map{
-			"message": "Failed to get admin by username",
-			"status":  "error",
+		ansi.PrintError("Failed to get username and display name: " + userName + ", " + displayName + " " + err.Error())
+		return c.JSON(http.StatusBadRequest, echo.Map{
+			"message": "Missing form parameter",
+			"status":  "error" + err.Error(),
 		})
+	}
+
+	a, err := getAdminByUsername(userName)
+	if err != nil {
+		if err != gorm.ErrRecordNotFound { // we want the record not to be found
+			return c.JSON(http.StatusInternalServerError, echo.Map{
+				"message": "Failed to get admin by username",
+				"status":  "error",
+			})
+		}
+	}
+
+	newAdmin := models.Admin{
+		Name:        userName,
+		DisplayName: displayName,
+		AdminID:     Uuid(userName).AsUint(),
 	}
 
 	options, sessionData, err := DefaultWAuth().BeginRegistration(a)
@@ -304,13 +321,9 @@ func generateRegistrationOptions(c echo.Context) error {
 		})
 	}
 
-	t := Uuid(username).Identifier
+	t := Uuid(string(newAdmin.WebAuthnID())).Identifier
 
 	datastore.SaveSession(t, *sessionData)
 
-	return c.JSON(http.StatusOK, echo.Map{
-		"message": sessionData.UserID,
-		"status":  "ok",
-		"options": options,
-	})
+	return JSONResponse(c.Response().Writer, t, options, http.StatusOK)
 }

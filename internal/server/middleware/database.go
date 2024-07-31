@@ -283,7 +283,12 @@ func getUserHash(username string) (string, uint) {
 
 func getAdminByUsername(username string) (models.Admin, error) {
 	var admin models.Admin
-	DBInstance.Driver.Where("username = ?", username).First(&admin)
+	tx := DBInstance.Driver.Where("username = ?", username).First(&admin)
+	if tx.Error == gorm.ErrRecordNotFound {
+		ansi.PrintWarning("Admin not found")
+		return models.Admin{}, tx.Error
+	}
+
 	return admin, nil
 }
 
