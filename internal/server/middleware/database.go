@@ -389,7 +389,7 @@ func writeUser(u *models.User) error {
 	ansi.PrintSuccess("User created successfully!")
 	return nil
 }
-
+		
 // GetTags query the database for all tags in the PostMetadata table,
 // trims whitesspace and quotation marks, and returns them as a slice of strings.
 func GetTags() map[string]int {

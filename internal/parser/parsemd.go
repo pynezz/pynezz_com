@@ -175,10 +175,14 @@ func parseContent(lines []string) *MarkdownDocument {
 				codeParser.codeBlockLang = "plaintext"
 			}
 
+			// should've made an AST..
 		linesCheck:
 			for _, l := range lines[i+1:] {
 				skipLines++
+				ansi.PrintDebug("line to skip: " + l)
 				for _, substr := range strings.Split(l, "\n") {
+
+					ansi.PrintColorf(ansi.DarkBlue, "substr: %s", substr)
 					if len(substr) >= 3 {
 						if substr[0:3] == "```" {
 							ansi.PrintInfo("end of code block found")
@@ -233,10 +237,10 @@ func parseContent(lines []string) *MarkdownDocument {
 				currentContent = nil
 			}
 			currentTitle = h6{heading{line[7:], "h6", H6Style}}
-		case strings.HasPrefix(line, "|"):
-			currentContent = append(currentContent, parseTable(line))
-			// case strings.Contains(line, "[") && strings.Contains(line, "]("):
-			// 	currentContent = append(currentContent, parseLink(line))
+		// case strings.HasPrefix(line, "|"):
+		// 	currentContent = append(currentContent, parseTable(line))
+		// case strings.Contains(line, "[") && strings.Contains(line, "]("):
+		// 	currentContent = append(currentContent, parseLink(line))
 		case strings.HasPrefix(line, "|"):
 			currentContent = append(currentContent, parseTable(line))
 		case strings.HasPrefix(line, "[") && strings.Contains(line, "]("):
@@ -308,6 +312,7 @@ func syntaxHighlight(code string) string {
 	return code
 }
 
+// All entities can be found here: https://www.freeformatter.com/html-entities.html
 func parseCodeBlock(content, lang string) string {
 	ansi.PrintColor(ansi.Cyan, "parseCodeBlock!")
 
@@ -317,9 +322,10 @@ func parseCodeBlock(content, lang string) string {
 	content = strings.ReplaceAll(content, ">", "&gt;")
 	content = strings.ReplaceAll(content, "\"", "&quot;")
 	content = strings.ReplaceAll(content, "'", "&#039;")
-	content = strings.ReplaceAll(content, "`", "&#96;")
+	// content = strings.ReplaceAll(content, "`", "&#96;")
+	// content = strings.ReplaceAll(content, "%", "&#37;")
 
-	content = strings.ReplaceAll(content, "\n", "<br>")
+	// content = strings.ReplaceAll(content, "\n", "<br>")
 
 	ansi.PrintColor(ansi.Cyan, "lang: "+lang)
 	ansi.PrintColor(ansi.Yellow, "content: "+content)
