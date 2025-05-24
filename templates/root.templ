@@ -1,46 +1,26 @@
 package templates
 
-import (
-	"github.com/pynezz/pynezz_com/templates/layout"
-)
+import "github.com/pynezz/pynezz_com/templates/layout"
 
 script js() {
-    document.addEventListener("DOMContentLoaded", ready);
-
-    function visit(url) {
-        window.location.href = url;
-    }
-
-    function ready() {
-        var burger = document.getElementById("burger-dropdown");
-        burger.onclick = toggleNav;
-
-        var aboutBtn = document.getElementById("about-btn");
-        if (aboutBtn) {
-            aboutBtn.onclick = () => { visit("/about"); };
-        }
-    }
-    function toggleNav() {
-        var nav = document.getElementById("nav-bar-list");
-        if (nav.classList.contains("hidden")) {
-            nav.classList.remove("hidden");
-        } else {
-            nav.classList.add("hidden");
-        }
-    }
+    // DataStar will handle most interactivity, but we can still add some initialization
+    document.addEventListener("DOMContentLoaded", function() {
+        // Any global initialization can go here
+        console.log("Page loaded with DataStar support");
+    });
 }
 
 templ Root(content templ.Component, path ...string) {
-    <!DOCTYPE html>
-    <html lang="en">
-        @layout.Links()
-        <body class="min-h-screen flex flex-col">
-            @layout.Header(path...)
-            <main class="flex-grow container mx-auto">
-                @content
-            </main>
-            @layout.Footer()
-            @js()
-        </body>
-    </html>
+	<!DOCTYPE html>
+	<html lang="en" data-signals="{navOpen: false}">
+		@layout.Links()
+		<body class="min-h-screen flex flex-col">
+			@layout.Header(path...)
+			<main class="flex-grow container mx-auto">
+				@content	
+			</main>
+			@layout.Footer()
+			@js()
+		</body>
+	</html>
 }

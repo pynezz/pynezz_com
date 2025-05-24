@@ -80,11 +80,87 @@ func setup(app *echo.Echo) {
 	})
 
 	app.GET("/api/stats", func(c echo.Context) error {
-		res, err := json.Marshal(getStats())
+		stats := getStats()
+		
+		// Create response that updates DataStar store and sets loading to false
+		response := map[string]interface{}{
+			"posts":    stats.Posts,
+			"tags":     stats.Tags,
+			"views":    stats.Views,
+			"visitors": stats.Visitors,
+			"loading":  false,
+		}
+		
+		res, err := json.Marshal(response)
 		if err != nil {
 			return err
 		}
 
+		// Set DataStar merge store header
+		c.Response().Header().Set("Content-Type", "application/json")
+		c.Response().Header().Set("Datastar-Merge-Store", "true")
+		
+		return c.JSONBlob(200, res)
+	})
+
+	app.GET("/api/posts", func(c echo.Context) error {
+		posts := middleware.GetPostsMetadata(0)
+		tags := middleware.GetTags()
+		
+		// Extract unique tags from posts
+		tagList := make([]string, 0, len(tags))
+		for tag := range tags {
+			if tag != "" {
+				tagList = append(tagList, tag)
+			}
+		}
+		
+		response := map[string]interface{}{
+			"posts":         posts,
+			"filteredPosts": posts,
+			"tags":          tagList,
+			"loading":       false,
+		}
+		
+		res, err := json.Marshal(response)
+		if err != nil {
+			return err
+		}
+
+		c.Response().Header().Set("Content-Type", "application/json")
+		c.Response().Header().Set("Datastar-Merge-Store", "true")
+		
+		return c.JSONBlob(200, res)
+	})
+
+	app.GET("/api/tags", func(c echo.Context) error {
+		tags := middleware.GetTags()
+		
+		// Convert map[string]int to array of objects for frontend
+		tagList := make([]map[string]interface{}, 0, len(tags))
+		for tag, count := range tags {
+			if tag != "" {
+				tagList = append(tagList, map[string]interface{}{
+					"name":  tag,
+					"count": count,
+				})
+			}
+		}
+		
+		response := map[string]interface{}{
+			"tags":         tagList,
+			"filteredTags": tagList,
+			"loading":      false,
+		}
+		
+		res, err := json.Marshal(response)
+		if err != nil {
+			return err
+		}
+
+		c.Response().Header().Set("Content-Type", "application/json")
+		c.Response().Header().Set("Datastar-Merge-Store", "true")
+		
 		return c.JSONBlob(200, res)
 	})
 
@@ -126,7 +202,7 @@ func Render(ctx echo.Context, statusCode int, t templ.Component) error {
 	defer templ.ReleaseBuffer(buf)
 	nonce, err := middleware.GenerateNonce()
 	templCtx := templ.WithNonce(ctx.Request().Context(), nonce)
-	ctx.Response().Header().Set("Content-Security-Policy", "default-src 'none'; script-src 'self' 'nonce-"+nonce+"'; style-src 'self'; img-src 'self' *.github.com; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; block-all-mixed-content; upgrade-insecure-requests;")
+	ctx.Response().Header().Set("Content-Security-Policy", "default-src 'none'; script-src 'self' 'unsafe-eval' 'nonce-"+nonce+"' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self' *.github.com; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; block-all-mixed-content; upgrade-insecure-requests;")
 
 	if err != nil {
 		ansi.PrintError("Error generating nonce: " + nonce)

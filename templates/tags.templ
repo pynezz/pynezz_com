@@ -2,19 +2,63 @@ package templates
 
 import (
     "github.com/pynezz/pynezz_com/templates/layout"
-	"fmt"
-	"strings"
 )
 
 const secStyle = "flex flex-col space-y-3"
 
 templ Tags(tags map[string]int) {
-    <section class={"section", secStyle}>
-      <h1 class={"h1", layout.Title}>Tags</h1>
-      <div class="flex flex-row flex-wrap">
-        for tag, freq := range tags {
-          <a href={templ.SafeURL("/tags/"+strings.Trim(tag, "'"))} class={"a", layout.TagBtn + " bg-mantle"}>{ tag }<span class="text-subtext0 font-mono text-sm">{ fmt.Sprintf(" | %d",freq) }</span></a>
-        }
-      </div>
+    <section class={"section", secStyle}
+             data-store="{searchTerm: '', tags: [], filteredTags: [], loading: true, sortBy: 'name'}"
+             data-computed-filteredTags="$tags.filter(tag => !$searchTerm || tag.name.toLowerCase().includes($searchTerm.toLowerCase())).sort((a, b) => { if ($sortBy === 'name') return a.name.localeCompare(b.name); return b.count - a.count; })"
+             data-on-load="$$get('/api/tags')">
+        
+        <h1 class={"h1", layout.Title}>Tags</h1>
+        
+        <!-- Search and Sort Controls -->
+        <div class="flex flex-col md:flex-row gap-4 mb-6">
+            <input type="text" 
+                   placeholder="Search tags..." 
+                   class="flex-1 px-4 py-2 rounded border border-surface0 bg-mantle text-text focus:outline-none focus:border-teal"
+                   data-model="searchTerm">
+            
+            <select class="px-4 py-2 rounded border border-surface0 bg-mantle text-text focus:outline-none focus:border-teal"
+                    data-model="sortBy">
+                <option value="name">Sort by Name</option>
+                <option value="count">Sort by Count</option>
+            </select>
+            
+            <button class="px-4 py-2 bg-teal text-base rounded hover:bg-sky transition-colors"
+                    data-on-click="$$get('/api/tags')">
+                Refresh
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div data-show="$loading" class="text-center py-8">
+            <p class="text-subtext1">Loading tags...</p>
+        </div>
+
+        <!-- Tags Display -->
+        <div data-show="!$loading && $filteredTags.length > 0" class="flex flex-row flex-wrap gap-2">
+            <div data-for="tag in $filteredTags" data-key="tag.name">
+                <a data-attr-href="'/tags/' + tag.name" 
+                   class={"a", layout.TagBtn + " bg-mantle hover:bg-surface0 transition-colors"}>
+                    <span data-text="tag.name"></span>
+                    <span class="text-subtext0 font-mono text-sm" data-text="' | ' + tag.count"></span>
+                </a>
+            </div>
+        </div>
+
+        <!-- No Results -->
+        <div data-show="!$loading && $filteredTags.length === 0" class="text-center py-8">
+            <p class="text-subtext1">No tags found matching your search.</p>
+        </div>
+
+        <!-- Stats Summary -->
+        <div data-show="!$loading" class="mt-6 p-4 bg-mantle rounded-lg">
+            <p class="text-sm text-subtext1">
+                Showing <span data-text="$filteredTags.length"></span> of <span data-text="$tags.length"></span> tags
+            </p>
+        </div>
     </section>
 }

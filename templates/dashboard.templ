@@ -4,13 +4,143 @@ import (
   "fmt"
 
   "github.com/pynezz/pynezz_com/internal/server/middleware/models"
+  "github.com/pynezz/pynezz_com/templates/layout"
 )
 
 templ Dashboard(user models.User) {
-  <h1 class={"h1", h1()}> Welcome { user.Username } </h1>
-  <div>
-    <p>your ID is { fmt.Sprintf("%d", user.UserID) }</p>
-    <p>created at { fmt.Sprintf("%s", user.CreatedAt.Local().Format("15:04:05 02.01 2006")) }</p>
+  <div class="container mx-auto px-4 py-8"
+       data-store="{stats: {posts: 0, tags: 0, views: 0, visitors: 0}, loading: true, activeTab: 'overview', error: '', retryCount: 0}"
+       data-on-load="$$get('/api/stats').catch(err => { $error = 'Failed to load statistics'; $loading = false; })">
+    
+    <div class="mb-8">
+      <h1 class={"h1", layout.Title}> Welcome { user.Username } </h1>
+      <div class="bg-mantle p-4 rounded-lg mt-4">
+        <p class="text-subtext1">User ID: { fmt.Sprintf("%d", user.UserID) }</p>
+        <p class="text-subtext1">Member since: { fmt.Sprintf("%s", user.CreatedAt.Local().Format("15:04:05 02.01 2006")) }</p>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="mb-6">
+      <nav class="flex space-x-4">
+        <button class="px-4 py-2 rounded-lg font-medium transition-colors"
+                data-class-bg-teal="$activeTab === 'overview'"
+                data-class-text-base="$activeTab === 'overview'"
+                data-class-bg-surface0="$activeTab !== 'overview'"
+                data-class-text-text="$activeTab !== 'overview'"
+                data-on-click="$activeTab = 'overview'">
+          Overview
+        </button>
+        <button class="px-4 py-2 rounded-lg font-medium transition-colors"
+                data-class-bg-teal="$activeTab === 'posts'"
+                data-class-text-base="$activeTab === 'posts'"
+                data-class-bg-surface0="$activeTab !== 'posts'"
+                data-class-text-text="$activeTab !== 'posts'"
+                data-on-click="$activeTab = 'posts'">
+          Posts
+        </button>
+        <button class="px-4 py-2 rounded-lg font-medium transition-colors"
+                data-class-bg-teal="$activeTab === 'settings'"
+                data-class-text-base="$activeTab === 'settings'"
+                data-class-bg-surface0="$activeTab !== 'settings'"
+                data-class-text-text="$activeTab !== 'settings'"
+                data-on-click="$activeTab = 'settings'">
+          Settings
+        </button>
+      </nav>
+    </div>
+
+    <!-- Overview Tab -->
+    <div data-show="$activeTab === 'overview'">
+      <h2 class="text-xl font-bold mb-4">Site Statistics</h2>
+      
+      <div data-show="$loading" class="text-center py-8">
+        <p class="text-subtext1">Loading statistics...</p>
+      </div>
+      
+      <div data-show="$error && !$loading" class="text-center py-8">
+        <div class="bg-red text-base p-4 rounded-lg mb-4">
+          <p data-text="$error"></p>
+        </div>
+        <button class="bg-teal text-base px-4 py-2 rounded-lg hover:bg-sky transition-colors"
+                data-on-click="$loading = true; $error = ''; $retryCount++; $$get('/api/stats').catch(err => { $error = 'Failed to load statistics (attempt ' + $retryCount + ')'; $loading = false; })">
+          Retry
+        </button>
+      </div>
+      
+      <div data-show="!$loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="bg-mantle p-6 rounded-lg">
+          <h3 class="text-lg font-semibold text-teal mb-2">Posts</h3>
+          <p class="text-2xl font-bold" data-text="$stats.posts"></p>
+        </div>
+        <div class="bg-mantle p-6 rounded-lg">
+          <h3 class="text-lg font-semibold text-sky mb-2">Tags</h3>
+          <p class="text-2xl font-bold" data-text="$stats.tags"></p>
+        </div>
+        <div class="bg-mantle p-6 rounded-lg">
+          <h3 class="text-lg font-semibold text-peach mb-2">Views</h3>
+          <p class="text-2xl font-bold" data-text="$stats.views"></p>
+        </div>
+        <div class="bg-mantle p-6 rounded-lg">
+          <h3 class="text-lg font-semibold text-mauve mb-2">Visitors</h3>
+          <p class="text-2xl font-bold" data-text="$stats.visitors"></p>
+        </div>
+      </div>
+
+      <div class="bg-mantle p-6 rounded-lg">
+        <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+        <div class="flex flex-wrap gap-3">
+          <a href="/posts" class="bg-teal text-base px-4 py-2 rounded-lg hover:bg-sky transition-colors">
+            View All Posts
+          </a>
+          <a href="/tags" class="bg-sky text-base px-4 py-2 rounded-lg hover:bg-teal transition-colors">
+            Manage Tags
+          </a>
+          <button class="bg-peach text-base px-4 py-2 rounded-lg hover:bg-yellow transition-colors"
+                  data-on-click="$loading = true; $error = ''; $$get('/api/stats').catch(err => { $error = 'Failed to refresh statistics'; $loading = false; })">
+            Refresh Stats
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Posts Tab -->
+    <div data-show="$activeTab === 'posts'">
+      <h2 class="text-xl font-bold mb-4">Post Management</h2>
+      <div class="bg-mantle p-6 rounded-lg">
+        <p class="text-subtext1 mb-4">Post management features coming soon...</p>
+        <div class="flex gap-3">
+          <button class="bg-green text-base px-4 py-2 rounded-lg hover:bg-teal transition-colors">
+            Create New Post
+          </button>
+          <button class="bg-yellow text-base px-4 py-2 rounded-lg hover:bg-peach transition-colors">
+            Draft Posts
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div data-show="$activeTab === 'settings'">
+      <h2 class="text-xl font-bold mb-4">User Settings</h2>
+      <div class="bg-mantle p-6 rounded-lg">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-2">Username</label>
+            <input type="text" value={ user.Username } class="w-full px-3 py-2 bg-surface0 border border-surface1 rounded-lg text-text" readonly/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">User ID</label>
+            <input type="text" value={ fmt.Sprintf("%d", user.UserID) } class="w-full px-3 py-2 bg-surface0 border border-surface1 rounded-lg text-text" readonly/>
+          </div>
+          <div class="pt-4">
+            <button class="bg-red text-base px-4 py-2 rounded-lg hover:bg-maroon transition-colors">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 }
 

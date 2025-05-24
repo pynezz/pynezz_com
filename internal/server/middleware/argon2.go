@@ -186,7 +186,7 @@ func (a *Argon2) GetPrintableKeyWithSalt(salt []byte) string {
 	encodedHash := fmt.Sprintf("$argon2id$v=%d$m=%d,t=%d,p=%d$%s$%s", argon2.Version, p.memory, p.iterations, p.parallelism, b64Salt, b64Hash)
 
 	return encodedHash
-}
+}	
 
 func (a *Argon2) GetHash() []byte {
 	if a.hash == nil {

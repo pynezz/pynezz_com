@@ -3,19 +3,52 @@ package templates
 import "github.com/pynezz/pynezz_com/templates/layout"
 
 templ Home() {
-		<div class={"div", layout.CardStyle}>
-			// <div class="flex flex-col justify-between p-4 max-w-fit">
-			<div class="flex flex-col justify-between p-4 max-w-fit flex-grow">
-				<h1 class={"h1", layout.Title}>/</h1>
-				<h2 class={"h2", layout.SubHeading }>Blogging about cyber security,<br />development, code, and tech.</h2>
-				// <span class="flex row-auto items-center content-between justify-between">
-				<span class="flex flex-col sm:flex-row items-center sm:justify-center space-y-12 sm:space-y-2 sm:space-x-2 mt-auto">
-					<button id="about-btn" class={layout.CardBtn + " mt-4	", layout.BtnHover}>About</button>
-					<a href="https://www.github.com/pynezz/">
-						<img src="/static/svgs/github-icon.svg" class={"img", layout.CardIcon} alt="github icon" />
-					</a>
-				</span>
-			</div>
-			<img src="/static/img/t_isometric_xs.webp" alt="Isometric depiction the site content" class={"img", layout.CardImg} />
+	<div class={"div", layout.CardStyle} data-store="{showAbout: false}">
+		// <div class="flex flex-col justify-between p-4 max-w-fit">
+		<div class="flex flex-col justify-between p-4 max-w-fit flex-grow">
+			<h1 class={"h1", layout.Title}>/</h1>
+			<h2 class={"h2", layout.SubHeading }>Blogging about cyber security,<br />development, code, and tech.</h2>
+			// <span class="flex row-auto items-center content-between justify-between">
+			<span class="flex flex-col sm:flex-row items-center sm:justify-center space-y-12 sm:space-y-2 sm:space-x-2 mt-auto">
+				<button id="about-btn" 
+						class={layout.CardBtn + " mt-4", layout.BtnHover}
+						data-on-click="$showAbout = !$showAbout">
+					<span data-show="!$showAbout">About</span>
+					<span data-show="$showAbout">Close</span>
+				</button>
+				<a href="https://www.github.com/pynezz/">
+					<img src="/static/svgs/github-icon.svg" class={"img", layout.CardIcon} alt="github icon" />
+				</a>
+			</span>
 		</div>
+		<img src="/static/img/t_isometric_xs.webp" alt="Isometric depiction the site content" class={"img", layout.CardImg} />
+		
+		<!-- About section -->
+		<div data-show="$showAbout" 
+			 class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+			 data-on-click="$showAbout = false">
+			<div class="bg-mantle p-6 rounded-lg max-w-md mx-4 text-text"
+				 data-on-click-stop="event.stopPropagation()">
+				<h3 class="text-xl font-bold mb-4">About pynezz.dev</h3>
+				<p class="mb-4">
+					Welcome to my tech blog! I'm Kevin (aka pynezz), and this is where I share my thoughts and experiences about:
+				</p>
+				<ul class="list-disc list-inside mb-4 space-y-1">
+					<li>Cybersecurity and Information Security</li>
+					<li>Software Development</li>
+					<li>Programming Languages and Frameworks</li>
+					<li>Technology Trends and Tools</li>
+				</ul>
+				<p class="mb-4">
+					This site itself is a meta-project - a blog about building a blog! Built with Go, Templ, and enhanced with DataStar for interactivity.
+				</p>
+				<div class="flex justify-end space-x-2">
+					<button data-on-click="$showAbout = false" 
+							class="px-4 py-2 bg-teal text-base rounded hover:bg-sky transition-colors">
+						Close
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 }

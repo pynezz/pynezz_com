@@ -129,16 +129,56 @@ css lighten() {
 templ Register() {
   // <div class={"div", Style()}>
   // @layout.Header(  "Register"  )
-    <div class={"div", formDiv()}>
+    <div class={"div", formDiv()}
+         data-store="{username: '', password: '', loading: false, error: '', success: false, passwordValid: false}"
+         data-computed-passwordValid="$password.length >= 12">
       <h1 class={"h1", h1()}> Register </h1>
       <p>registration is needed to post content</p>
+      
+      <!-- Error message -->
+      <div data-show="$error" class="bg-red text-base p-3 rounded mb-4" data-text="$error"></div>
+      
+      <!-- Success message -->
+      <div data-show="$success" class="bg-green text-base p-3 rounded mb-4">
+        Registration successful! Redirecting to login...
+      </div>
+      
       // Input form
-      <form class={"form", form()} action="/register" method="post">
-        <input class={"input", input()} type="text" name="username" placeholder="Username" />
-        <input class={"input", input()} type="password" name="password" placeholder="Password" />
-        <button type="submit" class={"button", btn(darkTxt, green)}>Register</button>
+      <form class={"form", form()} 
+            data-on-submit="$$post('/register').then(res => { if(res.ok) { $success = true; setTimeout(() => window.location.href = '/login', 2000); } else { $error = 'Registration failed. Username may already exist.'; } }).catch(() => { $error = 'Network error. Please try again.'; }).finally(() => { $loading = false; })">
+        <input class={"input", input()} 
+               type="text" 
+               name="username" 
+               placeholder="Username" 
+               data-model="username"
+               data-bind-disabled="$loading"
+               required />
+        <input class={"input", input()} 
+               type="password" 
+               name="password" 
+               placeholder="Password" 
+               data-model="password"
+               data-bind-disabled="$loading"
+               required />
+        <button type="submit" 
+                class={"button", btn(darkTxt, green)}
+                data-bind-disabled="$loading || !$username || !$passwordValid"
+                data-on-click="$loading = true; $error = ''">
+          <span data-show="!$loading">Register</span>
+          <span data-show="$loading">Registering...</span>
+        </button>
       </form>
-      <i class={"i", hint()}> Password requirements<br><br><code class={"code", code()}>> 12 characters</code></i>
+      <i class={"i", hint()}> Password requirements<br><br>
+        <code class={"code", code()} 
+              data-class-text-green="$passwordValid"
+              data-class-text-red="!$passwordValid && $password.length > 0">
+          > 12 characters
+        </code>
+        <span data-show="$password.length > 0 && !$passwordValid" class="text-red text-sm ml-2">
+          (<span data-text="$password.length"></span>/12)
+        </span>
+        <span data-show="$passwordValid" class="text-green text-sm ml-2">✓</span>
+      </i>
       <br>
       <p style="display: flex; flex-direction: column; justify-content: center;"> Already have an account?
         <a href="/login" class={"a", templ.KV("hover:lighten", false), aTxt()}> Login here </a>

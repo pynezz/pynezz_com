@@ -10,14 +10,43 @@ import (
 templ Login() {
   // <div class={"div", Style()}>
   // @layout.Header( "login" )
-    <div class={"div", formDiv()}>
+    <div class={"div", formDiv()} 
+         data-store="{username: '', password: '', loading: false, error: '', success: false}">
       <h1 class={"h1", h1()}> Login </h1>
       <p>Current time: { time.Now().UTC().Local().Format("01-02-2006 15:04:05") }</p>
+      
+      <!-- Error message -->
+      <div data-show="$error" class="bg-red text-base p-3 rounded mb-4" data-text="$error"></div>
+      
+      <!-- Success message -->
+      <div data-show="$success" class="bg-green text-base p-3 rounded mb-4">
+        Login successful! Redirecting...
+      </div>
+      
       // Input form
-      <form class={"form", form()} action="/login" method="post">
-        <input class={"input", input()} type="text" name="username" placeholder="Username" />
-        <input class={"input", input()} type="password" name="password" placeholder="Password" />
-        <button type="submit" class={"button", btn(darkTxt, green)}>Log in</button>
+      <form class={"form", form()} 
+            data-on-submit="$$post('/login').then(res => { if(res.ok) { $success = true; setTimeout(() => window.location.href = '/dashboard', 1000); } else { $error = 'Login failed. Please check your credentials.'; } }).catch(() => { $error = 'Network error. Please try again.'; }).finally(() => { $loading = false; })">
+        <input class={"input", input()} 
+               type="text" 
+               name="username" 
+               placeholder="Username" 
+               data-model="username"
+               data-bind-disabled="$loading"
+               required />
+        <input class={"input", input()} 
+               type="password" 
+               name="password" 
+               placeholder="Password" 
+               data-model="password"
+               data-bind-disabled="$loading"
+               required />
+        <button type="submit" 
+                class={"button", btn(darkTxt, green)}
+                data-bind-disabled="$loading || !$username || !$password"
+                data-on-click="$loading = true; $error = ''">
+          <span data-show="!$loading">Log in</span>
+          <span data-show="$loading">Logging in...</span>
+        </button>
       </form>
 
       <p style="display: flex; flex-direction: column; justify-content: center;"> Don't have an account?

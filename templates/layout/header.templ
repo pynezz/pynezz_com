@@ -39,7 +39,8 @@ templ Links() {
 
 
 
-    <script src="/static/js/webauthn.js"></script>
+    <script src="/js/webauthn.js"></script>
+    <script type="module" src="/js/datastar.js"></script>
 
 	</head>
 }
@@ -64,13 +65,19 @@ templ Header(path ...string) {
 			</h3>
 		</div>
 		<!-- Burger menu -->
-		<button id="burger-dropdown" class={ "burger-menu", burgerMenu }>
+		<button id="burger-dropdown" 
+				class={ "burger-menu", burgerMenu }
+				data-on-click="$navOpen = !$navOpen"
+				data-attr-aria-expanded="$navOpen">
 			<!-- SVG for burger icon -->
 			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
 			</svg>
 		</button>
-		<ul id="nav-bar-list" class={ "ul", navBarListResponsive }>
+		<ul id="nav-bar-list" 
+			class={ "ul", navBarListResponsive }
+			data-class-hidden="!$navOpen"
+			data-class-flex="$navOpen">
 			<li class={ navBarItem }>
 				<a href="/posts/" class={ "a", navBarItemLink }>posts</a>
 			</li>

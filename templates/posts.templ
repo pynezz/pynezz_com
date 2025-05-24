@@ -37,17 +37,62 @@ templ Show(title string, body string, post models.Post) {
 }
 
 templ PostsList(posts []models.PostMetadata) {
-<div class="flex flex-col items-center justify-center flex-wrap mx-auto px-2 space-x-2 space-y-2 bg-inherit">
+<div class="flex flex-col items-center justify-center flex-wrap mx-auto px-2 space-x-2 space-y-2 bg-inherit"
+     data-store="{searchTerm: '', selectedTag: '', posts: [], tags: [], loading: true}"
+     data-computed-filteredPosts="$posts.filter(post => { const searchTerm = $searchTerm.toLowerCase(); const selectedTag = $selectedTag; const matchesSearch = !searchTerm || post.Title.toLowerCase().includes(searchTerm) || (post.Summary && post.Summary.toLowerCase().includes(searchTerm)); const matchesTag = !selectedTag || post.Tags.toLowerCase().includes(selectedTag.toLowerCase()); return matchesSearch && matchesTag; })"
+     data-on-load="$$get('/api/posts')">
 		<h1 class={ "h1", layout.LinkCardTitle }>Posts</h1>
-		<ul class={"ul", postsList}>
-			if len(posts) == 0 {
-				<li>No posts found</li>
-			} else {
-				for _, p := range posts {
-					@postCard(p)
-				}
-			}
+		
+		<!-- Search and Filter Controls -->
+		<div class="flex flex-col md:flex-row gap-4 w-full max-w-2xl mb-6">
+			<input type="text" 
+				   placeholder="Search posts..." 
+				   class="flex-1 px-4 py-2 rounded border border-surface0 bg-mantle text-text focus:outline-none focus:border-teal"
+				   data-model="searchTerm">
+			
+			<select class="px-4 py-2 rounded border border-surface0 bg-mantle text-text focus:outline-none focus:border-teal"
+					data-model="selectedTag">
+				<option value="">All Tags</option>
+				<option data-for="tag in $tags" data-value="tag" data-text="tag"></option>
+			</select>
+			
+			<button class="px-4 py-2 bg-teal text-base rounded hover:bg-sky transition-colors"
+					data-on-click="$$get('/api/posts')">
+				Refresh
+			</button>
+		</div>
+
+		<ul class={"ul", postsList} data-show="$filteredPosts.length > 0">
+			<li data-for="post in $filteredPosts" data-key="post.ID">
+				<div class={"div", layout.LinkCard + " w-full"}>
+					<article class="flex flex-col flex-wrap text-wrap content-between justify-between m-2 p-2">
+						<span class="flex flex-col flex-wrap m-2">
+							<a data-attr-href="'/posts/' + post.Slug">
+								<strong class="first-letter:text-xl text-lg text-text font-semibold hover:border-b hover:border-b-sky" 
+										data-text="post.Title"></strong>
+							</a>
+							<i class="date" data-text="new Date(post.CreatedAt).toLocaleDateString('en-GB')"></i>
+							<i data-text="post.Summary || 'no summary available..'"></i>
+						</span>
+						<span class="flex flex-row flex-wrap m-2 pb-2">
+							<span data-for="tag in post.Tags.split(',').filter(t => t.trim())" data-key="tag">
+								<a data-attr-href="'/tags/' + tag.trim()" 
+								   class={"a", layout.TagBtn + " bg-crust"}
+								   data-text="tag.trim()"></a>
+							</span>
+						</span>
+					</article>
+				</div>
+			</li>
 		</ul>
+		
+		<div data-show="$filteredPosts.length === 0 && !$loading" class="text-center py-8">
+			<p class="text-subtext1">No posts found matching your criteria.</p>
+		</div>
+		
+		<div data-show="$loading" class="text-center py-8">
+			<p class="text-subtext1">Loading posts...</p>
+		</div>
 	</div>
 }
 

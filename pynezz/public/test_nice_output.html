@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Polishing the terminal output mini</title><link rel="stylesheet" type="text/css" href="/css/post.css">
+</head>
+<body>
+<ul class="main-nav">
+		<li class="nav-item">
+			<a href="/" class="nav-link">/</a>
+		</li>
+    <li class="nav-item">
+      <a href="/posts/" class="nav-link">posts</a>
+    </li>
+</ul><article class="content"><h1 class="font-sans">Polishing the terminal output mini</h1>
+<p class="date">19.07.2024</p>
+<section class="flex flex-col flex-wrap align-start"><h2 class="text-xl text-subtext1 underline mb-0.5 pt-4 ">How to make the output look nice</h2>
+<p>When dealing with certain output, like help descriptions that are of unknown length, things can get tricky.</p>
+<p>![[Pasted image 20240621132359.png]]</p>
+<p>Like this above </p>
+<p>I'll need to figure out the string with the greatest length, and add the necessary padding between the command and the description (key, value). </p>
+<p>To get that I'll use a simple for loop and store the greatest length found so far in the iteration, and return the greatest length when done:</p>
+<pre class="bg-crust overflow-x-auto rounded-md p-2 w-full"><code id="language-go" class="text-sm whitespace-pre">func longestStringMap(m map[string]ICommand) int {
+    var max int
+    for k := range m {
+        if len(k) &gt; max {
+            max = len(k)
+         }
+    }
+    return max
+}
+
+ </code></pre>
+<p>
+Now we have the greatest length, which turns out to be 11 as of now.</p>
+<p>In my [ansi-library](https://github.com/pynezz/pynezzentials) I have an <code class="bg-surface0 text-subtext1 p-1 rounded-md">AddPadding()</code> function, which takes a string and adds padding to it. Originally I made it to use it in another function <code class="bg-surface0 text-subtext1 p-1 rounded-md">FormatRoundedBox()</code> which makes the output at the beginning of the program in the first image. </p>
+</section>
+<p class="p-2 m-2 rounded bg-mantle text-green">Tags: <a class='tag' href='/tags/Go'>Go</a> <a class='tag' href='/tags/ parsing'> parsing</a> <a class='tag' href='/tags/ terminal'> terminal</a> <a class='tag' href='/tags/ development'> development</a> <a class='tag' href='/tags/ DX'> DX</a> <a class='tag' href='/tags/ programming'> programming</a> </p>
+
+</article>
+</body>
+</html>

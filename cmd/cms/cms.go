@@ -16,7 +16,7 @@ type cms struct{}
 
 // INFO: This is example commands for now.
 func commands() map[string]ICommand {
-	prefix := "--"
+	prefix := "--"		
 
 	// 	typo := regexp.MustCompile(`(.*?)`)
 
