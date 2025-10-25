@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	configcmd "github.com/pynezz/pynezz_com/cmd/config"
 	"github.com/pynezz/pynezz_com/cmd/cms"
+	configcmd "github.com/pynezz/pynezz_com/cmd/config"
 	"github.com/pynezz/pynezz_com/cmd/serve"
 )
 

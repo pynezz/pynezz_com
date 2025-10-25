@@ -70,9 +70,9 @@ type ProfileConfig struct {
 
 // Bundle contains the base configuration and all resolved profiles.
 type Bundle struct {
-	Base     AppConfig                  `json:"base"`
-	Profiles map[string]ProfileConfig   `json:"profiles"`
-	Sources  []string                   `json:"sources"`
+	Base     AppConfig                `json:"base"`
+	Profiles map[string]ProfileConfig `json:"profiles"`
+	Sources  []string                 `json:"sources"`
 }
 
 // DefaultConfig returns the built-in defaults used as a baseline.

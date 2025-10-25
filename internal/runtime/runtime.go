@@ -89,4 +89,3 @@ func parsePathList(paths string) []string {
 func defaultPaths() []string {
 	return []string{"config"}
 }
-

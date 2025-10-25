@@ -49,11 +49,11 @@ func (d *document) merge(src document) {
 }
 
 type siteFragment struct {
-	Name        *string         `toml:"name"`
-	BaseURL     *string         `toml:"base_url"`
-	Description *string         `toml:"description"`
-	Keywords    *[]string       `toml:"keywords"`
-	Theme       *themeFragment  `toml:"theme"`
+	Name        *string        `toml:"name"`
+	BaseURL     *string        `toml:"base_url"`
+	Description *string        `toml:"description"`
+	Keywords    *[]string      `toml:"keywords"`
+	Theme       *themeFragment `toml:"theme"`
 }
 
 func (f *siteFragment) merge(src *siteFragment) {
@@ -282,11 +282,11 @@ func (f *cliFragment) clone() *cliFragment {
 }
 
 type profileFragment struct {
-	Extends []string         `toml:"extends"`
-	Site    *siteFragment    `toml:"site"`
-	Content *contentFragment `toml:"content"`
+	Extends  []string          `toml:"extends"`
+	Site     *siteFragment     `toml:"site"`
+	Content  *contentFragment  `toml:"content"`
 	Database *databaseFragment `toml:"database"`
-	Server  *serverFragment  `toml:"server"`
+	Server   *serverFragment   `toml:"server"`
 }
 
 func (f *profileFragment) merge(src profileFragment) {
@@ -512,4 +512,3 @@ func applyCLI(base CLISettings, frag *cliFragment) CLISettings {
 	}
 	return base
 }
-

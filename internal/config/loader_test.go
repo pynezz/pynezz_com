@@ -136,4 +136,3 @@ driver = "unknown"
 		t.Fatalf("expected validation error description, got %v", err)
 	}
 }
-
