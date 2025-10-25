@@ -9,7 +9,7 @@ import (
 
 	cfg "github.com/pynezz/pynezz_com/internal/config"
 	"github.com/pynezz/pynezz_com/internal/runtime"
-	"github.com/pynezzentials/ansi"
+	"github.com/pynezz/pynezzentials/ansi"
 )
 
 var errHelpRequested = errors.New("help requested")
@@ -251,4 +251,3 @@ func renderText(cfg cfg.AppConfig, profile string, active bool, sources []string
 	fmt.Printf("  color:           %t\n", cfg.CLI.Color)
 	fmt.Println("  log_level:       " + cfg.CLI.LogLevel)
 }
-

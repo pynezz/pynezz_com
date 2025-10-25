@@ -1,3 +1,7 @@
 package view
 
-func View() 
+import "errors"
+
+func View() error {
+	return errors.New("not implemented")
+}

@@ -1,7 +1,6 @@
 package config
 
 import (
-	"encoding/toml"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -9,6 +8,8 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+
+	"github.com/BurntSushi/toml"
 )
 
 // Loader reads TOML configuration snippets and produces a merged bundle.
@@ -230,4 +231,3 @@ func (r *profileResolver) resolve(name string) (AppConfig, error) {
 	r.resolved[name] = cloneAppConfig(cfg)
 	return cfg, nil
 }
-

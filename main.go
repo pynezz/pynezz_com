@@ -8,11 +8,11 @@ import (
 	"strings"
 
 	"github.com/pynezz/pynezz_com/cmd"
-	configcmd "github.com/pynezz/pynezz_com/cmd/config"
 	"github.com/pynezz/pynezz_com/cmd/cms"
+	configcmd "github.com/pynezz/pynezz_com/cmd/config"
 	"github.com/pynezz/pynezz_com/cmd/serve"
 	"github.com/pynezz/pynezz_com/internal/runtime"
-	"github.com/pynezzentials/ansi"
+	"github.com/pynezz/pynezzentials/ansi"
 )
 
 var warning = func(warning string) {
@@ -120,11 +120,11 @@ It's a simple markdown based CMS to manage the content of my website and serve t
 			names = append(names, name)
 		}
 		sort.Strings(names)
-		msg += fmt.Sprintf("profiles:       %s\n", ansi.ColorF(ansi.Cyan, strings.Join(names, ", ")))
+		msg += fmt.Sprintf("profiles:       %s\n", ansi.ColorF(ansi.Cyan, "%s", strings.Join(names, ", ")))
 	}
 
 	if len(env.Bundle.Sources) > 0 {
-		msg += fmt.Sprintf("config files:   %s\n", ansi.ColorF(ansi.Cyan, strings.Join(env.Bundle.Sources, ", ")))
+		msg += fmt.Sprintf("config files:   %s\n", ansi.ColorF(ansi.Cyan, "%s", strings.Join(env.Bundle.Sources, ", ")))
 	}
 
 	fmt.Println(msg)
@@ -153,10 +153,10 @@ func Execute(args ...string) {
 		return
 	}
 	f := map[string]func(...string){
-		"cms":     cms.Execute,
-		"serve":   serve.Execute,
-		"config":  configcmd.Execute,
-		"info":    info,
+		"cms":    cms.Execute,
+		"serve":  serve.Execute,
+		"config": configcmd.Execute,
+		"info":   info,
 	}
 
 	for _, module := range args[:1] {

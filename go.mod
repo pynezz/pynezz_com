@@ -1,19 +1,20 @@
 module github.com/pynezz/pynezz_com
 
-go 1.23
+go 1.24.0
 
-toolchain go1.23.0
+toolchain go1.24.5
 
 require (
 	github.com/go-webauthn/webauthn v0.11.2
 	github.com/google/uuid v1.6.0
-	github.com/pynezz/pynezzentials v0.0.0-20241104202752-c3069ff79e92
+	github.com/pynezz/pynezzentials v0.0.0-20250529204220-424e50eded8b
 	gorm.io/driver/sqlite v1.5.7
 	gorm.io/gorm v1.25.12
 )
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
+	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/go-webauthn/x v0.1.16 // indirect
@@ -35,9 +36,9 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	golang.org/x/crypto v0.31.0
-	golang.org/x/net v0.33.0 // indirect
-	golang.org/x/sys v0.29.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/crypto v0.43.0
+	golang.org/x/net v0.45.0 // indirect
+	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/text v0.30.0 // indirect
 	gorm.io/datatypes v1.2.5
 )
