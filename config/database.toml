@@ -1,0 +1,7 @@
+[database]
+driver = "sqlite"
+path = "pynezz.dev.db"
+dsn = "file:pynezz.dev.db?_foreign_keys=on"
+migrations_dir = "internal/server/migrations"
+log_sql = false
+

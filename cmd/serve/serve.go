@@ -2,64 +2,94 @@ package serve
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/pynezz/pynezz_com/internal/helpers"
+	"github.com/pynezz/pynezz_com/internal/runtime"
 	"github.com/pynezz/pynezz_com/internal/server"
 	"github.com/pynezz/pynezzentials/ansi"
 )
 
-var usage func(...string) string = func(args ...string) string {
-	fmt.Println("args in serve.go", args)
+type options struct {
+	host string
+	port int
+}
 
-	return fmt.Sprintln(`Usage: serve [options]
+func usage() string {
+	env := runtime.Current()
+	host := env.Active.Server.Host
+	if host == "" {
+		host = "127.0.0.1"
+	}
+	port := env.Active.Server.Port
+	if port == 0 {
+		port = 8080
+	}
+	return fmt.Sprintf(`Usage: serve [options]
 
-  Serve the web server on a specified port.
+  Serve the web server using configuration defaults (host %s, port %d).
 
 Options:
-    --help      Print this help message
-    --port, -p  Specify the port to listen on
-
-Example:
-  serve --port 8080
-
-Visit http://localhost:8080 in your browser to see the webapp.`)
+    --help, -h      Print this help message
+    --host          Override the listening host (default %s)
+    --port, -p      Override the listening port (default %d)
+`, host, port, host, port)
 }
 
 func Help(args ...string) string {
-	return fmt.Sprintf("Help for serve module: \n%s", usage(args...))
+	return usage()
 }
 
 func Execute(args ...string) {
-
-	fmt.Println("Hello from the serve package!")
-
-	// Some args parsing
-	if len(args) < 1 {
-		helpers.Warning("Please provide a command.")
-		fmt.Println(usage(args...))
-		return
+	env := runtime.Current()
+	opts := options{
+		host: env.Active.Server.Host,
+		port: env.Active.Server.Port,
+	}
+	if opts.host == "" {
+		opts.host = "127.0.0.1"
+	}
+	if opts.port == 0 {
+		opts.port = 8080
 	}
 
-	for i, arg := range args[:1] {
-		if arg == "--help" {
-			fmt.Println(usage(args...))
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
+		switch arg {
+		case "--help", "-h":
+			fmt.Println(usage())
 			return
-		}
-
-		if arg == "--port" || arg == "-p" {
-			if len(args) < 2 {
-				fmt.Println("Please provide a port number.")
-				fmt.Println(usage(args...))
+		case "--host":
+			if i+1 >= len(args) {
+				helpers.Warning("Missing value for --host")
+				fmt.Println(usage())
 				return
 			}
-
-			port := args[i+1]
-			
-			server.Serve(port)
-
-			ansi.PrintInfo("Listening on port: " + port)
+			i++
+			opts.host = args[i]
+		case "--port", "-p":
+			if i+1 >= len(args) {
+				helpers.Warning("Missing value for --port")
+				fmt.Println(usage())
+				return
+			}
+			i++
+			port, err := strconv.Atoi(args[i])
+			if err != nil || port <= 0 || port > 65535 {
+				helpers.Warning("Invalid port supplied.")
+				fmt.Println(usage())
+				return
+			}
+			opts.port = port
+		default:
+			helpers.Warning(fmt.Sprintf("Unknown argument: %s", arg))
+			fmt.Println(usage())
+			return
 		}
 	}
 
+	address := fmt.Sprintf("%s:%d", opts.host, opts.port)
+	server.Serve(strconv.Itoa(opts.port))
+	ansi.PrintInfo("Serving content on " + address)
 	ansi.PrintInfo("Waiting for SIGINT (Ctrl+C) to shutdown...")
 }

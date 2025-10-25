@@ -34,7 +34,7 @@ The metadata fields will be used to define certain properties of the content, li
 - [x] Push the content to the frontend, with correct paths, and metadata
 - [x] Display and fetch posts by tag
 - [ ] Compress images for faster loading times
-- [ ] Configuration file
+- [x] Configuration files (TOML snippets under `config/`)
 
 #### Known issues
 
@@ -120,4 +120,22 @@ Run the project:
 
 ```bash
 ./pynezz_com_[os_arch](.exe)
+```
+
+## Configuration
+
+Runtime settings are defined as composable TOML snippets inside the `config/` directory. Files are merged in lexical order, allowing you to break configuration into focused fragments such as `site.toml`, `content.toml`, or `profiles.toml`.
+
+- Set `PYNEZZ_CONFIG_PATHS` to override the lookup directories (use your OS path separator).
+- Set `PYNEZZ_PROFILE` to pick a resolved profile (`dev`, `preview`, `prod`, ...).
+- Default values live in `internal/config` and cover local development if no files are found.
+
+See the sample snippets in `config/` for the v2 baseline.
+
+Inspect the active configuration or list available profiles via the CLI:
+
+```bash
+pynezz config show            # pretty text view of the active profile
+pynezz config show --format json
+pynezz config profiles        # list profiles and inheritance
 ```

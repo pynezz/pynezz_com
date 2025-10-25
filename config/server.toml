@@ -1,0 +1,11 @@
+[server]
+host = "127.0.0.1"
+port = 8080
+public_url = "http://127.0.0.1:8080"
+
+[cli]
+default_profile = "dev"
+output_format = "text"
+color = true
+log_level = "debug"
+

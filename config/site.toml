@@ -1,0 +1,11 @@
+[site]
+name = "pynezz.dev"
+base_url = "https://pynezz.dev"
+description = "pynezz.dev publishing stack"
+keywords = ["pynezz", "go", "cms"]
+
+[site.theme]
+default = "catppuccin-mocha"
+variants = ["catppuccin-latte", "catppuccin-frappe", "catppuccin-mocha"]
+allow_system = true
+

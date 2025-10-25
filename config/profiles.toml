@@ -1,0 +1,26 @@
+[profiles.dev.content]
+root = "content"
+ignore = ["content/drafts", "content/tmp"]
+
+[profiles.dev.database]
+log_sql = true
+
+[profiles.preview]
+extends = ["dev"]
+
+[profiles.preview.server]
+public_url = "https://preview.pynezz.dev"
+host = "0.0.0.0"
+port = 8081
+
+[profiles.prod]
+extends = ["dev"]
+
+[profiles.prod.server]
+host = "0.0.0.0"
+port = 8443
+tls = true
+tls_cert_path = "/etc/ssl/pynezz/pynezz.crt"
+tls_key_path = "/etc/ssl/pynezz/pynezz.key"
+public_url = "https://pynezz.dev"
+

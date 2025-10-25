@@ -1,0 +1,6 @@
+[content]
+root = "content"
+static_root = "pynezz/public"
+drafts = "content/drafts"
+ignore = [".git", ".DS_Store", "node_modules"]
+

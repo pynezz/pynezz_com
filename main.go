@@ -4,12 +4,15 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/pynezz/pynezz_com/cmd"
+	configcmd "github.com/pynezz/pynezz_com/cmd/config"
 	"github.com/pynezz/pynezz_com/cmd/cms"
 	"github.com/pynezz/pynezz_com/cmd/serve"
-	"github.com/pynezz/pynezzentials/ansi"
+	"github.com/pynezz/pynezz_com/internal/runtime"
+	"github.com/pynezzentials/ansi"
 )
 
 var warning = func(warning string) {
@@ -47,12 +50,34 @@ var buildVersion string
 
 // var t = template.Must(template.ParseFS(resources, "templates/*", "templates/layout/*"))
 
-var header = func() string {
-	return fmt.Sprintf("%s%s", ansi.FormatRoundedBox("pynezz.dev CLI\n"+buildVersion), "\n")
+var header = func(env runtime.Environment) string {
+	profile := env.ActiveProfile
+	if profile == "" {
+		profile = "base"
+	}
+	version := buildVersion
+	if version == "" {
+		version = "development"
+	}
+	lines := []string{
+		"pynezz.dev CLI",
+		fmt.Sprintf("version: %s", version),
+		fmt.Sprintf("profile: %s", profile),
+	}
+	if len(env.Paths) > 0 {
+		lines = append(lines, fmt.Sprintf("config paths: %s", strings.Join(env.Paths, ", ")))
+	}
+	return fmt.Sprintf("%s\n", ansi.FormatRoundedBox(strings.Join(lines, "\n")))
 }
 
 func main() {
-	fmt.Println(header())
+	env, err := runtime.Bootstrap()
+	if err != nil {
+		ansi.PrintError(err.Error())
+		os.Exit(1)
+	}
+
+	fmt.Println(header(env))
 	args := os.Args[1:]
 	Execute(args...)
 }
@@ -70,6 +95,7 @@ Options:
 }
 
 var info func(...string) = func(...string) {
+	env := runtime.Current()
 	if buildVersion == "" {
 		buildVersion = "development"
 	}
@@ -77,10 +103,29 @@ var info func(...string) = func(...string) {
 It's a simple markdown based CMS to manage the content of my website and serve the webapp.`+
 		"\n\n", ansi.ColorF(ansi.Cyan, "%s", strings.Split(filepath.Base(os.Args[0]), "_")[0]))
 
-	msg += fmt.Sprintf("version:     %s\n", buildVersion)
-	msg += fmt.Sprintf("author:      %s", ansi.ColorF(ansi.Cyan, "Kevin aka. pynezz\n"))
-	msg += fmt.Sprintf("website:     %s", ansi.ColorF(ansi.Cyan, "https://pynezz.dev\n"))
-	msg += fmt.Sprintf("source code: %s", ansi.ColorF(ansi.Cyan, "%s", "https://github.com/pynezz/pynezz_com\n"))
+	activeProfile := env.ActiveProfile
+	if activeProfile == "" {
+		activeProfile = "base"
+	}
+
+	msg += fmt.Sprintf("version:        %s\n", buildVersion)
+	msg += fmt.Sprintf("author:         %s", ansi.ColorF(ansi.Cyan, "Kevin aka. pynezz\n"))
+	msg += fmt.Sprintf("website:        %s", ansi.ColorF(ansi.Cyan, "https://pynezz.dev\n"))
+	msg += fmt.Sprintf("source code:    %s", ansi.ColorF(ansi.Cyan, "%s", "https://github.com/pynezz/pynezz_com\n"))
+	msg += fmt.Sprintf("active profile: %s\n", ansi.ColorF(ansi.Cyan, "%s", activeProfile))
+
+	if len(env.Bundle.Profiles) > 0 {
+		names := make([]string, 0, len(env.Bundle.Profiles))
+		for name := range env.Bundle.Profiles {
+			names = append(names, name)
+		}
+		sort.Strings(names)
+		msg += fmt.Sprintf("profiles:       %s\n", ansi.ColorF(ansi.Cyan, strings.Join(names, ", ")))
+	}
+
+	if len(env.Bundle.Sources) > 0 {
+		msg += fmt.Sprintf("config files:   %s\n", ansi.ColorF(ansi.Cyan, strings.Join(env.Bundle.Sources, ", ")))
+	}
 
 	fmt.Println(msg)
 }
@@ -94,7 +139,6 @@ func Execute(args ...string) {
 
 	needHelp := false
 	for _, arg := range args {
-		// fmt.Println("arg: ", arg)
 		if arg == "help" {
 			if help := cmd.Execute(args...); help != "" {
 				needHelp = true
@@ -109,12 +153,12 @@ func Execute(args ...string) {
 		return
 	}
 	f := map[string]func(...string){
-		"cms":   cms.Execute,
-		"serve": serve.Execute,
-		"info":  info,
+		"cms":     cms.Execute,
+		"serve":   serve.Execute,
+		"config":  configcmd.Execute,
+		"info":    info,
 	}
 
-	// check the arguments and execute the function if it exists
 	for _, module := range args[:1] {
 		if f[module] == nil {
 			warning("[!] unknown module: " + module)

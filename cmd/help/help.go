@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	configcmd "github.com/pynezz/pynezz_com/cmd/config"
 	"github.com/pynezz/pynezz_com/cmd/cms"
 	"github.com/pynezz/pynezz_com/cmd/serve"
 )
@@ -45,8 +46,9 @@ var displayHelp func(args ...string) string = func(args ...string) string {
 	fmt.Println("displayHelp: ", args)
 
 	h := map[string]func(...string) string{
-		"cms":   cms.Help,
-		"serve": serve.Help,
+		"cms":    cms.Help,
+		"serve":  serve.Help,
+		"config": configcmd.Help,
 	}
 
 	if hasParams := len(args)-1 > 2; !hasParams {

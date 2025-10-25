@@ -2,15 +2,18 @@ package cms
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
+	cfg "github.com/pynezz/pynezz_com/internal/config"
 	"github.com/pynezz/pynezz_com/internal/helpers"
 	"github.com/pynezz/pynezz_com/internal/parser"
+	"github.com/pynezz/pynezz_com/internal/runtime"
 	"github.com/pynezz/pynezz_com/internal/server/middleware"
 	"github.com/pynezz/pynezz_com/internal/server/middleware/models"
-	ansi "github.com/pynezz/pynezzentials/ansi"
+	ansi "github.com/pynezzentials/ansi"
 	"github.com/pynezz/pynezzentials/fsutil"
 	"gorm.io/datatypes"
 )
@@ -51,6 +54,42 @@ var c = map[string]ICommand{
 
 var validCommands = []string{"list", "edit", "parse", "build", "create", "delete", "publish", "unpublish", "status", "tags", "config", "page"}
 
+func activeConfig() cfg.AppConfig {
+	return runtime.Current().Active
+}
+
+func contentRoot() string {
+	root := activeConfig().Content.Root
+	if root == "" {
+		return "content"
+	}
+	return root
+}
+
+func staticRoot() string {
+	root := activeConfig().Content.StaticRoot
+	if root == "" {
+		return "pynezz/public"
+	}
+	return root
+}
+
+func ignorePatterns() []string {
+	return activeConfig().Content.Ignore
+}
+
+func shouldIgnore(path string) bool {
+	for _, pattern := range ignorePatterns() {
+		if pattern == "" {
+			continue
+		}
+		if strings.Contains(path, pattern) {
+			return true
+		}
+	}
+	return false
+}
+
 func noop() bool {
 	fmt.Println("Noop called")
 	return false
@@ -72,29 +111,24 @@ func confirmForce() bool {
 
 func parseAll(rebuild bool) bool {
 
-	// Read "content/*.md" files
-	// Parse the content
-	// Create the pages
-	// Write the pages to "public/*.html" files
-	// Return true if successful, false otherwise
-	// Use the parser package for this
-
-	files, err := fsutil.GetFiles("content")
+	// Read markdown files from configured root
+	files, err := fsutil.GetFiles(contentRoot())
 	if err != nil {
-		ansi.PrintError("error reading contents of 'content' directory")
+		ansi.PrintError("error reading contents of '" + contentRoot() + "' directory")
 	}
 
 	for _, file := range files {
-		// check if the file is already parsed:
-		// if it is, skip it
-		// if it is not, parse it
+		if shouldIgnore(file) {
+			ansi.PrintDebug("ignoring file due to configured pattern: " + file)
+			continue
+		}
 
 		// if the file is already parsed, and we're not forcing rebuild, skip it
 		if isParsed(file) && !rebuild {
 			ansi.PrintInfo("file already parsed: " + file)
 			continue
 		}
-			
+
 		ansi.PrintDebug("parsing and writing: " + file)
 		bytes, doc := parser.MarkdownToHTML(file)
 		if bytes == nil {
@@ -102,13 +136,17 @@ func parseAll(rebuild bool) bool {
 			return false
 		}
 
-		// write the parsed content to a file
-		// the file should be in the "public" directory
+		// write the parsed content to a file in the configured static root
 		newName := filenameConvert(file)
 		ansi.PrintDebug("newName: " + newName)
 
-		// Kind of unnecessary to create a file here, but we'll keep it until I deem it totally unnecessary
-		f, err := fsutil.CreateFile("pynezz/public/" + newName)
+		target := filepath.Join(staticRoot(), newName)
+		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
+			ansi.PrintError("error ensuring target directory: " + err.Error())
+			return false
+		}
+
+		f, err := fsutil.CreateFile(target)
 		if err != nil {
 			ansi.PrintError("error writing parsed content to file: " + newName)
 			return false
@@ -122,18 +160,13 @@ func parseAll(rebuild bool) bool {
 		ansi.PrintInfo(fmt.Sprintf("parsed content written to file: %s (%d bytes)", newName, written))
 
 		// write to database
-		// the database should be in the "db" directory
-		// post := middleware.ContentsDB.GenerateMetadata(bytes)
 		post := parser.Post{
 			Metadata: doc.Metadata,
 		}
 
 		var p models.PostMetadata
 		var slug string = ""
-		// we want to ignore setting the slug if we're forcing a rebuild
-		if !rebuild { // might have to account a the case where the file is not in the database
-			// (calling rebuild on a file that is not in the database)
-			// for now: just don't force rebuild after adding a new file or first time running the program
+		if !rebuild {
 			slug = middleware.ContentsDB.GenerateSlug(post.Metadata.Title)
 			ansi.PrintDebug("generated slug: " + slug)
 			p.Slug = slug
@@ -148,8 +181,7 @@ func parseAll(rebuild bool) bool {
 			}
 			ansi.PrintInfo("found slug: " + p.Slug)
 		}
-		// we can't fetch the slug from the database if we're forcing a rebuild, and we can't generate a new one
-		// but we can use the adler32 checksum of the title identify the post
+
 		postMetadata := models.PostMetadata{
 			Title: post.Metadata.Title,
 			Path:  newName,
@@ -161,7 +193,6 @@ func parseAll(rebuild bool) bool {
 			LastModified: time.Now(),
 		}
 
-		// write to database
 		if err := middleware.ContentsDB.NewPost(postMetadata); err != nil {
 			ansi.PrintError("error writing to database")
 			return false
@@ -274,8 +305,7 @@ func config(id string) bool {
 }
 
 func isParsed(file string) bool {
-	// check the "public" directory for the file
-	return fsutil.FileExists("pynezz/public/" + filenameConvert(file)) // if the file exists, it is parsed
+	return fsutil.FileExists(filepath.Join(staticRoot(), filenameConvert(file))) // if the file exists, it is parsed
 }
 
 // filenameConvert converts a markdown filename to an html filename
@@ -295,3 +325,4 @@ func filenameConvert(file string) string {
 	fmt.Println("Converting " + fileName + " to " + strings.TrimSuffix(fileName, fileType) + ".html")
 	return strings.TrimSuffix(fileName, fileType) + ".md"
 }
+
