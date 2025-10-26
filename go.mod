@@ -5,9 +5,9 @@ go 1.23.0
 require (
 	github.com/go-webauthn/webauthn v0.13.0
 	github.com/google/uuid v1.6.0
-	github.com/pynezz/pynezzentials v0.0.0-20241104202752-c3069ff79e92
+	github.com/pynezz/pynezzentials v0.0.0-20250529204220-424e50eded8b
 	gorm.io/driver/sqlite v1.5.7
-	gorm.io/gorm v1.26.1
+	gorm.io/gorm v1.30.0
 )
 
 require (
@@ -25,7 +25,7 @@ require (
 )
 
 require (
-	github.com/a-h/templ v0.3.865
+	github.com/a-h/templ v0.3.887
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/labstack/gommon v0.4.2 // indirect

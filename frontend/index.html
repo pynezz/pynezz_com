@@ -1,0 +1,53 @@
+pynezz_com/frontend/index.html
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Now - Bitcoin Lightning & Monero</title>
+    <link rel="manifest" href="static/manifest.json">
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="static/htmx.min.js"></script>
+    <script src="static/alpinejs.min.js" defer></script>
+</head>
+<body class="min-h-screen bg-background text-foreground flex flex-col items-center justify-center font-sans">
+    <</title>main class="w-full max-w-md mx-auto p-6 rounded-lg shadow-lg bg-card" x-data="{ method: 'lightning', invoice: null, status: null, qr: '', polling: false }">
+        <h1 class="text-2xl font-bold mb-4 text-center">Buy Now</h1>
+        <div class="mb-4 flex justify-center gap-4">
+            <button 
+                class="btn btn-primary"
+                :class="{ 'btn-active': method === 'lightning' }"
+                @click="method = 'lightning'; invoice = null; status = null; qr = ''"
+            >
+                Bitcoin Lightning
+            </button>
+            <button 
+                class="btn btn-secondary"
+                :class="{ 'btn-active': method === 'monero' }"
+                @click="method = 'monero'; invoice = null; status = null; qr = ''"
+            >
+                Monero
+            </button>
+        </div>
+        <button 
+            class="btn btn-accent w-full mb-6"
+            hx-post="/api/invoice/"
+            :hx-vals="JSON.stringify({ method: method })"
+            hx-target="#invoice-display"
+            hx-swap="innerHTML"
+            @click="polling = true"
+        >
+            Buy Now
+        </button>
+        <div id="invoice-display" class="mb-4">
+            <!-- Invoice/address info will be loaded here via HTMX -->
+        </div>
+        <template x-if="status === 'paid'">
+            <div class="alert alert-success mt-4 text-center">
+                Payment received! Thank you.
+            </div>
+        </template>
+    </main>
+    <script src="static/app.js"></script>
+</body>
+</html>

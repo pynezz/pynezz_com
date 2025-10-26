@@ -63,3 +63,5 @@ content/
 pynezz/public/codeblock.html
 pynezz/public/hello-world.html
 pynezz/public/test.html
+
+tmp/
