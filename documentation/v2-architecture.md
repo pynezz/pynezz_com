@@ -1,12 +1,14 @@
 # Pynezz.dev V2 Architecture Plan
 
 ## Scope & Mandate
+
 - Revamp the Go-based CLI + web stack to deliver a production-ready content workflow.
 - Keep CLI-driven authoring (no web editor) while exposing authenticated APIs/webhooks for automation.
 - Ship a polished, responsive frontend with theming, Safari parity, and installable PWA experience.
 - Provide composable TOML snippets for configuration and Podman-friendly deployment artifacts.
 
 ## Current Pain Points
+
 - CMS commands are mostly stubs; publish pipeline (MD → HTML → DB) is unreliable.
 - Parser lacks deterministic output, metadata validation, and structured error handling.
 - Server couples presentation/data access and exposes limited APIs; auth story unfinished.
@@ -14,6 +16,7 @@
 - Build/config story is ad-hoc: no external config format, no container image definition, Tailwind/templ steps undocumented.
 
 ## V2 Pillars
+
 1. **Content Pipeline**
    - Declarative TOML config snippets (site, database, content roots); merge at startup.
    - Strongly typed parser with markdown linting, front-matter validation, slug management.
@@ -45,6 +48,7 @@
    - Observability hooks (structured logs, health/readiness endpoints).
 
 ## Milestones / Deliverables
+
 1. **Foundation**
    - ~~Finalize config schema; implement loader/validator package.~~
    - Refactor parser & models; ensure CLI commands operate end-to-end locally.
@@ -59,15 +63,18 @@
    - Add smoke tests (Go + npm) and CI-ready scripts.
 
 ## Open Questions
+
 - Do we need multi-language support (i18n) in V2?
 - Should webhooks queue and retry or remain fire-and-forget?
 - Preferred secret storage mechanism (env vars vs. files) for prod?
 
 ## Next Actions
+
 - Flesh out CMS command UX with structured text/JSON output and config-driven defaults.
 - Establish integration tests for parser → DB → templates.
 - Drive server/middleware bootstrapping from the new configuration bundle (DB, auth, assets).
 
 ## Progress Log
+
 - ✅ **Config baseline**: Added TOML-driven configuration loader with profile inheritance (`internal/config`) plus sample snippets in `config/`. CLI bootstrap respects `PYNEZZ_CONFIG_PATHS` and `PYNEZZ_PROFILE` overrides.
 - ✅ **CLI tools**: Added `pynezz config` inspector (text/JSON) and profile listing; `serve` and CMS parsing now respect configuration paths/ignore rules.
