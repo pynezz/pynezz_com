@@ -1,6 +1,8 @@
-# pynezz_com
+# website [pynezz_com](pynezz.dev)
 
-Simple website for ~~pynezz.com~~ pynezz.dev built with Go and [Go-Templ](https://templ.guide)
+![current index page look, 2025-28-10](documentation/assets/img/index-20252810.png)
+
+Simple website for ~~pynezz.com~~ [pynezz.dev](https://pynezz.dev) built with Go and [Go-Templ](https://templ.guide)
 
 ## Description
 
@@ -24,7 +26,7 @@ Everything will be living on the server.
 
 The `cms` module is able to read markdown files from a directory, parse them, generate a slug based on the title, insert tailwind styles, and insert them into the SQLite database. The `serve` module will then display the contents on the website.
 
-**metadata**
+**metadata:**
 
 The metadata fields will be used to define certain properties of the content, like the title, date, and tags/categories.
 
@@ -103,7 +105,7 @@ npm install # install tailwindcss and dependencies
 GOOS=linux GOARCH=amd64 CGO_ENABLED=1
 CC="zig cc -target x86_64-linux-gnu.2.31.0" CXX="zig c++ -target x86_64-linux-gnu.2.31.0"
 
-templ generate && npm build:css && go build -o pynezz_com_linux_amd64
+templ generate && npm build:css && CGO_ENABLED=1 go build -o pynezz_com_linux_amd64
 ```
 
 NB: *Not tested. Just a rough idea of how to build the project without Make.*

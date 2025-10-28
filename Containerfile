@@ -57,6 +57,10 @@ RUN VERSION=$(git describe --tags --always --long 2>/dev/null || echo dev) && \
       -tags linux \
       -ldflags="-s -w -X main.buildVersion=${VERSION}" .
 
+# Windows: doesn't work with current setup - no priority
+# RUN VERSION=$(git describe --tags --always --long 2>/dev/null || echo dev) && \
+#     GOOS=windows GOARCH=amd64 CGO_ENABLED=1 go build -v -o "${BIN_NAME}_windows__amd64.exe" -ldflags="-s -w -X main.buildVersion=$(VERSION)" .
+
 FROM --platform=amd64 registry.access.redhat.com/ubi10-minimal:latest AS runtime
 WORKDIR /app
 
@@ -69,24 +73,7 @@ COPY --from=builder /app/pynezz ./pynezz
 COPY --from=builder /app/templates ./templates
 COPY --from=builder /app/content ./content
 COPY --from=builder /app/config ./config
-
-RUN cat <<'EOF' > /app/entrypoint.sh
-#!/usr/bin/env sh
-set -eu
-
-auto_parse() {
-  echo "[pynezz] parsing markdown content..."
-  /app/pynezz-cli_linux_amd64.out cms parse
-}
-
-case "${PYNEZZ_AUTO_PARSE:-0}" in
-  1|true|TRUE|on|ON)
-    auto_parse
-    ;;
-esac
-
-exec /app/pynezz-cli_linux_amd64.out "$@"
-EOF
+COPY --chown=1000:1000 ./scripts/container-entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
 EXPOSE 8080

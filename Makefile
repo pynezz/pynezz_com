@@ -54,12 +54,13 @@ gen-run: gen ## Generate code and run the application
 CTR:='registry.pynezz.dev/pynezz_dev:2.0.0-'$(VERSION)
 
 podman-build: ## Build podman container
-	podman build -f Containerfile -t registry.pynezz.dev/pynezz_dev:2.0.0
+	podman build -f Containerfile -t registry.pynezz.dev/pynezz_dev:2.0.0-$(VERSION)
 
 podman-create: ## Create podman container
-	podman run -n pynezz_dev \
-	-v # volume
-	$(CTR)
+	podman run -d --rm \
+		--name pynezz_dev \
+		-p 8080:8080 \
+		$(CTR) || podman container run -d --rm -p 8080:8080 $(CTR)
 
 clean:	## Remove build files
 	go clean

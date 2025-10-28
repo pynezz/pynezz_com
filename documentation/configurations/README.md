@@ -13,8 +13,7 @@ Here's the configurations of the different 3rd party services included in the pr
 
 - [ ] Add Caddy config
 - [ ] Steer project towards container by default
-- [x] Add mechanism to reload and add pages/post(s) without rebuilding everything [1dda18]
-
+- [x] Add mechanism to reload and add pages/post(s) without rebuilding everything [74205de]
 
 ### nginx.conf
 
