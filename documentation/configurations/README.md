@@ -4,7 +4,6 @@ Here's the configurations of the different 3rd party services included in the pr
 
 - [Configurations](#configurations)
   - [TODO](#todo)
-  - [OpenResty](#openresty)
     - [nginx.conf](#nginxconf)
     - [pynezz.com.conf](#pynezzcomconf)
     - [pynezz.dev.conf](#pynezzdevconf)
@@ -14,9 +13,8 @@ Here's the configurations of the different 3rd party services included in the pr
 
 - [ ] Add Caddy config
 - [ ] Steer project towards container by default
-- [ ] Add file-watcher for compiling pages after build by passing "$(PWD):/$(PWD)" to the container
+- [x] Add mechanism to reload and add pages/post(s) without rebuilding everything [1dda18]
 
-## OpenResty
 
 ### nginx.conf
 
