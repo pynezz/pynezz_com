@@ -1,5 +1,8 @@
 # pynezz_com
 
+> [!IMPORTANT] I've bumped this to V2
+> Go to v2 branch for latest changes
+
 Simple website for ~~pynezz.com~~ pynezz.dev built with Go and [Go-Templ](https://templ.guide)
 
 ## Description
