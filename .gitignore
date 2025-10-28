@@ -41,6 +41,7 @@ Thumbs.db
 
 # Zed editor
 .zedstate
+.zed
 
 # Database
 *.sqlite3
@@ -51,6 +52,7 @@ Thumbs.db
 .env.local
 .env.development
 .env.test
+!.env.example
 
 # Node
 node_modules/
@@ -63,3 +65,4 @@ content/
 pynezz/public/codeblock.html
 pynezz/public/hello-world.html
 pynezz/public/test.html
+dist/

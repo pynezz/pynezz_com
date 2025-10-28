@@ -3,12 +3,18 @@
 Here's the configurations of the different 3rd party services included in the project.
 
 - [Configurations](#configurations)
+  - [TODO](#todo)
   - [OpenResty](#openresty)
     - [nginx.conf](#nginxconf)
     - [pynezz.com.conf](#pynezzcomconf)
     - [pynezz.dev.conf](#pynezzdevconf)
   - [Certificates](#certificates)
 
+## TODO
+
+- [ ] Add Caddy config
+- [ ] Steer project towards container by default
+- [ ] Add file-watcher for compiling pages after build by passing "$(PWD):/$(PWD)" to the container
 
 ## OpenResty
 

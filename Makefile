@@ -44,10 +44,22 @@ run: ## Build and run the application (Linux)
 	$(LINUX) && ./$(LINUX)
 
 gen: tw ## Generate code
+	[[ $(go tool templ) ]] && \
+	@go tool templ generate || \
 	@templ generate
 
 gen-run: gen ## Generate code and run the application
 	go run . serve -p 8080
+
+CTR:='registry.pynezz.dev/pynezz_dev:2.0.0-'$(VERSION)
+
+podman-build: ## Build podman container
+	podman build -f Containerfile -t registry.pynezz.dev/pynezz_dev:2.0.0
+
+podman-create: ## Create podman container
+	podman run -n pynezz_dev \
+	-v # volume
+	$(CTR)
 
 clean:	## Remove build files
 	go clean

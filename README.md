@@ -122,6 +122,36 @@ Run the project:
 ./pynezz_com_[os_arch](.exe)
 ```
 
+### Container Workflow
+
+Build the multi-stage container image to bundle both the CLI and the runtime server:
+
+```bash
+podman build -f Containerfile -t pynezz .
+```
+
+Mount your markdown sources and the rendered static output to keep them in sync with your host:
+
+```bash
+podman run --rm \
+  -v "$(pwd)/content:/app/content" \
+  -v "$(pwd)/pynezz/public:/app/pynezz/public" \
+  pynezz cms parse
+```
+
+To parse automatically before serving, set `PYNEZZ_AUTO_PARSE=1` (or `true`, `on`) when starting the container:
+
+```bash
+podman run --rm \
+  -e PYNEZZ_AUTO_PARSE=1 \
+  -p 8080:8080 \
+  -v "$(pwd)/content:/app/content" \
+  -v "$(pwd)/pynezz/public:/app/pynezz/public" \
+  pynezz serve --port 8080
+```
+
+The entrypoint retains full CLI access, so you can swap `serve` for any other module (`cms`, `config`, `info`, …) as needed.
+
 ## Configuration
 
 Runtime settings are defined as composable TOML snippets inside the `config/` directory. Files are merged in lexical order, allowing you to break configuration into focused fragments such as `site.toml`, `content.toml`, or `profiles.toml`.
