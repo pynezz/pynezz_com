@@ -1,7 +1,9 @@
 package serve
 
 import (
+	"errors"
 	"fmt"
+	"net/http"
 	"strconv"
 
 	"github.com/pynezz/pynezz_com/internal/helpers"
@@ -89,7 +91,13 @@ func Execute(args ...string) {
 	}
 
 	address := fmt.Sprintf("%s:%d", opts.host, opts.port)
-	server.Serve(strconv.Itoa(opts.port))
 	ansi.PrintInfo("Serving content on " + address)
 	ansi.PrintInfo("Waiting for SIGINT (Ctrl+C) to shutdown...")
+
+	if err := server.Serve(opts.host, strconv.Itoa(opts.port)); err != nil {
+		if errors.Is(err, http.ErrServerClosed) {
+			return
+		}
+		ansi.PrintError("Server error: " + err.Error())
+	}
 }

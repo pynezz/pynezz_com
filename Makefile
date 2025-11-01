@@ -7,11 +7,17 @@ VERSION=$(shell git describe --tags --always --long)
 
 .PHONY: all test clean
 
-$(LINUX): main.go
-	CGO_ENABLED=1 GOARCH=amd64 GOOS=linux CC="zig cc -target x86_64-linux-gnu.2.31.0" CXX="zig c++ -target x86_64-linux-gnu.2.31.0" go build -v -o $(LINUX) -tags linux -ldflags="-s -w -X main.buildVersion=$(VERSION)" .
+$(LINUX):
+	CGO_ENABLED=1 \
+	GOARCH=amd64 \
+	GOOS=linux \
+	CC="zig cc -target x86_64-linux-gnu.2.31.0" \
+	CXX="zig c++ -target x86_64-linux-gnu.2.31.0" \
+	go build -v -o $(LINUX) -tags linux -ldflags="-s -w -X main.buildVersion=$(VERSION)"
 
-$(WINDOWS): main.go
-	GOOS=windows GOARCH=amd64 CGO_ENABLED=1 go build -v -o $(WINDOWS) -ldflags="-s -w -X main.buildVersion=$(VERSION)" .
+$(WINDOWS):
+	GOOS=windows GOARCH=amd64 CGO_ENABLED=1 \
+	go build -v -o $(WINDOWS) -ldflags="-s -w -X main.buildVersion=$(VERSION)" .
 
 # Build targets
 windows: $(WINDOWS)
@@ -40,23 +46,25 @@ build-linux: linux  ## Build the application for Linux
 tw: # Build Tailwindcss
 	@npm run build:css
 
-run: ## Build and run the application (Linux)
-	$(LINUX) && ./$(LINUX)
+run: linux	## Build and run the application (Linux)
+	./$(LINUX)
 
-gen: tw ## Generate code
-	[[ $(go tool templ) ]] && \
-	@go tool templ generate || \
+gen:	tw ## Generate code
 	@templ generate
 
 gen-run: gen ## Generate code and run the application
 	go run . serve -p 8080
 
-CTR:='registry.pynezz.dev/pynezz_dev:2.0.0-'$(VERSION)
+CTR := "registry.pynezz.dev/pynezz_dev:2.0.0-$(VERSION)"
 
 podman-build: ## Build podman container
 	podman build -f Containerfile -t registry.pynezz.dev/pynezz_dev:2.0.0-$(VERSION)
 
 podman-create: ## Create podman container
+	if [ ! "$(CTR)" ]; then
+		echo "Container image not found"
+		make podman-build
+	fi
 	podman run -d --rm \
 		--name pynezz_dev \
 		-p 8080:8080 \
@@ -64,7 +72,9 @@ podman-create: ## Create podman container
 
 clean:	## Remove build files
 	go clean
-	rm $(WINDOWS) $(LINUX)
+	@rm $(WINDOWS) $(LINUX) || :
+	rm templates/*_templ.go
+	rm templates/*/**_templ.go
 
 help: ## Display available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

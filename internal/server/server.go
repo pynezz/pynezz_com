@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"net"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
@@ -12,12 +13,13 @@ import (
 	"github.com/pynezz/pynezzentials/ansi"
 )
 
-func Serve(port string) {
-	fmt.Println("Serving the webapp on port", port)
+func Serve(host, port string) error {
+	address := net.JoinHostPort(host, port)
+	fmt.Println("Serving the webapp on", address)
 	app := echo.New()
 
 	setup(app)
-	app.Start(":" + port)
+	return app.Start(address)
 }
 
 func setup(app *echo.Echo) {
